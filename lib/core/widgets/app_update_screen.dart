@@ -28,14 +28,14 @@ class AppUpdateScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final title =
         info.title ??
-            (info.isForced
-                ? l10n.appUpdateRequiredTitle
-                : l10n.appUpdateAvailableTitle);
+        (info.isForced
+            ? l10n.appUpdateRequiredTitle
+            : l10n.appUpdateAvailableTitle);
     final message =
         info.message ??
-            (info.isForced
-                ? l10n.appUpdateRequiredMessage
-                : l10n.appUpdateAvailableMessage);
+        (info.isForced
+            ? l10n.appUpdateRequiredMessage
+            : l10n.appUpdateAvailableMessage);
 
     return PopScope(
       canPop: !info.isForced,
