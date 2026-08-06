@@ -52,13 +52,16 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               backgroundColor: Colors.white,
-                              child: SizedBox(height: 50,
-                               child:Image(
-                                  image: AssetImage("assets/images/Frame 157.png"),
+                              child: SizedBox(
+                                height: 50,
+                                child: Image(
+                                  image: AssetImage(
+                                    "assets/images/Frame 157.png",
+                                  ),
                                   width: 200,
                                   height: 200,
-                                )
-                               ),
+                                ),
+                              ),
                             ),
 
                             CircleAvatar(
@@ -139,13 +142,16 @@ class HomeScreen extends StatelessWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
-                               SizedBox(height: 100,
-                               child:Image(
-                                  image: AssetImage("assets/images/Icons.png"),
-                                  width: 200,
-                                  height: 200,
-                                )
-                               ),
+                                SizedBox(
+                                  height: 100,
+                                  child: Image(
+                                    image: AssetImage(
+                                      "assets/images/Icons.png",
+                                    ),
+                                    width: 200,
+                                    height: 200,
+                                  ),
+                                ),
 
                                 SizedBox(height: 8),
 
@@ -230,7 +236,7 @@ class _QuickCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
-          BoxShadow(color: Colors.grey.withOpacity(.08), blurRadius: 8),
+          BoxShadow(color: Colors.grey.withValues(alpha: .08), blurRadius: 8),
         ],
       ),
       child: Column(

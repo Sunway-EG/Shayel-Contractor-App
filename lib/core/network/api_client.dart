@@ -10,26 +10,25 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'auth_screen_guard.dart';
 import '../router/app_router_holder.dart';
 import '../storage/auth_storage.dart';
-import '../services/fcm_service.dart';
 import 'app_update_interceptor.dart';
 
-/// Base URL for driver API (override via --dart-define=DRIVER_API_BASE_URL=... in release).
-const String kDriverApiBaseUrl = String.fromEnvironment(
-  'DRIVER_API_BASE_URL',
-  // defaultValue: 'https://api-agg.sunway-eg.com/api/driver',
-  defaultValue: 'https://stg-api-agg.sunway-eg.com/api/driver',
+/// Base URL for Contractor API (override via --dart-define=CONTRACTOR_API_BASE_URL=... in release).
+const String kContractorApiBaseUrl = String.fromEnvironment(
+  'CONTRACTOR_API_BASE_URL',
+  // defaultValue: 'https://api-agg.sunway-eg.com/api/contractor',
+  defaultValue: 'https://stg-api-agg.sunway-eg.com/api/contractor',
 );
 
-/// Shared API root (e.g. `https://…/api`) for endpoints outside `/driver`.
+/// Shared API root (e.g. `https://…/api`) for endpoints outside `/contractor`.
 String get kApiBaseUrl {
-  const suffix = '/driver';
-  if (kDriverApiBaseUrl.endsWith(suffix)) {
-    return kDriverApiBaseUrl.substring(
+  const suffix = '/contractor';
+  if (kContractorApiBaseUrl.endsWith(suffix)) {
+    return kContractorApiBaseUrl.substring(
       0,
-      kDriverApiBaseUrl.length - suffix.length,
+      kContractorApiBaseUrl.length - suffix.length,
     );
   }
-  return kDriverApiBaseUrl;
+  return kContractorApiBaseUrl;
 }
 
 /// Dio interceptor that adds authentication token to requests
@@ -113,24 +112,6 @@ class LanguageInterceptor extends Interceptor {
       options.headers['lang'] = _langFromLocale(localeCode);
     } catch (_) {
       options.headers['lang'] = 'ar';
-    }
-    handler.next(options);
-  }
-}
-
-/// Dio interceptor that adds FCM token to request headers
-class FcmTokenInterceptor extends Interceptor {
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    try {
-      final fcmService = FCMService();
-      final fcmToken = fcmService.currentToken;
-      if (fcmToken != null && fcmToken.isNotEmpty) {
-        options.headers['fcmToken'] = fcmToken;
-      }
-    } catch (e) {
-      // If FCM token is not available, continue without it
-      debugPrint('Failed to get FCM token for header: $e');
     }
     handler.next(options);
   }
@@ -252,11 +233,11 @@ class DeviceInfo {
   });
 }
 
-/// Dio instance for driver API with interceptors.
-Dio createDriverApiClient() {
+/// Dio instance for contractor API with interceptors.
+Dio createContractorApiClient() {
   final dio = Dio(
     BaseOptions(
-      baseUrl: kDriverApiBaseUrl,
+      baseUrl: kContractorApiBaseUrl,
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       headers: {
@@ -267,7 +248,6 @@ Dio createDriverApiClient() {
   );
   dio.interceptors.add(DeviceInterceptor());
   dio.interceptors.add(LanguageInterceptor());
-  dio.interceptors.add(FcmTokenInterceptor());
   dio.interceptors.add(AuthInterceptor());
   dio.interceptors.add(AppUpdateInterceptor());
   dio.interceptors.add(ChuckerDioInterceptor());

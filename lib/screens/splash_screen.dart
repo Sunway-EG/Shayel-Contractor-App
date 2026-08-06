@@ -78,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget ripple(double delay) {
     return AnimatedBuilder(
       animation: _controller,
-      builder: (_, __) {
+      builder: (_, _) {
         double value = (_controller.value - delay).clamp(0.0, 1.0);
 
         return IgnorePointer(
@@ -87,7 +87,7 @@ class _SplashScreenState extends State<SplashScreen>
             height: 700 * value,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.12 * (1 - value)),
+              color: Colors.white.withValues(alpha: 0.12 * (1 - value)),
             ),
           ),
         );
@@ -120,15 +120,15 @@ class _SplashScreenState extends State<SplashScreen>
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.white.withOpacity(
-                          .6 * (1 - _controller.value),
+                        color: Colors.white.withValues(
+                          alpha: 0.6 * (1 - _controller.value),
                         ),
                         blurRadius: 60,
                         spreadRadius: 15,
                       ),
                       BoxShadow(
-                        color: Colors.blue.withOpacity(
-                          .45 * (1 - _controller.value),
+                        color: Colors.blue.withValues(
+                          alpha: 0.45 * (1 - _controller.value),
                         ),
                         blurRadius: 120,
                         spreadRadius: 35,

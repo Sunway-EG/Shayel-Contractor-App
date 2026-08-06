@@ -75,7 +75,7 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
                                 BoxShadow(
                                   color: const Color(
                                     0xFF2196F3,
-                                  ).withOpacity(.5),
+                                  ).withValues(alpha: .5),
                                   blurRadius: 60,
                                   spreadRadius: 20,
                                 ),
@@ -104,7 +104,7 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
                                 BoxShadow(
                                   color: const Color(
                                     0xFF2196F3,
-                                  ).withOpacity(.5),
+                                  ).withValues(alpha: .5),
                                   blurRadius: 60,
                                   spreadRadius: 20,
                                 ),

@@ -57,10 +57,6 @@ class AppRouter {
         return AppRoutePaths.signin;
       }
 
-      if (isAuthenticated && authRoutes.contains(location)) {
-        return AppRoutePaths.home;
-      }
-
       return null;
     },
     errorBuilder: (context, state) => _ErrorScreen(state.error?.toString()),
