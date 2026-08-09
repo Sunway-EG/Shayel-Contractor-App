@@ -28,8 +28,6 @@ import 'features/auth/domain/use_cases/verify_mfa_usecase.dart';
 import 'features/auth/domain/use_cases/enable_mfa_usecase.dart';
 import 'features/auth/domain/use_cases/disable_mfa_usecase.dart';
 import 'features/auth/domain/use_cases/change_password_usecase.dart';
-import 'features/auth/domain/use_cases/verify_email_usecase.dart';
-import 'features/auth/domain/use_cases/resend_verification_usecase.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'l10n/gen/app_localizations.dart';
@@ -72,8 +70,6 @@ Future<void> _runApp({bool useSentry = false}) async {
   final enableMfaUseCase = EnableMfaUseCase(authRepository);
   final disableMfaUseCase = DisableMfaUseCase(authRepository);
   final changePasswordUseCase = ChangePasswordUseCase(authRepository);
-  final verifyEmailUseCase = VerifyEmailUseCase(authRepository);
-  final resendVerificationUseCase = ResendVerificationUseCase(authRepository);
 
   // Initialize BloC with use cases
   final authBloc = AuthBloc(
@@ -89,8 +85,6 @@ Future<void> _runApp({bool useSentry = false}) async {
     enableMfaUseCase: enableMfaUseCase,
     disableMfaUseCase: disableMfaUseCase,
     changePasswordUseCase: changePasswordUseCase,
-    verifyEmailUseCase: verifyEmailUseCase,
-    resendVerificationUseCase: resendVerificationUseCase,
   );
 
   final localeBloc = LocaleBloc();
@@ -159,8 +153,7 @@ class ShayelContractorApp extends StatelessWidget {
             locale: locale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            // routerConfig: createAppRouter(),
-            routerConfig: AppRouter.router,
+            routerConfig: createAppRouter(),
           );
         },
       ),

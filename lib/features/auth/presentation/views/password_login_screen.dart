@@ -1,3 +1,4 @@
+import 'package:contractor_app/core/router/route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -279,16 +280,16 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                   final email = state.loginResult.email ?? '';
                   final phone = state.loginResult.phone ?? '';
                   context.go(
-                    '/mfa-channel?email=${Uri.encodeComponent(email)}&phone=${Uri.encodeComponent(phone)}',
+                    '${AppRoutePaths.mfa}?email=${Uri.encodeComponent(email)}&phone=${Uri.encodeComponent(phone)}',
                   );
                 } else if (state.loginResult.redirect == 'forget_password') {
                   final contact = state.loginResult.phoneForOtp ?? _fullLogin;
                   final isPhone = !contact.contains('@');
                   context.go(
-                    '/otp?contact=${Uri.encodeComponent(contact)}&viaSms=$isPhone&forgetPassword=true',
+                    '${AppRoutePaths.otp}?contact=${Uri.encodeComponent(contact)}&viaSms=$isPhone&forgetPassword=true',
                   );
                 } else {
-                  context.go('/home');
+                  context.go(AppRoutePaths.home);
                 }
               },
             );
@@ -302,7 +303,7 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
             final contact = Uri.encodeComponent(isPhone ? _fullLogin : login);
             final viaSms = isPhone;
             context.go(
-              '/otp?contact=$contact&viaSms=$viaSms&forgetPassword=true',
+              '${AppRoutePaths.otp}?contact=$contact&viaSms=$viaSms&forgetPassword=true',
             );
           });
         }
@@ -637,7 +638,8 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                                       const SizedBox(height: 12),
                                       CupertinoButton(
                                         padding: EdgeInsets.zero,
-                                        onPressed: () => context.go('/login'),
+                                        onPressed: () =>
+                                            context.go(AppRoutePaths.login),
                                         child: Text(
                                           l10n.backToLogin,
                                           style: const TextStyle(

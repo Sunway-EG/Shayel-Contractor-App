@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:contractor_app/core/router/route_constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:chucker_flutter/chucker_flutter.dart';
@@ -77,7 +78,7 @@ class AuthInterceptor extends Interceptor {
         if (router != null) {
           Future.microtask(() {
             try {
-              router.go('/login');
+              router.go(AppRoutePaths.login);
             } catch (e) {
               debugPrint('Failed to redirect to login on 401: $e');
             }

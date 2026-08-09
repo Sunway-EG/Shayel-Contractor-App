@@ -17,8 +17,6 @@ import '../../domain/use_cases/verify_mfa_usecase.dart';
 import '../../domain/use_cases/enable_mfa_usecase.dart';
 import '../../domain/use_cases/disable_mfa_usecase.dart';
 import '../../domain/use_cases/change_password_usecase.dart';
-import '../../domain/use_cases/verify_email_usecase.dart';
-import '../../domain/use_cases/resend_verification_usecase.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
@@ -36,8 +34,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required EnableMfaUseCase enableMfaUseCase,
     required DisableMfaUseCase disableMfaUseCase,
     required ChangePasswordUseCase changePasswordUseCase,
-    required VerifyEmailUseCase verifyEmailUseCase,
-    required ResendVerificationUseCase resendVerificationUseCase,
   }) : _loginUseCase = loginUseCase,
        _sendLoginOtpUseCase = sendLoginOtpUseCase,
        _loginWithOtpUseCase = loginWithOtpUseCase,
@@ -50,8 +46,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
        _enableMfaUseCase = enableMfaUseCase,
        _disableMfaUseCase = disableMfaUseCase,
        _changePasswordUseCase = changePasswordUseCase,
-       _verifyEmailUseCase = verifyEmailUseCase,
-       _resendVerificationUseCase = resendVerificationUseCase,
        super(const AuthInitial()) {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthSendLoginOtpRequested>(_onSendLoginOtpRequested);
@@ -68,8 +62,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEnableMfaRequested>(_onEnableMfaRequested);
     on<AuthDisableMfaRequested>(_onDisableMfaRequested);
     on<AuthChangePasswordRequested>(_onChangePasswordRequested);
-    on<AuthVerifyEmailRequested>(_onVerifyEmailRequested);
-    on<AuthResendVerificationRequested>(_onResendVerificationRequested);
     on<AuthBiometricLoginRequested>(_onBiometricLoginRequested);
     on<AuthEnableBiometricRequested>(_onEnableBiometricRequested);
     on<AuthDisableBiometricRequested>(_onDisableBiometricRequested);
@@ -87,8 +79,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final EnableMfaUseCase _enableMfaUseCase;
   final DisableMfaUseCase _disableMfaUseCase;
   final ChangePasswordUseCase _changePasswordUseCase;
-  final VerifyEmailUseCase _verifyEmailUseCase;
-  final ResendVerificationUseCase _resendVerificationUseCase;
   String? _passwordResetToken;
   String? _loginOtpToken;
   String? _loginOtpPhone;
@@ -410,44 +400,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       },
       (_) {
         emit(const AuthChangePasswordSuccess());
-      },
-    );
-  }
-
-  Future<void> _onVerifyEmailRequested(
-    AuthVerifyEmailRequested event,
-    Emitter<AuthState> emit,
-  ) async {
-    emit(const AuthLoading());
-    final result = await _verifyEmailUseCase(
-      VerifyEmailParams(code: event.code),
-    );
-
-    result.fold(
-      (failure) {
-        emit(AuthError(_messageForFailure(failure)));
-      },
-      (_) {
-        emit(const AuthVerifyEmailSuccess());
-      },
-    );
-  }
-
-  Future<void> _onResendVerificationRequested(
-    AuthResendVerificationRequested event,
-    Emitter<AuthState> emit,
-  ) async {
-    emit(const AuthLoading());
-    final result = await _resendVerificationUseCase(
-      ResendVerificationParams(channel: event.channel),
-    );
-
-    result.fold(
-      (failure) {
-        emit(AuthError(_messageForFailure(failure)));
-      },
-      (_) {
-        emit(const AuthResendVerificationSuccess());
       },
     );
   }

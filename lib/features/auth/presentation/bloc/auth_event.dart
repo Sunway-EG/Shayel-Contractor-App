@@ -160,25 +160,6 @@ class AuthChangePasswordRequested extends AuthEvent {
   List<Object?> get props => [currentPassword, newPassword, confirmPassword];
 }
 
-class AuthVerifyEmailRequested extends AuthEvent {
-  const AuthVerifyEmailRequested({required this.code});
-
-  final String code;
-
-  @override
-  List<Object?> get props => [code];
-}
-
-class AuthResendVerificationRequested extends AuthEvent {
-  const AuthResendVerificationRequested({this.channel});
-
-  /// 0 = Email, 1 = SMS. Null = default (Email).
-  final int? channel;
-
-  @override
-  List<Object?> get props => [channel];
-}
-
 class AuthBiometricLoginRequested extends AuthEvent {
   const AuthBiometricLoginRequested({required this.localizedReason});
 

@@ -28,4 +28,3 @@ export 'presentation/bloc/auth_state.dart';
 // Presentation - Views
 export 'presentation/views/login_screen.dart';
 export 'presentation/views/otp_screen.dart';
-export 'presentation/views/verification_screen.dart';

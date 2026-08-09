@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 
 import '../../../../../core/network/api_endpoints.dart';
@@ -10,8 +8,6 @@ import '../../models/send_login_otp_response_dto.dart';
 import '../../models/login_with_otp_request_dto.dart';
 import '../../models/send_mfa_code_request_dto.dart';
 import '../../models/verify_mfa_request_dto.dart';
-import '../../models/verify_email_request_dto.dart';
-import '../../models/resend_verification_request_dto.dart';
 import '../../models/enable_mfa_request_dto.dart';
 import '../../models/update_profile_request_dto.dart';
 
@@ -45,23 +41,9 @@ abstract interface class AuthRemoteDataSource {
   });
   Future<void> sendMfaCode({required int channel});
   Future<LoginResponseDto> verifyMfa({required String code});
-  Future<void> verifyEmail({required String code});
-
-  /// Requests a new verification code. [channel] 1 = Email, 2 = SMS. Omit or 1 for email.
-  Future<void> resendVerification({int? channel});
   Future<void> enableMfa({required int channel});
   Future<void> disableMfa();
   Future<DriverProfileDto> updateProfile(UpdateProfileRequestDto request);
-  Future<void> uploadDriverDocument({
-    required int documentId,
-    required File file,
-    DateTime? expiryDate,
-  });
-  Future<void> updateDriverDocument({
-    required int id,
-    File? file,
-    DateTime? expiryDate,
-  });
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -230,22 +212,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> verifyEmail({required String code}) async {
-    await _postSuccess(
-      ApiEndpoints.verifyEmail,
-      body: VerifyEmailRequestDto(code: code).toJson(),
-    );
-  }
-
-  @override
-  Future<void> resendVerification({int? channel}) async {
-    final body = channel != null
-        ? ResendVerificationRequestDto(channel: channel).toJson()
-        : null;
-    await _postSuccess(ApiEndpoints.resendVerification, body: body);
-  }
-
-  @override
   Future<void> enableMfa({required int channel}) async {
     await _postSuccess(
       ApiEndpoints.enableMfa,
@@ -278,50 +244,5 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     // API returns success with data: null (e.g. "Authentication operation completed")
     // Fetch the profile to return updated data
     return getProfile();
-  }
-
-  @override
-  Future<void> uploadDriverDocument({
-    required int documentId,
-    required File file,
-    DateTime? expiryDate,
-  }) async {
-    final formData = FormData.fromMap({
-      'DocumentId': documentId,
-      'File': await MultipartFile.fromFile(
-        file.path,
-        filename: file.path.split('/').last,
-      ),
-      if (expiryDate != null)
-        'ExpiryDate': expiryDate.toUtc().toIso8601String(),
-    });
-    final response = await _dio.post<Map<String, dynamic>>(
-      ApiEndpoints.driverDocuments,
-      data: formData,
-    );
-    throwIfEnvelopeFailed(response);
-  }
-
-  @override
-  Future<void> updateDriverDocument({
-    required int id,
-    File? file,
-    DateTime? expiryDate,
-  }) async {
-    if (file == null && expiryDate == null) return;
-    final formData = FormData.fromMap({
-      if (file != null)
-        'File': await MultipartFile.fromFile(
-          file.path,
-          filename: file.path.split('/').last,
-        ),
-      if (expiryDate != null)
-        'ExpiryDate': expiryDate.toUtc().toIso8601String(),
-    });
-    final response = await _dio.put<Map<String, dynamic>>(
-      ApiEndpoints.driverDocumentById(id),
-      data: formData,
-    );
-    throwIfEnvelopeFailed(response);
   }
 }

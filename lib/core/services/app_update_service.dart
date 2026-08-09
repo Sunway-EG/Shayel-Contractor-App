@@ -10,7 +10,7 @@ import '../network/api_endpoints.dart';
 import '../network/api_response_parser.dart';
 import 'app_version_check_resolver.dart';
 
-/// Fetches app version policy from the driver API and resolves update prompts.
+/// Fetches app version policy from the contractor API and resolves update prompts.
 class AppUpdateService {
   AppUpdateService(this._dio);
 
@@ -22,7 +22,7 @@ class AppUpdateService {
 
   static AppUpdateService? get instance => _instance;
 
-  static const appType = 'Driver';
+  static const appType = 'Contractor';
 
   final Dio _dio;
 

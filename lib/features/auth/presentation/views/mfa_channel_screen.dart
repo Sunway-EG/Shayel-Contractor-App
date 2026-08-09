@@ -1,3 +1,4 @@
+import 'package:contractor_app/core/router/route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -63,7 +64,7 @@ class _MfaChannelScreenState extends State<MfaChannelScreen> {
                   : widget.email;
               final viaSms = _selectedChannel == 2;
               context.go(
-                '/otp?contact=${Uri.encodeComponent(contact)}&viaSms=$viaSms&isMfa=true',
+                '${AppRoutePaths.otp}?contact=${Uri.encodeComponent(contact)}&viaSms=$viaSms&isMfa=true',
               );
             }
           });
@@ -72,7 +73,7 @@ class _MfaChannelScreenState extends State<MfaChannelScreen> {
       child: PopScope(
         canPop: false,
         onPopInvokedWithResult: (bool didPop, dynamic result) {
-          if (!didPop) context.go('/login');
+          if (!didPop) context.go(AppRoutePaths.login);
         },
         child: CupertinoPageScaffold(
           backgroundColor: CupertinoColors.transparent,

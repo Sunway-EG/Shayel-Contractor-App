@@ -278,20 +278,6 @@ class AuthImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, void>> verifyEmail({required String code}) async {
-    return _run(() async {
-      await _remote.verifyEmail(code: code);
-    }, invalidCredentialsOnUnauthorized: true);
-  }
-
-  @override
-  Future<Either<AuthFailure, void>> resendVerification({int? channel}) async {
-    return _run(() async {
-      await _remote.resendVerification(channel: channel);
-    }, invalidCredentialsOnUnauthorized: true);
-  }
-
-  @override
   Future<Either<AuthFailure, void>> enableMfa({required int channel}) async {
     return _run(() async {
       await _remote.enableMfa(channel: channel);
@@ -334,35 +320,5 @@ class AuthImpl implements AuthRepository {
       );
       return _mapDriverProfile(dto);
     }, invalidCredentialsOnUnauthorized: true);
-  }
-
-  @override
-  Future<Either<AuthFailure, void>> uploadDriverDocument({
-    required int documentId,
-    required String filePath,
-    DateTime? expiryDate,
-  }) async {
-    return _run(() async {
-      await _remote.uploadDriverDocument(
-        documentId: documentId,
-        file: File(filePath),
-        expiryDate: expiryDate,
-      );
-    });
-  }
-
-  @override
-  Future<Either<AuthFailure, void>> updateDriverDocument({
-    required int id,
-    String? filePath,
-    DateTime? expiryDate,
-  }) async {
-    return _run(() async {
-      await _remote.updateDriverDocument(
-        id: id,
-        file: filePath != null && filePath.isNotEmpty ? File(filePath) : null,
-        expiryDate: expiryDate,
-      );
-    });
   }
 }

@@ -1,4 +1,4 @@
-/// Version check payload from the driver API `data` envelope.
+/// Version check payload from the contractor API `data` envelope.
 class AppVersionCheckDto {
   const AppVersionCheckDto({
     required this.clientVersion,

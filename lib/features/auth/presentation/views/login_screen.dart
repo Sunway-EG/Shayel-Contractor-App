@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:contractor_app/core/router/route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show Icons;
 import 'package:flutter_sficon/flutter_sficon.dart';
@@ -164,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Future.microtask(() {
             if (context.mounted) {
               final phone = Uri.encodeComponent(_fullPhoneNumber);
-              context.go('/otp?contact=$phone&viaSms=true');
+              context.go('${AppRoutePaths.otp}?contact=$phone&viaSms=true');
             }
           });
         } else if (state is AuthLoginSuccess) {
@@ -178,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   final email = state.loginResult.email ?? '';
                   final phone = state.loginResult.phone ?? '';
                   context.go(
-                    '/mfa-channel?email=${Uri.encodeComponent(email)}&phone=${Uri.encodeComponent(phone)}',
+                    '${AppRoutePaths.mfa}?email=${Uri.encodeComponent(email)}&phone=${Uri.encodeComponent(phone)}',
                   );
                 } else if (state.loginResult.redirect == 'forget_password' &&
                     state.loginResult.phoneForOtp != null) {
@@ -187,10 +188,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   );
                   final isPhone = !state.loginResult.phoneForOtp!.contains('@');
                   context.go(
-                    '/otp?contact=$contact&viaSms=$isPhone&forgetPassword=true',
+                    '${AppRoutePaths.otp}?contact=$contact&viaSms=$isPhone&forgetPassword=true',
                   );
                 } else {
-                  context.go('/home');
+                  context.go(AppRoutePaths.home);
                 }
               },
             );
@@ -353,7 +354,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       const SizedBox(height: 16),
                                       GestureDetector(
-                                        onTap: () => context.go('/auth/login'),
+                                        onTap: () => context.go(
+                                          AppRoutePaths.passwordLogin,
+                                        ),
                                         child: Container(
                                           width: double.infinity,
                                           padding: const EdgeInsets.symmetric(

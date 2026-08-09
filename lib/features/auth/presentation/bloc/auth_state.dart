@@ -91,14 +91,6 @@ class AuthChangePasswordSuccess extends AuthState {
   const AuthChangePasswordSuccess();
 }
 
-class AuthVerifyEmailSuccess extends AuthState {
-  const AuthVerifyEmailSuccess();
-}
-
-class AuthResendVerificationSuccess extends AuthState {
-  const AuthResendVerificationSuccess();
-}
-
 class AuthEnableBiometricSuccess extends AuthState {
   const AuthEnableBiometricSuccess();
 }

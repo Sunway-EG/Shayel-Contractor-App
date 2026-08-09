@@ -1,7 +1,7 @@
 import '../../features/auth/domain/failures/auth_failure.dart';
 
 /// Maps auth failures to user-facing display strings.
-/// This is a lightweight replacement for the Shayel Driver shared mapper.
+/// This is a lightweight replacement for the Shayel Contractor shared mapper.
 class FailureMessageMapper {
   static String forAuth(
     AuthFailure failure, {

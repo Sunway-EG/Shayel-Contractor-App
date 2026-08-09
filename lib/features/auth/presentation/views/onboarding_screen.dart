@@ -31,7 +31,7 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
                   const SizedBox(width: 80),
                   TextButton(
                     onPressed: () {
-                      context.go(AppRoutePaths.signin);
+                      context.go(AppRoutePaths.passwordLogin);
                     },
                     child: const Text(
                       "تخطي",
@@ -134,7 +134,7 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
                       );
                     } else {
                       // لو في آخر صفحة افتح شاشة التسجيل
-                      context.go(AppRoutePaths.signin);
+                      context.go(AppRoutePaths.passwordLogin);
                     }
                   },
                   style: ElevatedButton.styleFrom(

@@ -57,11 +57,6 @@ abstract interface class AuthRepository {
 
   Future<Either<AuthFailure, LoginResult>> verifyMfa({required String code});
 
-  Future<Either<AuthFailure, void>> verifyEmail({required String code});
-
-  /// Requests a new verification code. [channel] 1 = Email, 2 = SMS. Null = default (Email).
-  Future<Either<AuthFailure, void>> resendVerification({int? channel});
-
   Future<Either<AuthFailure, void>> enableMfa({required int channel});
 
   Future<Either<AuthFailure, void>> disableMfa();
@@ -74,17 +69,5 @@ abstract interface class AuthRepository {
     String? phone,
     String? profilePicturePath,
     bool? biometricFingerprint,
-  });
-
-  Future<Either<AuthFailure, void>> uploadDriverDocument({
-    required int documentId,
-    required String filePath,
-    DateTime? expiryDate,
-  });
-
-  Future<Either<AuthFailure, void>> updateDriverDocument({
-    required int id,
-    String? filePath,
-    DateTime? expiryDate,
   });
 }
