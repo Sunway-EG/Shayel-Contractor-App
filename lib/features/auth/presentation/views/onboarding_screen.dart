@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:contractor_app/core/router/route_constants.dart';
 
+
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
 
@@ -28,10 +29,10 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
                 children: [
                   Image.asset("assets/images/Frame 157.png", height: 50),
                   Image.asset("assets/images/image 18.png", height: 50),
-                  const SizedBox(width: 80),
+                  const SizedBox(width: 50),
                   TextButton(
                     onPressed: () {
-                      context.go(AppRoutePaths.passwordLogin);
+                      context.go(AppRoutePaths.firstChoose);
                     },
                     child: const Text(
                       "تخطي",
@@ -123,7 +124,7 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
               ),
               SizedBox(
                 width: double.infinity,
-                height: 55,
+                height: 45,
                 child: ElevatedButton(
                   onPressed: () {
                     if (currentPage == 0) {
@@ -134,7 +135,7 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
                       );
                     } else {
                       // لو في آخر صفحة افتح شاشة التسجيل
-                      context.go(AppRoutePaths.passwordLogin);
+                      context.go(AppRoutePaths.firstChoose);
                     }
                   },
                   style: ElevatedButton.styleFrom(

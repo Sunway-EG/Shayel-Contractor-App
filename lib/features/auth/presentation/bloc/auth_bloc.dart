@@ -19,6 +19,7 @@ import '../../domain/use_cases/disable_mfa_usecase.dart';
 import '../../domain/use_cases/change_password_usecase.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
+import '../../domain/use_cases/register_usecase.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
@@ -34,6 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required EnableMfaUseCase enableMfaUseCase,
     required DisableMfaUseCase disableMfaUseCase,
     required ChangePasswordUseCase changePasswordUseCase,
+    required RegisterUseCase registerUseCase,
   }) : _loginUseCase = loginUseCase,
        _sendLoginOtpUseCase = sendLoginOtpUseCase,
        _loginWithOtpUseCase = loginWithOtpUseCase,
@@ -46,6 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
        _enableMfaUseCase = enableMfaUseCase,
        _disableMfaUseCase = disableMfaUseCase,
        _changePasswordUseCase = changePasswordUseCase,
+        _registerUseCase = registerUseCase,
        super(const AuthInitial()) {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthSendLoginOtpRequested>(_onSendLoginOtpRequested);
@@ -65,6 +68,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthBiometricLoginRequested>(_onBiometricLoginRequested);
     on<AuthEnableBiometricRequested>(_onEnableBiometricRequested);
     on<AuthDisableBiometricRequested>(_onDisableBiometricRequested);
+    on<AuthRegisterRequested>(_onRegisterRequested);
   }
 
   final LoginUseCase _loginUseCase;
@@ -79,6 +83,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final EnableMfaUseCase _enableMfaUseCase;
   final DisableMfaUseCase _disableMfaUseCase;
   final ChangePasswordUseCase _changePasswordUseCase;
+  final RegisterUseCase _registerUseCase;
   String? _passwordResetToken;
   String? _loginOtpToken;
   String? _loginOtpPhone;
@@ -495,4 +500,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
     }
   }
+  Future<void> _onRegisterRequested(
+  AuthRegisterRequested event,
+  Emitter<AuthState> emit,
+) async {
+  emit(const AuthLoading());
+
+  final result = await _registerUseCase(
+    RegisterParams(
+      fullName: event.fullName,
+      phone: event.phone,
+      address: event.address,
+      documents: event.documents,
+    ),
+  );
+
+  result.fold(
+    (failure) {
+      emit(AuthError(_messageForFailure(failure)));
+    },
+    (_) {
+      emit(const AuthRegisterSuccess());
+    },
+  );
+}
 }

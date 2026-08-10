@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:contractor_app/core/router/route_constants.dart';
+import 'package:contractor_app/features/auth/presentation/views/register.dart';
 import 'package:contractor_app/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +16,7 @@ import '../../features/auth/presentation/views/change_password_screen.dart';
 import '../services/app_update_service.dart';
 import '../storage/auth_storage.dart';
 import '../widgets/app_update_presenter.dart';
+import '../../features/auth/presentation/views/first_choose_screen.dart';
 
 /// Global router instance holder for accessing router from interceptors
 class AppRouterHolder {
@@ -92,9 +94,6 @@ class _SplashScreenState extends State<_SplashScreen>
 
     _controller.forward();
 
-    Timer(const Duration(seconds: 3), () {
-      context.go(AppRoutePaths.onboarding);
-    });
   }
 
   @override
@@ -227,6 +226,8 @@ GoRouter createAppRouter() {
       final isLoggedIn = AuthStorage.instance.isLoggedIn();
       final isAuthRoute =
           state.uri.path == AppRoutePaths.onboarding ||
+          state.uri.path == AppRoutePaths.firstChoose ||
+          state.uri.path == AppRoutePaths.register ||
           state.uri.path == AppRoutePaths.login ||
           state.uri.path == AppRoutePaths.passwordLogin ||
           state.uri.path == AppRoutePaths.otp ||
@@ -259,6 +260,14 @@ GoRouter createAppRouter() {
         path: AppRoutePaths.passwordLogin,
         builder: (context, state) => const PasswordLoginScreen(),
       ),
+      GoRoute(
+  path: AppRoutePaths.firstChoose,
+  builder: (context, state) => const first_choose_screen(),
+),
+GoRoute(
+  path: AppRoutePaths.register,
+  builder: (context, state) => const RegisterScreen(),
+),
       GoRoute(
         path: AppRoutePaths.mfa,
         builder: (context, state) {

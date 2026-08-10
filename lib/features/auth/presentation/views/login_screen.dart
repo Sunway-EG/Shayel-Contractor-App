@@ -6,6 +6,9 @@ import 'package:flutter/material.dart' show Icons;
 import 'package:flutter_sficon/flutter_sficon.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:contractor_app/core/locale/bloc/locale_bloc.dart';
+import 'package:flutter/material.dart';
+
 
 import '../../../../core/services/biometric_service.dart';
 import '../../../../core/utils/string_utils.dart';
@@ -200,213 +203,161 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, authState) {
-          return CupertinoPageScaffold(
-            backgroundColor: CupertinoColors.transparent,
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    const _LoginHeader(),
-                    Expanded(
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Positioned(
-                            top: AppLayout.authContentTop,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child: ClipRRect(
-                              borderRadius: AppLayout.authContentBorderRadius,
-                              child: Container(
-                                color: AppColors.white,
-                                child: SingleChildScrollView(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      const SizedBox(height: 48),
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional.centerStart,
-                                        child: Image.asset(
-                                          'assets/images/shayel_logo.png',
-                                          width: 56,
-                                          height: 68,
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 48),
-                                      Text(
-                                        '${l10n.welcome} 👋',
-                                        style: CupertinoTheme.of(context)
-                                            .textTheme
-                                            .navLargeTitleTextStyle
-                                            .copyWith(
-                                              color: AppColors.darkGray,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      const SizedBox(height: 12),
-                                      Text(
-                                        l10n.verificationInstruction,
-                                        style: CupertinoTheme.of(context)
-                                            .textTheme
-                                            .textStyle
-                                            .copyWith(
-                                              color: AppColors.mediumBlueGray,
-                                              fontSize: 15,
-                                              height: 1.4,
-                                            ),
-                                      ),
-                                      const SizedBox(height: 28),
-                                      AppPhoneInput(
-                                        controller: _phoneController,
-                                        label: l10n.phone,
-                                        placeholder: l10n.phone,
-                                        error: _phoneError,
-                                        onChanged: (_) => _validatePhone(l10n),
-                                        onSubmitted: (_) => _submit(l10n),
-                                        textInputAction: TextInputAction.done,
-                                      ),
-                                      const SizedBox(height: 16),
-                                      GestureDetector(
-                                        onTap: () => _toggleRememberMe(),
-                                        behavior: HitTestBehavior.opaque,
-                                        child: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 22,
-                                              height: 22,
-                                              child: CupertinoCheckbox(
-                                                value: _rememberMe,
-                                                onChanged: (_) =>
-                                                    _toggleRememberMe(),
-                                                activeColor: AppColors.mainBlue,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(
-                                              l10n.rememberMe,
-                                              style: const TextStyle(
-                                                color: AppColors.darkGray,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(height: 28),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                            child: AppButton(
-                                              label: l10n.signIn,
-                                              onPressed: () => _submit(l10n),
-                                              loading: authState is AuthLoading,
-                                            ),
-                                          ),
-                                          if (_biometricAvailable) ...[
-                                            const SizedBox(width: 0),
-                                            CupertinoButton(
-                                              padding: const EdgeInsets.all(12),
-                                              minimumSize: Size.zero,
-                                              onPressed:
-                                                  authState is AuthLoading
-                                                  ? null
-                                                  : () {
-                                                      context.read<AuthBloc>().add(
-                                                        AuthBiometricLoginRequested(
-                                                          localizedReason: l10n
-                                                              .biometricLocalizedReasonSignIn,
-                                                        ),
-                                                      );
-                                                    },
-                                              child: Container(
-                                                padding: const EdgeInsets.all(
-                                                  10,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: AppColors.mainBlue,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                child: Platform.isIOS
-                                                    ? SFIcon(
-                                                        SFIcons.sf_faceid,
-                                                        color: AppColors.white,
-                                                        fontSize: 24,
-                                                      )
-                                                    : Icon(
-                                                        Icons.fingerprint,
-                                                        color: AppColors.white,
-                                                        size: 24,
-                                                      ),
-                                              ),
-                                            ),
-                                          ],
-                                        ],
-                                      ),
-                                      const SizedBox(height: 16),
-                                      GestureDetector(
-                                        onTap: () => context.go(
-                                          AppRoutePaths.passwordLogin,
-                                        ),
-                                        child: Container(
-                                          width: double.infinity,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 24,
-                                            vertical: 14,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: CupertinoColors.transparent,
-                                            border: Border.all(
-                                              color: AppColors.mainBlue,
-                                              width: 1.5,
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              l10n.loginWithPassword,
-                                              style: const TextStyle(
-                                                color: AppColors.mainBlue,
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 24),
-                                      const Center(child: AppVersionWidget()),
-                                      const SizedBox(height: 24),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+          return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            children: [
+              const SizedBox(height: 60),
+
+              /// Logo
+              Image.asset(
+                "assets/images/logo.png",
+                width: 60,
+                height: 60,
+              ),
+
+              const SizedBox(height: 18),
+
+              /// Title
+              const Text(
+                "مرحباً في شايل",
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              /// Subtitle
+              const Text(
+                "اكتب كلمة مرورك لتسجيل الدخول أو تبديل حسابك",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+              ),
+
+              const SizedBox(height: 28),
+
+              /// Phone Label
+              const Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  "رقم الهاتف",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              /// Phone Field
+              TextField(
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  hintText: "10 234 5678",
+                  prefixIcon: const Padding(
+                    padding: EdgeInsets.all(14),
+                    child: Text(
+                      "🇪🇬 +20",
+                      style: TextStyle(fontSize: 15),
                     ),
-                  ],
+                  ),
+                  prefixIconConstraints:
+                      const BoxConstraints(minWidth: 90),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 18),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                PositionedDirectional(
-                  top: MediaQuery.of(context).padding.top + 8,
-                  end: 16,
-                  child: const LanguageSwitcher(),
+              ),
+
+              const SizedBox(height: 22),
+
+              /// Login Button
+              SizedBox(
+                width: double.infinity,
+                height: 55,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff0066C3),
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    "تسجيل الدخول",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ],
-            ),
-          );
+              ),
+
+              const SizedBox(height: 20),
+
+              /// Password Login
+              SizedBox(
+                width: double.infinity,
+                height: 55,
+                child: OutlinedButton(
+                  onPressed: () {},
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xff0066C3),
+                    side: const BorderSide(
+                      color: Color(0xff0066C3),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    "تسجيل دخول بكلمة المرور",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                ),
+              ),
+
+              const Spacer(),
+
+              TextButton(
+                onPressed: () {},
+                child: const Text(
+                  "تبديل الحساب",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xff0066C3),
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+
+              const Text(
+                "التطبيق الإصدار0.1",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black54,
+                ),
+              ),
+
+              const SizedBox(height: 18),
+            ],
+          ),
+        ),
+      ),
+    );
         },
       ),
     );

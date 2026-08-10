@@ -10,6 +10,7 @@ import '../../models/send_mfa_code_request_dto.dart';
 import '../../models/verify_mfa_request_dto.dart';
 import '../../models/enable_mfa_request_dto.dart';
 import '../../models/update_profile_request_dto.dart';
+import '../../models/register_document_model.dart';
 
 abstract interface class AuthRemoteDataSource {
   /// Returns [LoginResponseDto] parsed from data envelope.
@@ -22,6 +23,12 @@ abstract interface class AuthRemoteDataSource {
   Future<void> forgetPassword({
     required String identifier,
     required int channel,
+  });
+  Future<void> register({
+    required String fullName,
+    required String phone,
+    required String address,
+    required List<RegisterDocumentModel> documents,
   });
   Future<void> resetPassword({
     required String token,
@@ -244,5 +251,50 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     // API returns success with data: null (e.g. "Authentication operation completed")
     // Fetch the profile to return updated data
     return getProfile();
+  }
+
+  @override
+  Future<void> register({
+    required String fullName,
+    required String phone,
+    required String address,
+    required List<RegisterDocumentModel> documents,
+  }) async {
+    final formData = FormData();
+
+    formData.fields.add(MapEntry('FullName', fullName));
+
+    formData.fields.add(MapEntry('Phone', phone));
+
+    formData.fields.add(MapEntry('Address', address));
+
+    for (var i = 0; i < documents.length; i++) {
+      final document = documents[i];
+
+      formData.fields.add(
+        MapEntry('Documents[$i].DocumentId', document.documentId.toString()),
+      );
+
+      formData.fields.add(
+        MapEntry(
+          'Documents[$i].ExpiryDate',
+          document.expiryDate.toUtc().toIso8601String(),
+        ),
+      );
+
+      formData.files.add(
+        MapEntry(
+          'Documents[$i].File',
+          await MultipartFile.fromFile(document.filePath),
+        ),
+      );
+    }
+
+    final response = await _dio.post<Map<String, dynamic>>(
+      ApiEndpoints.register,
+      data: formData,
+    );
+
+    throwIfEnvelopeFailed(response, fallbackMessage: 'Registration failed');
   }
 }

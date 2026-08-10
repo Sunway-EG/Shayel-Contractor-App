@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../domain/entities/register_document.dart';
 
 abstract class AuthEvent extends Equatable {
   const AuthEvent();
@@ -192,4 +193,25 @@ class AuthDisableBiometricRequested extends AuthEvent {
 
   @override
   List<Object?> get props => [];
+}
+class AuthRegisterRequested extends AuthEvent {
+  const AuthRegisterRequested({
+    required this.fullName,
+    required this.phone,
+    required this.address,
+    required this.documents,
+  });
+
+  final String fullName;
+  final String phone;
+  final String address;
+  final List<RegisterDocument> documents;
+
+  @override
+  List<Object?> get props => [
+        fullName,
+        phone,
+        address,
+        documents,
+      ];
 }

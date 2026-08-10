@@ -8,4 +8,6 @@ class AppRoutePaths {
   static const changePassword = '/change-password';
   static const home = '/home';
   static const notFound = '/404';
+  static const firstChoose = '/first-choose';
+  static const register = '/register';
 }

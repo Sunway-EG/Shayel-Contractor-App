@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:contractor_app/core/router/route_constants.dart';
 
-class SigninScreen extends StatelessWidget {
-  const SigninScreen({super.key});
+class first_choose_screen extends StatelessWidget {
+  const first_choose_screen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class SigninScreen extends StatelessWidget {
                 height: 55,
                 child: OutlinedButton(
                   onPressed: () {
-                    // TODO: Add create account route when the screen exists.
+                    context.go(AppRoutePaths.register);
                   },
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color(0xff0066C3),

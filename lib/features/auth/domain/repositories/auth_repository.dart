@@ -1,3 +1,4 @@
+import '../entities/register_document.dart';
 import 'package:dartz/dartz.dart';
 
 import '../entities/driver_profile.dart';
@@ -11,6 +12,13 @@ abstract interface class AuthRepository {
     required String login,
     String? password,
     String? locale,
+  });
+
+  Future<Either<AuthFailure, void>> register({
+    required String fullName,
+    required String phone,
+    required String address,
+    required List<RegisterDocument> documents,
   });
 
   /// Sends OTP to phone number and returns token for login-with-otp

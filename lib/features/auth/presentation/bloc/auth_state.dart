@@ -98,3 +98,7 @@ class AuthEnableBiometricSuccess extends AuthState {
 class AuthDisableBiometricSuccess extends AuthState {
   const AuthDisableBiometricSuccess();
 }
+
+class AuthRegisterSuccess extends AuthState {
+  const AuthRegisterSuccess();
+}

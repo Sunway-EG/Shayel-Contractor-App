@@ -15,6 +15,8 @@ import '../sources/remote/auth_remote_data_source.dart';
 import '../models/login_request_dto.dart';
 import '../models/update_profile_request_dto.dart';
 import '../models/login_with_otp_request_dto.dart';
+import '../../domain/entities/register_document.dart';
+import '../models/register_document_model.dart';
 
 /// Trims "+2" prefix from phone numbers (e.g. Egyptian +20) when displayed in profile.
 String? _trimPhonePrefixPlus2(String? phone) {
@@ -288,6 +290,33 @@ class AuthImpl implements AuthRepository {
   Future<Either<AuthFailure, void>> disableMfa() async {
     return _run(() async {
       await _remote.disableMfa();
+    });
+  }
+
+  @override
+  Future<Either<AuthFailure, void>> register({
+    required String fullName,
+    required String phone,
+    required String address,
+    required List<RegisterDocument> documents,
+  }) async {
+    return _run(() async {
+      final documentModels = documents
+          .map(
+            (document) => RegisterDocumentModel(
+              documentId: document.documentId,
+              filePath: document.filePath,
+              expiryDate: document.expiryDate,
+            ),
+          )
+          .toList();
+
+      await _remote.register(
+        fullName: fullName,
+        phone: phone,
+        address: address,
+        documents: documentModels,
+      );
     });
   }
 
