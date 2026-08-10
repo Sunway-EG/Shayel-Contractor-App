@@ -1,4 +1,4 @@
-import 'package:contractor_app/core/router/route_constants.dart';
+import '../../../../core/router/route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -267,7 +267,7 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                 );
                 // Sync biometric preference with backend
                 context.read<ProfileBloc>().add(
-                  ProfileUpdateRequested(biometricFingerprint: true),
+                  const ProfileUpdateRequested(biometricFingerprint: true),
                 );
               }
             }
@@ -424,7 +424,7 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                                                         ),
                                                       ),
                                                       const SizedBox(width: 6),
-                                                      Text(
+                                                      const Text(
                                                         '+2',
                                                         style: TextStyle(
                                                           fontSize: 16,

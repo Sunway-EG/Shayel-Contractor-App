@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:chucker_flutter/chucker_flutter.dart';
-import 'package:contractor_app/core/router/route_constants.dart';
-import 'package:contractor_app/features/auth/presentation/views/register.dart';
-import 'package:contractor_app/screens/home.dart';
+import 'route_constants.dart';
+import '../../features/auth/presentation/views/register.dart';
+import '../../screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -84,8 +84,11 @@ class _SplashScreenState extends State<_SplashScreen>
     );
 
     // Name Slide
-    _textSlide = Tween<Offset>(begin: const Offset(0, .8), end: Offset(0, -1))
-        .animate(
+    _textSlide =
+        Tween<Offset>(
+          begin: const Offset(0, .8),
+          end: const Offset(0, -1),
+        ).animate(
           CurvedAnimation(
             parent: _controller,
             curve: const Interval(.7, 1, curve: Curves.easeOut),
@@ -93,7 +96,6 @@ class _SplashScreenState extends State<_SplashScreen>
         );
 
     _controller.forward();
-
   }
 
   @override
@@ -261,13 +263,13 @@ GoRouter createAppRouter() {
         builder: (context, state) => const PasswordLoginScreen(),
       ),
       GoRoute(
-  path: AppRoutePaths.firstChoose,
-  builder: (context, state) => const first_choose_screen(),
-),
-GoRoute(
-  path: AppRoutePaths.register,
-  builder: (context, state) => const RegisterScreen(),
-),
+        path: AppRoutePaths.firstChoose,
+        builder: (context, state) => const FirstChooseScreen(),
+      ),
+      GoRoute(
+        path: AppRoutePaths.register,
+        builder: (context, state) => const RegisterScreen(),
+      ),
       GoRoute(
         path: AppRoutePaths.mfa,
         builder: (context, state) {

@@ -47,7 +47,7 @@ class LanguageSwitcher extends StatelessWidget {
         cancelButton: CupertinoActionSheetAction(
           isDefaultAction: true,
           onPressed: () => Navigator.of(context).pop(),
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
         ),
       ),
     );

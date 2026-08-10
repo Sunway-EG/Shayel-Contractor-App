@@ -1,26 +1,15 @@
-import 'dart:io' show Platform;
-
-import 'package:contractor_app/core/router/route_constants.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show Icons;
-import 'package:flutter_sficon/flutter_sficon.dart';
+import '../../../../core/router/route_constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:contractor_app/core/locale/bloc/locale_bloc.dart';
 import 'package:flutter/material.dart';
-
 
 import '../../../../core/services/biometric_service.dart';
 import '../../../../core/utils/string_utils.dart';
 import '../../../../core/storage/auth_storage.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_layout.dart';
-import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_dialog_presenter.dart';
-import '../../../../core/widgets/app_phone_input.dart';
 import '../../../../core/widgets/app_update_flow.dart';
-import '../../../../core/widgets/app_version.dart';
-import '../../../../core/widgets/language_switcher.dart';
 import '../../../../l10n/gen/app_localizations.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
@@ -204,160 +193,151 @@ class _LoginScreenState extends State<LoginScreen> {
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, authState) {
           return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              const SizedBox(height: 60),
+            backgroundColor: Colors.white,
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 60),
 
-              /// Logo
-              Image.asset(
-                "assets/images/logo.png",
-                width: 60,
-                height: 60,
-              ),
-
-              const SizedBox(height: 18),
-
-              /// Title
-              const Text(
-                "مرحباً في شايل",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              /// Subtitle
-              const Text(
-                "اكتب كلمة مرورك لتسجيل الدخول أو تبديل حسابك",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
-              ),
-
-              const SizedBox(height: 28),
-
-              /// Phone Label
-              const Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  "رقم الهاتف",
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              /// Phone Field
-              TextField(
-                textAlign: TextAlign.center,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  hintText: "10 234 5678",
-                  prefixIcon: const Padding(
-                    padding: EdgeInsets.all(14),
-                    child: Text(
-                      "🇪🇬 +20",
-                      style: TextStyle(fontSize: 15),
+                    /// Logo
+                    Image.asset(
+                      "assets/images/logo.png",
+                      width: 60,
+                      height: 60,
                     ),
-                  ),
-                  prefixIconConstraints:
-                      const BoxConstraints(minWidth: 90),
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 18),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
 
-              const SizedBox(height: 22),
+                    const SizedBox(height: 18),
 
-              /// Login Button
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff0066C3),
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                    /// Title
+                    const Text(
+                      "مرحباً في شايل",
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    "تسجيل الدخول",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
+
+                    const SizedBox(height: 10),
+
+                    /// Subtitle
+                    const Text(
+                      "اكتب كلمة مرورك لتسجيل الدخول أو تبديل حسابك",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
-                  ),
-                ),
-              ),
 
-              const SizedBox(height: 20),
+                    const SizedBox(height: 28),
 
-              /// Password Login
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xff0066C3),
-                    side: const BorderSide(
-                      color: Color(0xff0066C3),
+                    /// Phone Label
+                    const Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "رقم الهاتف",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+
+                    const SizedBox(height: 8),
+
+                    /// Phone Field
+                    TextField(
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        hintText: "10 234 5678",
+                        prefixIcon: const Padding(
+                          padding: EdgeInsets.all(14),
+                          child: Text(
+                            "🇪🇬 +20",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ),
+                        prefixIconConstraints: const BoxConstraints(
+                          minWidth: 90,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 18,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    "تسجيل دخول بكلمة المرور",
-                    style: TextStyle(fontSize: 17),
-                  ),
+
+                    const SizedBox(height: 22),
+
+                    /// Login Button
+                    SizedBox(
+                      width: double.infinity,
+                      height: 55,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff0066C3),
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Text(
+                          "تسجيل الدخول",
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    /// Password Login
+                    SizedBox(
+                      width: double.infinity,
+                      height: 55,
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xff0066C3),
+                          side: const BorderSide(color: Color(0xff0066C3)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Text(
+                          "تسجيل دخول بكلمة المرور",
+                          style: TextStyle(fontSize: 17),
+                        ),
+                      ),
+                    ),
+
+                    const Spacer(),
+
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        "تبديل الحساب",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xff0066C3),
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+
+                    const Text(
+                      "التطبيق الإصدار0.1",
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+
+                    const SizedBox(height: 18),
+                  ],
                 ),
               ),
-
-              const Spacer(),
-
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  "تبديل الحساب",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xff0066C3),
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-
-              const Text(
-                "التطبيق الإصدار0.1",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black54,
-                ),
-              ),
-
-              const SizedBox(height: 18),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
         },
       ),
     );

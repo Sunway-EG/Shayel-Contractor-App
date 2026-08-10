@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/auth_bloc.dart';
@@ -19,34 +19,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final addressController = TextEditingController(
     text: '102 طريق أولين شرقي موبين، VIC 3000',
   );
-final List<RegisterDocument> documents = [];
+  final List<RegisterDocument> documents = [];
   bool agree = false;
-Future<void> _pickDocument({
-  required int documentId,
-}) async {
-  final result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,
-    allowedExtensions: ['jpg', 'jpeg', 'png'],
-  );
+  Future<void> _pickDocument({required int documentId}) async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png'],
+    );
 
-  if (result == null || result.files.single.path == null) {
-    return;
+    if (result == null || result.files.single.path == null) {
+      return;
+    }
+
+    final file = result.files.single;
+
+    final document = RegisterDocument(
+      documentId: documentId,
+      filePath: file.path!,
+      expiryDate: DateTime.now().add(const Duration(days: 365)),
+    );
+
+    setState(() {
+      documents.add(document);
+    });
   }
 
-  final file = result.files.single;
-
-  final document = RegisterDocument(
-    documentId: documentId,
-    filePath: file.path!,
-    expiryDate: DateTime.now().add(
-      const Duration(days: 365),
-    ),
-  );
-
-  setState(() {
-    documents.add(document);
-  });
-}
   @override
   void dispose() {
     nameController.dispose();
@@ -163,9 +160,8 @@ Future<void> _pickDocument({
                 // الهوية الوطنية
                 _documentSection(
                   title: 'الهوية الوطنية',
-                    documentId: 31,
+                  documentId: 31,
 
-                  
                   files: const ['صورة-الهوية.jpg'],
                 ),
 
@@ -239,13 +235,13 @@ Future<void> _pickDocument({
                     onPressed: agree
                         ? () {
                             context.read<AuthBloc>().add(
-  AuthRegisterRequested(
-    fullName: nameController.text.trim(),
-    phone: phoneController.text.trim(),
-    address: addressController.text.trim(),
-    documents: documents,
-  ),
-);
+                              AuthRegisterRequested(
+                                fullName: nameController.text.trim(),
+                                phone: phoneController.text.trim(),
+                                address: addressController.text.trim(),
+                                documents: documents,
+                              ),
+                            );
                           }
                         : null,
                     style: ElevatedButton.styleFrom(
@@ -426,8 +422,8 @@ Future<void> _pickDocument({
 
   Widget _documentSection({
     required String title,
-  required int documentId,
-  required List<String> files,
+    required int documentId,
+    required List<String> files,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -444,9 +440,7 @@ Future<void> _pickDocument({
 
         const SizedBox(height: 8),
 
-        _uploadBox(
-          documentId: documentId,
-        ),
+        _uploadBox(documentId: documentId),
 
         if (files.isNotEmpty) ...[
           const SizedBox(height: 8),
@@ -466,72 +460,65 @@ Future<void> _pickDocument({
   // UPLOAD BOX
   // ============================================================
 
-  Widget _uploadBox({
- required int documentId,
- }) {
-  return GestureDetector(
-    onTap: () => _pickDocument(
-      documentId: documentId,
-    ),
-    child: Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(7),
-        border: Border.all(
-          color: const Color(0xff70ace0),
-          width: 1.2,
+  Widget _uploadBox({required int documentId}) {
+    return GestureDetector(
+      onTap: () => _pickDocument(documentId: documentId),
+      child: Container(
+        height: 70,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(7),
+          border: Border.all(color: const Color(0xff70ace0), width: 1.2),
+        ),
+        child: Row(
+          children: [
+            const SizedBox(width: 12),
+
+            Container(
+              width: 42,
+              height: 42,
+              decoration: const BoxDecoration(
+                color: Color(0xffeef7ff),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.cloud_upload_outlined,
+                size: 22,
+                color: Color(0xff0071C8),
+              ),
+            ),
+
+            const Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'رفع صورة أو تصفح',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff222222),
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'PNG, JPG بحد أقصى 10 ميجابايت',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Color(0xff777777),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(width: 12),
+          ],
         ),
       ),
-      child: Row(
-        children: [
-          const SizedBox(width: 12),
-
-          Container(
-            width: 42,
-            height: 42,
-            decoration: const BoxDecoration(
-              color: Color(0xffeef7ff),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.cloud_upload_outlined,
-              size: 22,
-              color: Color(0xff0071C8),
-            ),
-          ),
-
-          const Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'رفع صورة أو تصفح',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff222222),
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  'PNG, JPG بحد أقصى 10 ميجابايت',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Color(0xff777777),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(width: 12),
-        ],
-      ),
-    ),
-  );
-}
+    );
+  }
 
   // ============================================================
   // UPLOADED FILE

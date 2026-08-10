@@ -1,4 +1,4 @@
-import 'package:contractor_app/core/router/route_constants.dart';
+import '../../../../core/router/route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'
     show Material, MaterialType, TextField, InputDecoration, OutlineInputBorder;
@@ -391,12 +391,13 @@ class _OtpScreenState extends State<OtpScreen> {
                                                     decoration: InputDecoration(
                                                       counterText: '',
                                                       hintText: '------',
-                                                      hintStyle: TextStyle(
-                                                        color: AppColors
-                                                            .mediumBlueGray,
-                                                        fontSize: 24,
-                                                        letterSpacing: 8,
-                                                      ),
+                                                      hintStyle:
+                                                          const TextStyle(
+                                                            color: AppColors
+                                                                .mediumBlueGray,
+                                                            fontSize: 24,
+                                                            letterSpacing: 8,
+                                                          ),
                                                       filled: true,
                                                       fillColor:
                                                           AppColors.white,

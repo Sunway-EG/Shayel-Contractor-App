@@ -60,7 +60,7 @@ class AppPhoneInput extends StatelessWidget {
                     style: TextStyle(fontSize: 20, height: 1.2),
                   ),
                   const SizedBox(width: 6),
-                  Text(
+                  const Text(
                     '+2',
                     style: TextStyle(
                       fontSize: 16,

@@ -19,7 +19,7 @@ class AppVersionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final defaultStyle = TextStyle(
+    final defaultStyle = const TextStyle(
       fontSize: 13,
       color: AppColors.mediumBlueGray,
     );
