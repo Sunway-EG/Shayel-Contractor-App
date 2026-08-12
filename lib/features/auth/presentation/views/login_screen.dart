@@ -1,26 +1,15 @@
-import 'dart:io' show Platform;
-
-import 'package:contractor_app/core/router/route_constants.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show Icons;
-import 'package:flutter_sficon/flutter_sficon.dart';
+import '../../../../core/router/route_constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:contractor_app/core/locale/bloc/locale_bloc.dart';
 import 'package:flutter/material.dart';
-
 
 import '../../../../core/services/biometric_service.dart';
 import '../../../../core/utils/string_utils.dart';
 import '../../../../core/storage/auth_storage.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_layout.dart';
-import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_dialog_presenter.dart';
-import '../../../../core/widgets/app_phone_input.dart';
 import '../../../../core/widgets/app_update_flow.dart';
-import '../../../../core/widgets/app_version.dart';
-import '../../../../core/widgets/language_switcher.dart';
 import '../../../../l10n/gen/app_localizations.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';

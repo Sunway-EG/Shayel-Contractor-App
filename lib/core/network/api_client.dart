@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:contractor_app/core/router/route_constants.dart';
+import '../router/route_constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:chucker_flutter/chucker_flutter.dart';

@@ -43,8 +43,8 @@ class HomeScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 150,
                   decoration: const BoxDecoration(color: Color(0xff0066C3)),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 18),
+                  child: const Padding(
+                    padding: EdgeInsets.fromLTRB(16, 12, 16, 18),
                     child: Column(
                       children: [
                         Row(
@@ -74,21 +74,21 @@ class HomeScreen extends StatelessWidget {
                           ],
                         ),
 
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20),
                       ],
                     ),
                   ),
                 ),
 
-                Expanded(
+                const Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    padding: EdgeInsets.symmetric(horizontal: 18),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const SizedBox(height: 60),
+                        SizedBox(height: 60),
 
-                        const Text(
+                        Text(
                           "القائمة المفضلة",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -96,7 +96,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
 
-                        const SizedBox(height: 18),
+                        SizedBox(height: 18),
 
                         Row(
                           children: [
@@ -107,7 +107,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ),
 
-                            const SizedBox(width: 12),
+                            SizedBox(width: 12),
 
                             Expanded(
                               child: _QuickCard(
@@ -116,7 +116,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ),
 
-                            const SizedBox(width: 12),
+                            SizedBox(width: 12),
 
                             Expanded(
                               child: _QuickCard(
@@ -127,9 +127,9 @@ class HomeScreen extends StatelessWidget {
                           ],
                         ),
 
-                        const SizedBox(height: 30),
+                        SizedBox(height: 30),
 
-                        const Text(
+                        Text(
                           "مراجعة الرحلات",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -141,7 +141,7 @@ class HomeScreen extends StatelessWidget {
                           child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 SizedBox(
                                   height: 100,
                                   child: Image(
@@ -205,7 +205,7 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: const Color(0xffFFFBEB),
-                  border: Border.all(color: Color(0xffFCD34D)),
+                  border: Border.all(color: const Color(0xffFCD34D)),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Text(
@@ -241,7 +241,7 @@ class _QuickCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(icon, color: Color(0xff0066C3)),
+          Icon(icon, color: const Color(0xff0066C3)),
           const SizedBox(height: 8),
           Text(
             title,

@@ -1,5 +1,5 @@
-import 'package:contractor_app/core/router/app_router.dart';
-import 'package:contractor_app/core/services/app_update_service.dart';
+import 'core/router/app_router.dart';
+import 'core/services/app_update_service.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:async';

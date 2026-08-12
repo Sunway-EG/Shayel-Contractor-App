@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:contractor_app/core/entities/user_profile.dart';
+import '../../../../core/entities/user_profile.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
