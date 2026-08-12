@@ -25,26 +25,39 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
             children: [
               /// Header
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.asset("assets/images/Frame 157.png", height: 50),
-                  Image.asset("assets/images/image 18.png", height: 50),
-                  const SizedBox(width: 50),
-                  TextButton(
-                    onPressed: () {
-                      context.go(AppRoutePaths.firstChoose);
-                    },
-                    child: const Text(
-                      "تخطي",
-                      style: TextStyle(
-                        color: Color(0xff005AA9),
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+  children: [
+    TextButton(
+      onPressed: () {
+        context.go(AppRoutePaths.firstChoose);
+      },
+      child: const Text(
+        "تخطي",
+        style: TextStyle(
+          color: Color(0xff005AA9),
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+
+    const Spacer(),
+
+    Row(
+      // mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Image.asset(
+          "assets/images/Frame 157.png",
+          height: 50,
+        ),
+        Image.asset(
+          "assets/images/image 18.png",
+          height: 50,
+        ),
+      ],
+    ),
+  ],
+),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
@@ -150,6 +163,7 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),

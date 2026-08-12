@@ -4,7 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
+import '../bloc/auth_state.dart';
 import '../../domain/entities/register_document.dart';
+import 'dart:io';
+import '../../domain/entities/document_definition.dart';
+import 'package:go_router/go_router.dart';
+import 'package:contractor_app/core/router/route_constants.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,38 +21,49 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final nameController = TextEditingController(text: 'أحمد');
-  final phoneController = TextEditingController(text: '10 234 5678');
+  final phoneController = TextEditingController(text: '1023 45678');
   final addressController = TextEditingController(
     text: '102 طريق أولين شرقي موبين، VIC 3000',
   );
-final List<RegisterDocument> documents = [];
+  final List<RegisterDocument> documents = [];
+  List<DocumentDefinition> documentDefinitions = [];
   bool agree = false;
-Future<void> _pickDocument({
-  required int documentId,
-}) async {
+  @override
+void initState() {
+  super.initState();
+
+  context.read<AuthBloc>().add(
+    const AuthGetDocumentsRequested(),
+  );
+}
+ Future<void> _pickDocument({required int documentId}) async {
   final result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
     allowedExtensions: ['jpg', 'jpeg', 'png'],
+    allowMultiple: true,
   );
 
-  if (result == null || result.files.single.path == null) {
+  if (result == null) {
     return;
   }
-
-  final file = result.files.single;
-
-  final document = RegisterDocument(
-    documentId: documentId,
-    filePath: file.path!,
-    expiryDate: DateTime.now().add(
-      const Duration(days: 365),
-    ),
-  );
-
+ print('Uploading document ID: $documentId'); 
   setState(() {
-    documents.add(document);
+    for (final file in result.files) {
+      if (file.path == null) continue;
+
+      documents.add(
+        RegisterDocument(
+          documentId: documentId,
+          filePath: file.path!,
+          expiryDate: DateTime.now().add(
+            const Duration(days: 365),
+          ),
+        ),
+      );
+    }
   });
 }
+
   @override
   void dispose() {
     nameController.dispose();
@@ -59,7 +76,13 @@ Future<void> _pickDocument({
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
+      child: BlocListener<AuthBloc, AuthState>(
+    listener: (context, state) {
+      if (state is AuthRegisterSuccess) {
+        _showSuccessDialog();
+      }
+    },
+    child:Scaffold(
         backgroundColor: Colors.white,
 
         appBar: AppBar(
@@ -84,7 +107,7 @@ Future<void> _pickDocument({
               ),
               SizedBox(width: 7),
               Text(
-                'ارفع مستنداتك',
+                'إنشاء حساب',
                 style: TextStyle(
                   color: Color(0xff006BB6),
                   fontSize: 17,
@@ -160,34 +183,53 @@ Future<void> _pickDocument({
 
                 const SizedBox(height: 14),
 
-                // الهوية الوطنية
-                _documentSection(
-                  title: 'الهوية الوطنية',
-                    documentId: 31,
+                BlocBuilder<AuthBloc, AuthState>(
+  buildWhen: (previous, current) =>
+      current is AuthDocumentsLoading ||
+      current is AuthDocumentsLoaded ||
+      current is AuthDocumentsError,
+  builder: (context, state) {
+    if (state is AuthDocumentsLoading) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
-                  
-                  files: const ['صورة-الهوية.jpg'],
-                ),
+    if (state is AuthDocumentsError) {
+      return Text(
+        state.message,
+        style: const TextStyle(color: Colors.red),
+      );
+    }
 
-                const SizedBox(height: 20),
+    if (state is AuthDocumentsLoaded) {
+      print('DOCUMENTS FROM API: ${state.documents}');
+      documentDefinitions = state.documents;
 
-                // السجل التجاري
-                _documentSection(
-                  title: 'السجل التجاري',
-                  documentId: 32,
-                  files: const ['صورة-السجل.jpg', 'صورة-السجل.jpg'],
-                ),
+      return Column(
+        children: [
+          for (int i = 0; i < state.documents.length; i++) ...[
+            _documentSection(
+              title: state.documents[i].nameAr,
+              documentId: state.documents[i].id,
+              required: state.documents[i].required,
+            ),
 
-                const SizedBox(height: 20),
+            if (i != state.documents.length - 1)
+              const SizedBox(height: 20),
+          ],
+        ],
+      );
+    }
 
-                // البطاقة الضريبية
-                _documentSection(
-                  title: 'البطاقة الضريبية',
-                  documentId: 33,
-                  files: const [],
-                ),
+    return const SizedBox.shrink();
+  },
+),
 
-                const SizedBox(height: 20),
+const SizedBox(height: 20),
 
                 // =========================
                 // الموافقة
@@ -238,14 +280,14 @@ Future<void> _pickDocument({
                   child: ElevatedButton(
                     onPressed: agree
                         ? () {
-                            context.read<AuthBloc>().add(
-  AuthRegisterRequested(
-    fullName: nameController.text.trim(),
-    phone: phoneController.text.trim(),
-    address: addressController.text.trim(),
-    documents: documents,
-  ),
-);
+                             context.read<AuthBloc>().add(
+                              AuthRegisterRequested(
+                                fullName: nameController.text.trim(),
+                                phone: phoneController.text.trim(),
+                                address: addressController.text.trim(),
+                                documents: documents,
+                              ),
+                            );
                           }
                         : null,
                     style: ElevatedButton.styleFrom(
@@ -273,6 +315,7 @@ Future<void> _pickDocument({
           ),
         ),
       ),
+      )
     );
   }
 
@@ -302,11 +345,20 @@ Future<void> _pickDocument({
       child: TextField(
         controller: controller,
         textAlign: TextAlign.right,
+
+        onTap: () {
+          controller.selection = TextSelection(
+            baseOffset: 0,
+            extentOffset: controller.text.length,
+          );
+        },
+
         style: const TextStyle(
           fontSize: 14,
           color: Color(0xff222222),
           fontWeight: FontWeight.bold,
         ),
+
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
@@ -373,6 +425,13 @@ Future<void> _pickDocument({
               controller: phoneController,
               keyboardType: TextInputType.phone,
               textAlign: TextAlign.right,
+              onTap: () {
+                phoneController.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: phoneController.text.length,
+                );
+              },
+
               style: const TextStyle(fontSize: 14),
               decoration: const InputDecoration(
                 border: InputBorder.none,
@@ -394,6 +453,12 @@ Future<void> _pickDocument({
       controller: addressController,
       maxLines: 4,
       textAlign: TextAlign.right,
+      onTap: () {
+        addressController.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: addressController.text.length,
+        );
+      },
       style: const TextStyle(
         fontSize: 14,
         color: Color.fromARGB(255, 7, 7, 7),
@@ -426,35 +491,55 @@ Future<void> _pickDocument({
 
   Widget _documentSection({
     required String title,
-  required int documentId,
-  required List<String> files,
+    required int documentId,
+    bool required = false,
   }) {
+    final uploadedDocuments = documents
+        .where((doc) => doc.documentId == documentId)
+        .toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          title,
-          textAlign: TextAlign.right,
-          style: const TextStyle(
-            fontSize: 13,
-            color: Color.fromARGB(255, 0, 0, 0),
-            fontWeight: FontWeight.bold,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 13,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            if (required) ...[
+              const SizedBox(width: 3),
+              const Text(
+                '*',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ],
         ),
 
         const SizedBox(height: 8),
 
-        _uploadBox(
-          documentId: documentId,
-        ),
+        // زر رفع صورة جديدة
+        _uploadBox(documentId: documentId),
 
-        if (files.isNotEmpty) ...[
+        // الصور المرفوعة
+        if (uploadedDocuments.isNotEmpty) ...[
           const SizedBox(height: 8),
 
-          ...files.map(
-            (file) => Padding(
+          ...uploadedDocuments.map(
+            (document) => Padding(
               padding: const EdgeInsets.only(bottom: 6),
-              child: _uploadedFile(file),
+              child: _uploadedFile(document),
             ),
           ),
         ],
@@ -466,102 +551,94 @@ Future<void> _pickDocument({
   // UPLOAD BOX
   // ============================================================
 
-  Widget _uploadBox({
- required int documentId,
- }) {
-  return GestureDetector(
-    onTap: () => _pickDocument(
-      documentId: documentId,
-    ),
-    child: Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(7),
-        border: Border.all(
-          color: const Color(0xff70ace0),
-          width: 1.2,
+  Widget _uploadBox({required int documentId}) {
+    return GestureDetector(
+      onTap: () => _pickDocument(documentId: documentId),
+      child: Container(
+        height: 70,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(7),
+          border: Border.all(color: const Color(0xff70ace0), width: 1.2),
+        ),
+        child: Row(
+          children: [
+            const SizedBox(width: 12),
+
+            Container(
+              width: 42,
+              height: 42,
+              decoration: const BoxDecoration(
+                color: Color(0xffeef7ff),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.cloud_upload_outlined,
+                size: 22,
+                color: Color(0xff0071C8),
+              ),
+            ),
+
+            const Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'رفع صورة أو تصفح',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff222222),
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'PNG, JPG بحد أقصى 10 ميجابايت',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Color(0xff777777),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(width: 12),
+          ],
         ),
       ),
-      child: Row(
-        children: [
-          const SizedBox(width: 12),
-
-          Container(
-            width: 42,
-            height: 42,
-            decoration: const BoxDecoration(
-              color: Color(0xffeef7ff),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.cloud_upload_outlined,
-              size: 22,
-              color: Color(0xff0071C8),
-            ),
-          ),
-
-          const Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'رفع صورة أو تصفح',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff222222),
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  'PNG, JPG بحد أقصى 10 ميجابايت',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Color(0xff777777),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(width: 12),
-        ],
-      ),
-    ),
-  );
-}
+    );
+  }
 
   // ============================================================
   // UPLOADED FILE
   // ============================================================
 
-  Widget _uploadedFile(String fileName) {
+  Widget _uploadedFile(RegisterDocument document) {
+    final file = File(document.filePath);
+
     return Container(
-      height: 55,
+      height: 60,
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Row(
         children: [
-          // thumbnail
-          Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xffe1e1e1)),
-              borderRadius: BorderRadius.circular(5),
-            ),
+          // Thumbnail
+          ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: Image.file(file, width: 42, height: 42, fit: BoxFit.cover),
           ),
 
           const SizedBox(width: 10),
 
+          // اسم الملف والحجم
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  fileName,
+                  file.path.split(Platform.pathSeparator).last,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -582,39 +659,133 @@ Future<void> _pickDocument({
 
           const SizedBox(width: 8),
 
-          // upload
-          Container(
-            width: 34,
-            height: 34,
-            decoration: const BoxDecoration(
-              color: Color(0xffedf7ff),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.refresh_outlined,
-              size: 18,
-              color: Color(0xff0071C8),
-            ),
-          ),
-
-          const SizedBox(width: 7),
-
-          // delete
-          Container(
-            width: 34,
-            height: 34,
-            decoration: const BoxDecoration(
-              color: Color(0xffffeeee),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.delete_outline,
-              size: 19,
-              color: Color(0xffef3d3d),
+          // Delete
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                documents.remove(document);
+              });
+            },
+            child: Container(
+              width: 34,
+              height: 34,
+              decoration: const BoxDecoration(
+                color: Color(0xffffeeee),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.delete_outline,
+                size: 19,
+                color: Color(0xffef3d3d),
+              ),
             ),
           ),
         ],
       ),
     );
   }
+  void _showSuccessDialog() {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (dialogContext) {
+      return Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(10, 24, 10, 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: const Color(0xff1D2A3A),
+              width: 4,
+            ),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x55000000),
+                blurRadius: 8,
+                offset: Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // الدائرة الخضراء
+              Container(
+                width: 56,
+                height: 56,
+                decoration: const BoxDecoration(
+                  color: Color(0xff3BA957),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                  size: 34,
+                ),
+              ),
+
+              const SizedBox(height: 14),
+
+              const Text(
+                'لقد رفعت معلوماتك',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff222222),
+                ),
+              ),
+
+              const SizedBox(height: 6),
+
+              const Text(
+                "You'll check and open your account to receive trips\n"
+                "from shayel very soon\n"
+                "maybe check your paper take 2 days",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 9,
+                  height: 1.5,
+                  color: Color(0xff777777),
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              SizedBox(
+                width: double.infinity,
+                height: 28,
+                child: ElevatedButton(
+                  onPressed: () {
+        context.go(AppRoutePaths.firstChoose);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff006BB6),
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    padding: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  child: const Text(
+                    'الذهاب لصفحة الدخول',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 }

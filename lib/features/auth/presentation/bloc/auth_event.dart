@@ -215,3 +215,7 @@ class AuthRegisterRequested extends AuthEvent {
         documents,
       ];
 }
+
+class AuthGetDocumentsRequested extends AuthEvent {
+  const AuthGetDocumentsRequested();
+}

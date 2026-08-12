@@ -17,6 +17,7 @@ import '../models/update_profile_request_dto.dart';
 import '../models/login_with_otp_request_dto.dart';
 import '../../domain/entities/register_document.dart';
 import '../models/register_document_model.dart';
+import '../../domain/entities/document_definition.dart';
 
 /// Trims "+2" prefix from phone numbers (e.g. Egyptian +20) when displayed in profile.
 String? _trimPhonePrefixPlus2(String? phone) {
@@ -350,4 +351,23 @@ class AuthImpl implements AuthRepository {
       return _mapDriverProfile(dto);
     }, invalidCredentialsOnUnauthorized: true);
   }
+  @override
+Future<Either<AuthFailure, List<DocumentDefinition>>> getDocuments() async {
+  return _run(() async {
+    final dtos = await _remote.getDocuments();
+
+    return dtos
+        .map(
+          (dto) => DocumentDefinition(
+            id: dto.id,
+            entityId: dto.entityId,
+            nameEn: dto.nameEn,
+            nameAr: dto.nameAr,
+            required: dto.required,
+            status: dto.status,
+          ),
+        )
+        .toList();
+  });
+}
 }

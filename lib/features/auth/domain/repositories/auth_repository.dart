@@ -5,6 +5,8 @@ import '../entities/driver_profile.dart';
 import '../entities/login_result.dart';
 import '../entities/send_login_otp_result.dart';
 import '../failures/auth_failure.dart';
+import '../entities/document_definition.dart';
+
 
 abstract interface class AuthRepository {
   /// Returns [LoginResult] on success. [locale] is used for the lang header (e.g. 'ar' for RTL).
@@ -78,4 +80,5 @@ abstract interface class AuthRepository {
     String? profilePicturePath,
     bool? biometricFingerprint,
   });
+  Future<Either<AuthFailure, List<DocumentDefinition>>> getDocuments();
 }

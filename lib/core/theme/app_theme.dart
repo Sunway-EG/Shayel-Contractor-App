@@ -1,59 +1,48 @@
 import 'package:flutter/cupertino.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
 /// Sun-Way design system theme.
-/// English: Manrope, Arabic: Almarai.
+/// English and Arabic now use the Zain font family globally.
 CupertinoThemeData buildAppTheme([String? languageCode]) {
-  final isArabic = languageCode == 'ar';
-  final fontFamily = isArabic ? 'Almarai' : 'Manrope';
-
   return CupertinoThemeData(
     primaryColor: AppColors.mainBlue,
     primaryContrastingColor: AppColors.white,
     barBackgroundColor: AppColors.mainBlue,
     brightness: Brightness.light,
-    textTheme: _buildTextTheme(fontFamily),
+    textTheme: _buildTextTheme('Zain'),
   );
 }
 
 CupertinoTextThemeData _buildTextTheme(String fontFamily) {
   final base = const CupertinoTextThemeData();
-  final manropeOrAlmarai = fontFamily == 'Almarai'
-      ? GoogleFonts.almarai().fontFamily
-      : GoogleFonts.manrope().fontFamily;
 
   return CupertinoTextThemeData(
     navTitleTextStyle: base.navTitleTextStyle.copyWith(
-      fontFamily: manropeOrAlmarai,
+      fontFamily: fontFamily,
       color: AppColors.mainBlue,
     ),
     navLargeTitleTextStyle: base.navLargeTitleTextStyle.copyWith(
-      fontFamily: manropeOrAlmarai,
+      fontFamily: fontFamily,
       color: AppColors.mainBlue,
       fontWeight: FontWeight.w700,
     ),
     textStyle: base.textStyle.copyWith(
-      fontFamily: manropeOrAlmarai,
+      fontFamily: fontFamily,
       color: AppColors.mainBlue,
     ),
     actionTextStyle: base.actionTextStyle.copyWith(
-      fontFamily: manropeOrAlmarai,
+      fontFamily: fontFamily,
       color: AppColors.mainBlue,
     ),
-    tabLabelTextStyle: base.tabLabelTextStyle.copyWith(
-      fontFamily: manropeOrAlmarai,
-    ),
+    tabLabelTextStyle: base.tabLabelTextStyle.copyWith(fontFamily: fontFamily),
     navActionTextStyle: base.navActionTextStyle.copyWith(
-      fontFamily: manropeOrAlmarai,
+      fontFamily: fontFamily,
       color: AppColors.white,
     ),
-    pickerTextStyle: base.pickerTextStyle.copyWith(
-      fontFamily: manropeOrAlmarai,
-    ),
+    pickerTextStyle: base.pickerTextStyle.copyWith(fontFamily: fontFamily),
     dateTimePickerTextStyle: base.dateTimePickerTextStyle.copyWith(
-      fontFamily: manropeOrAlmarai,
+      fontFamily: fontFamily,
     ),
   );
 }

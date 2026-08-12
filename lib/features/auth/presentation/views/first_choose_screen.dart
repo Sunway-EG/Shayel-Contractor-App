@@ -48,7 +48,7 @@ class first_choose_screen extends StatelessWidget {
                 height: 55,
                 child: ElevatedButton(
                   onPressed: () {
-                    context.go(AppRoutePaths.login);
+                    context.push(AppRoutePaths.login);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff0066C3),
@@ -74,7 +74,7 @@ class first_choose_screen extends StatelessWidget {
                 height: 55,
                 child: OutlinedButton(
                   onPressed: () {
-                    context.go(AppRoutePaths.register);
+                    context.push(AppRoutePaths.register);
                   },
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color(0xff0066C3),

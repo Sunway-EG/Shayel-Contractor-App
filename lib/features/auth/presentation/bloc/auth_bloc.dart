@@ -20,6 +20,7 @@ import '../../domain/use_cases/change_password_usecase.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 import '../../domain/use_cases/register_usecase.dart';
+import '../../domain/use_cases/get_documents_usecase.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
@@ -36,6 +37,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required DisableMfaUseCase disableMfaUseCase,
     required ChangePasswordUseCase changePasswordUseCase,
     required RegisterUseCase registerUseCase,
+    required GetDocumentsUseCase getDocumentsUseCase,
   }) : _loginUseCase = loginUseCase,
        _sendLoginOtpUseCase = sendLoginOtpUseCase,
        _loginWithOtpUseCase = loginWithOtpUseCase,
@@ -49,6 +51,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
        _disableMfaUseCase = disableMfaUseCase,
        _changePasswordUseCase = changePasswordUseCase,
         _registerUseCase = registerUseCase,
+        _getDocumentsUseCase = getDocumentsUseCase,
        super(const AuthInitial()) {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthSendLoginOtpRequested>(_onSendLoginOtpRequested);
@@ -69,7 +72,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEnableBiometricRequested>(_onEnableBiometricRequested);
     on<AuthDisableBiometricRequested>(_onDisableBiometricRequested);
     on<AuthRegisterRequested>(_onRegisterRequested);
-  }
+on<AuthGetDocumentsRequested>(_onGetDocumentsRequested);  }
 
   final LoginUseCase _loginUseCase;
   final SendLoginOtpUseCase _sendLoginOtpUseCase;
@@ -84,6 +87,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final DisableMfaUseCase _disableMfaUseCase;
   final ChangePasswordUseCase _changePasswordUseCase;
   final RegisterUseCase _registerUseCase;
+  final GetDocumentsUseCase _getDocumentsUseCase;
   String? _passwordResetToken;
   String? _loginOtpToken;
   String? _loginOtpPhone;
@@ -521,6 +525,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     },
     (_) {
       emit(const AuthRegisterSuccess());
+    },
+  );
+}
+Future<void> _onGetDocumentsRequested(
+  AuthGetDocumentsRequested event,
+  Emitter<AuthState> emit,
+) async {
+  emit(const AuthDocumentsLoading());
+
+  final result = await _getDocumentsUseCase(null);
+
+  result.fold(
+    (failure) {
+      emit(AuthDocumentsError(_messageForFailure(failure)));
+    },
+    (documents) {
+      emit(AuthDocumentsLoaded(documents));
     },
   );
 }

@@ -60,7 +60,7 @@ dependencies:
   google_fonts: ^8.0.2
   permission_handler: ^12.0.1
   sentry_flutter: ^9.12.0
-  file_picker: 11.0.3
+  file_picker: ^10.3.10
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -82,6 +82,20 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  fonts:
+    - family: Zain
+      fonts:
+        - asset: assets/fonts/Zain-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Zain-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Zain-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Zain-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Zain-Black.ttf
+          weight: 900
 
   # To add assets to your application, add an assets section, like this:
   assets:

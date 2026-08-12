@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../domain/entities/login_result.dart';
+import '../../domain/entities/document_definition.dart';
 
 abstract class AuthState extends Equatable {
   const AuthState();
@@ -101,4 +102,25 @@ class AuthDisableBiometricSuccess extends AuthState {
 
 class AuthRegisterSuccess extends AuthState {
   const AuthRegisterSuccess();
+}
+class AuthDocumentsLoading extends AuthState {
+  const AuthDocumentsLoading();
+}
+
+class AuthDocumentsLoaded extends AuthState {
+  const AuthDocumentsLoaded(this.documents);
+
+  final List<DocumentDefinition> documents;
+
+  @override
+  List<Object?> get props => [documents];
+}
+
+class AuthDocumentsError extends AuthState {
+  const AuthDocumentsError(this.message);
+
+  final String message;
+
+  @override
+  List<Object?> get props => [message];
 }

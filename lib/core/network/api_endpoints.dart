@@ -15,7 +15,8 @@ abstract final class ApiEndpoints {
   static const String enableMfa = '/auth/enable-mfa';
   static const String disableMfa = '/auth/disable-mfa';
 
-  static const register = '/api/contractor/auth/register';
+  static const register = '/auth/register';
+  static const documents = '/documents';
 
   // App version check (shared API root, not under /contractor)
   static const String appVersionCheck = '/app-version/check';

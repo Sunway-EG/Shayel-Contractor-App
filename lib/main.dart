@@ -32,6 +32,7 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'l10n/gen/app_localizations.dart';
 import 'features/auth/domain/use_cases/register_usecase.dart';
+import 'features/auth/domain/use_cases/get_documents_usecase.dart';
 
 /// Override with --dart-define=SENTRY_DSN=... for other environments.
 const _sentryDsn = String.fromEnvironment(
@@ -72,6 +73,7 @@ Future<void> _runApp({bool useSentry = false}) async {
   final disableMfaUseCase = DisableMfaUseCase(authRepository);
   final changePasswordUseCase = ChangePasswordUseCase(authRepository);
   final registerUseCase = RegisterUseCase(authRepository);
+  final getDocumentsUseCase = GetDocumentsUseCase(authRepository);
   // Initialize BloC with use cases
   final authBloc = AuthBloc(
     loginUseCase: loginUseCase,
@@ -87,6 +89,7 @@ Future<void> _runApp({bool useSentry = false}) async {
     disableMfaUseCase: disableMfaUseCase,
     changePasswordUseCase: changePasswordUseCase,
     registerUseCase: registerUseCase,
+     getDocumentsUseCase: getDocumentsUseCase,
   );
 
   final localeBloc = LocaleBloc();
