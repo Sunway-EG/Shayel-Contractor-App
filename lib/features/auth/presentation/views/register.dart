@@ -21,7 +21,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final nameController = TextEditingController(text: 'أحمد');
-  final phoneController = TextEditingController(text: '1023 45678');
+  final phoneController = TextEditingController(text: '10 234 5678');
   final addressController = TextEditingController(
     text: '102 طريق أولين شرقي موبين، VIC 3000',
   );
@@ -280,7 +280,12 @@ const SizedBox(height: 20),
                   child: ElevatedButton(
                     onPressed: agree
                         ? () {
-                             context.read<AuthBloc>().add(
+                          final phone = phoneController.text.trim();
+
+        final phoneWithCountryCode = phone.startsWith('+02')
+            ? phone
+            : '+02$phone';
+                            context.read<AuthBloc>().add(
                               AuthRegisterRequested(
                                 fullName: nameController.text.trim(),
                                 phone: phoneController.text.trim(),
