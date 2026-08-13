@@ -8,9 +8,9 @@ import '../../../../core/services/biometric_service.dart';
 import '../../../../core/utils/string_utils.dart';
 import '../../../../core/storage/auth_storage.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_layout.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_update_flow.dart';
+import '../../../../core/widgets/app_version.dart';
 import '../../../../core/widgets/language_switcher.dart';
 import '../../../../l10n/gen/app_localizations.dart';
 import '../../../profile/presentation/bloc/profile_bloc.dart';
@@ -311,403 +311,310 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, authState) {
           final isLoading = authState is AuthLoading;
-
-          return CupertinoPageScaffold(
-            backgroundColor: CupertinoColors.transparent,
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    const _PasswordLoginHeader(),
-                    Expanded(
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Positioned(
-                            top: AppLayout.authContentTop,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child: ClipRRect(
-                              borderRadius: AppLayout.authContentBorderRadius,
-                              child: Container(
-                                color: AppColors.white,
-                                child: SingleChildScrollView(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (bool didPop, dynamic result) {
+              if (!didPop) context.go(AppRoutePaths.login);
+            },
+            child: CupertinoPageScaffold(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Container(
+                  color: AppColors.white,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 48),
+                      Image.asset(
+                        'assets/images/shayel_logo.png',
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.contain,
+                      ),
+                      const SizedBox(height: 48),
+                      Text(
+                        l10n.welcomeToShayel,
+                        style: CupertinoTheme.of(context)
+                            .textTheme
+                            .navLargeTitleTextStyle
+                            .copyWith(
+                              fontSize: 18,
+                              color: AppColors.darkGray,
+                              fontWeight: FontWeight.w400,
+                            ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        l10n.signInToAccount,
+                        style: CupertinoTheme.of(context).textTheme.textStyle
+                            .copyWith(
+                              color: AppColors.mediumBlueGray,
+                              fontSize: 14,
+                              height: 1.4,
+                              fontWeight: FontWeight.w400,
+                            ),
+                      ),
+                      const SizedBox(height: 28),
+                      Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: Text(
+                          '${l10n.phone} / ${l10n.email}',
+                          style: const TextStyle(
+                            color: AppColors.darkGray,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: _loginError != null
+                                ? CupertinoColors.systemRed
+                                : AppColors.lightGray,
+                          ),
+                        ),
+                        child: Row(
+                          textDirection: TextDirection.ltr,
+                          children: [
+                            if (_isPhoneInput)
+                              Directionality(
+                                textDirection: TextDirection.ltr,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 12),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      const SizedBox(height: 48),
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional.centerStart,
-                                        child: Image.asset(
-                                          'assets/images/shayel_logo.png',
-                                          width: 56,
-                                          height: 68,
-                                          fit: BoxFit.contain,
+                                      const Text(
+                                        '🇪🇬',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          height: 1.2,
                                         ),
                                       ),
-                                      const SizedBox(height: 48),
-                                      Text(
-                                        '${l10n.welcome} 👋',
-                                        style: CupertinoTheme.of(context)
-                                            .textTheme
-                                            .navLargeTitleTextStyle
-                                            .copyWith(
-                                              color: AppColors.darkGray,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      const SizedBox(height: 12),
-                                      Text(
-                                        l10n.signInToAccount,
-                                        style: CupertinoTheme.of(context)
-                                            .textTheme
-                                            .textStyle
-                                            .copyWith(
-                                              color: AppColors.mediumBlueGray,
-                                              fontSize: 15,
-                                              height: 1.4,
-                                            ),
-                                      ),
-                                      const SizedBox(height: 28),
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional.centerStart,
-                                        child: Text(
-                                          '${l10n.phone} / ${l10n.email}',
-                                          style: const TextStyle(
-                                            color: AppColors.darkGray,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                      const SizedBox(width: 6),
+                                      const Text(
+                                        '+2',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: AppColors.mediumBlueGray,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                      const SizedBox(height: 8),
+                                      const SizedBox(width: 10),
                                       Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColors.white,
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
-                                          border: Border.all(
-                                            color: _loginError != null
-                                                ? CupertinoColors.systemRed
-                                                : AppColors.lightGray,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          textDirection: TextDirection.ltr,
-                                          children: [
-                                            if (_isPhoneInput)
-                                              Directionality(
-                                                textDirection:
-                                                    TextDirection.ltr,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                        left: 12,
-                                                      ),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      const Text(
-                                                        '🇪🇬',
-                                                        style: TextStyle(
-                                                          fontSize: 20,
-                                                          height: 1.2,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(width: 6),
-                                                      const Text(
-                                                        '+2',
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: AppColors
-                                                              .mediumBlueGray,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(width: 10),
-                                                      Container(
-                                                        width: 1,
-                                                        height: 20,
-                                                        color:
-                                                            AppColors.lightGray,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            Expanded(
-                                              child: CupertinoTextField(
-                                                controller: _loginController,
-                                                focusNode: _loginFocusNode,
-                                                placeholder: _isPhoneInput
-                                                    ? '${l10n.phone} / ${l10n.email}'
-                                                    : '${l10n.email} / ${l10n.phone}',
-                                                keyboardType: _isPhoneInput
-                                                    ? TextInputType.phone
-                                                    : TextInputType
-                                                          .emailAddress,
-                                                textInputAction:
-                                                    TextInputAction.next,
-                                                onChanged: (value) {
-                                                  _updateInputType(value);
-                                                  if (_loginError != null) {
-                                                    setState(
-                                                      () => _loginError = null,
-                                                    );
-                                                  }
-                                                },
-                                                onSubmitted: (_) {
-                                                  _passwordFocusNode
-                                                      .requestFocus();
-                                                },
-                                                inputFormatters: _isPhoneInput
-                                                    ? [
-                                                        FilteringTextInputFormatter
-                                                            .digitsOnly,
-                                                        LengthLimitingTextInputFormatter(
-                                                          11,
-                                                        ),
-                                                      ]
-                                                    : null,
-                                                maxLength: _isPhoneInput
-                                                    ? 11
-                                                    : null,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 16,
-                                                      vertical: 14,
-                                                    ),
-                                                decoration: null,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                        width: 1,
+                                        height: 20,
+                                        color: AppColors.lightGray,
                                       ),
-                                      if (_loginError != null) ...[
-                                        const SizedBox(height: 8),
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional.centerStart,
-                                          child: Text(
-                                            _loginError!,
-                                            style: const TextStyle(
-                                              color: CupertinoColors.systemRed,
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                      const SizedBox(height: 20),
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional.centerStart,
-                                        child: Text(
-                                          l10n.password,
-                                          style: const TextStyle(
-                                            color: AppColors.darkGray,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColors.white,
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
-                                          border: Border.all(
-                                            color: _passwordError != null
-                                                ? CupertinoColors.systemRed
-                                                : AppColors.lightGray,
-                                          ),
-                                        ),
-                                        child: CupertinoTextField(
-                                          controller: _passwordController,
-                                          focusNode: _passwordFocusNode,
-                                          placeholder: l10n.enterYourPassword,
-                                          obscureText: _obscurePassword,
-                                          textInputAction: TextInputAction.done,
-                                          onChanged: (_) {
-                                            if (_passwordError != null) {
-                                              setState(
-                                                () => _passwordError = null,
-                                              );
-                                            }
-                                          },
-                                          onSubmitted: (_) => _submit(l10n),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 16,
-                                            vertical: 14,
-                                          ),
-                                          decoration: null,
-                                          suffix: CupertinoButton(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                              vertical: 8,
-                                            ),
-                                            minimumSize: Size.zero,
-                                            onPressed: () {
-                                              setState(() {
-                                                _obscurePassword =
-                                                    !_obscurePassword;
-                                              });
-                                            },
-                                            child: Icon(
-                                              _obscurePassword
-                                                  ? CupertinoIcons.eye_slash
-                                                  : CupertinoIcons.eye,
-                                              color: AppColors.mediumBlueGray,
-                                              size: 20,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      if (_passwordError != null) ...[
-                                        const SizedBox(height: 8),
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional.centerStart,
-                                          child: Text(
-                                            _passwordError!,
-                                            style: const TextStyle(
-                                              color: CupertinoColors.systemRed,
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                      const SizedBox(height: 16),
-                                      GestureDetector(
-                                        onTap: () => _toggleRememberMe(),
-                                        behavior: HitTestBehavior.opaque,
-                                        child: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 22,
-                                              height: 22,
-                                              child: CupertinoCheckbox(
-                                                value: _rememberMe,
-                                                onChanged: (_) =>
-                                                    _toggleRememberMe(),
-                                                activeColor: AppColors.mainBlue,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(
-                                              l10n.rememberMe,
-                                              style: const TextStyle(
-                                                color: AppColors.darkGray,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(height: 28),
-                                      AppButton(
-                                        label: l10n.signIn,
-                                        onPressed: () => _submit(l10n),
-                                        loading: isLoading,
-                                      ),
-                                      const SizedBox(height: 16),
-                                      CupertinoButton(
-                                        padding: EdgeInsets.zero,
-                                        onPressed: () =>
-                                            _handleForgetPassword(l10n),
-                                        child: Text(
-                                          l10n.forgetPassword,
-                                          style: const TextStyle(
-                                            color: AppColors.mainBlue,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 12),
-                                      CupertinoButton(
-                                        padding: EdgeInsets.zero,
-                                        onPressed: () =>
-                                            context.go(AppRoutePaths.login),
-                                        child: Text(
-                                          l10n.backToLogin,
-                                          style: const TextStyle(
-                                            color: AppColors.mainBlue,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 24),
                                     ],
                                   ),
                                 ),
                               ),
+                            Expanded(
+                              child: CupertinoTextField(
+                                controller: _loginController,
+                                focusNode: _loginFocusNode,
+                                placeholder: _isPhoneInput
+                                    ? '${l10n.phone} / ${l10n.email}'
+                                    : '${l10n.email} / ${l10n.phone}',
+                                keyboardType: _isPhoneInput
+                                    ? TextInputType.phone
+                                    : TextInputType.emailAddress,
+                                textInputAction: TextInputAction.next,
+                                onChanged: (value) {
+                                  _updateInputType(value);
+                                  if (_loginError != null) {
+                                    setState(() => _loginError = null);
+                                  }
+                                },
+                                onSubmitted: (_) {
+                                  _passwordFocusNode.requestFocus();
+                                },
+                                inputFormatters: _isPhoneInput
+                                    ? [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        LengthLimitingTextInputFormatter(11),
+                                      ]
+                                    : null,
+                                maxLength: _isPhoneInput ? 11 : null,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 14,
+                                ),
+                                decoration: null,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (_loginError != null) ...[
+                        const SizedBox(height: 8),
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            _loginError!,
+                            style: const TextStyle(
+                              color: CupertinoColors.systemRed,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 20),
+                      Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: Text(
+                          l10n.password,
+                          style: const TextStyle(
+                            color: AppColors.darkGray,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: _passwordError != null
+                                ? CupertinoColors.systemRed
+                                : AppColors.lightGray,
+                          ),
+                        ),
+                        child: CupertinoTextField(
+                          controller: _passwordController,
+                          focusNode: _passwordFocusNode,
+                          placeholder: l10n.enterYourPassword,
+                          obscureText: _obscurePassword,
+                          textInputAction: TextInputAction.done,
+                          onChanged: (_) {
+                            if (_passwordError != null) {
+                              setState(() => _passwordError = null);
+                            }
+                          },
+                          onSubmitted: (_) => _submit(l10n),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                          decoration: null,
+                          suffix: CupertinoButton(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            minimumSize: Size.zero,
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                            child: Icon(
+                              _obscurePassword
+                                  ? CupertinoIcons.eye_slash
+                                  : CupertinoIcons.eye,
+                              color: AppColors.mediumBlueGray,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (_passwordError != null) ...[
+                        const SizedBox(height: 8),
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            _passwordError!,
+                            style: const TextStyle(
+                              color: CupertinoColors.systemRed,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () => _handleForgetPassword(l10n),
+                            child: Text(
+                              l10n.forgetPassword,
+                              style: const TextStyle(
+                                color: AppColors.mainBlue,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => _toggleRememberMe(),
+                            behavior: HitTestBehavior.opaque,
+                            child: Row(
+                              children: [
+                                Text(
+                                  l10n.rememberMe,
+                                  style: const TextStyle(
+                                    color: AppColors.darkGray,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CupertinoCheckbox(
+                                    value: _rememberMe,
+                                    onChanged: (_) => _toggleRememberMe(),
+                                    activeColor: AppColors.mainBlue,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 24),
+                      SizedBox(
+                        width: double.infinity,
+                        child: AppButton(
+                          label: l10n.signIn,
+                          onPressed: () => _submit(l10n),
+                          loading: isLoading,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () => context.go(AppRoutePaths.login),
+                        child: Text(
+                          l10n.backToLogin,
+                          style: const TextStyle(
+                            color: AppColors.mainBlue,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const LanguageSwitcher(),
+                      const SizedBox(height: 5),
+                      const Center(child: AppVersionWidget()),
+                      const SizedBox(height: 24),
+                    ],
+                  ),
                 ),
-                PositionedDirectional(
-                  top: MediaQuery.of(context).padding.top + 8,
-                  end: 16,
-                  child: const LanguageSwitcher(),
-                ),
-              ],
+              ),
             ),
           );
         },
       ),
     );
   }
-}
-
-class _PasswordLoginHeader extends StatelessWidget {
-  const _PasswordLoginHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: _PasswordLoginHeaderClipper(),
-      child: Container(
-        width: double.infinity,
-        height: AppLayout.authHeaderHeight,
-        color: AppColors.mainBlue,
-      ),
-    );
-  }
-}
-
-/// Curved bottom edge: dips down on the left, curves up on the right.
-class _PasswordLoginHeaderClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    return Path()
-      ..lineTo(size.width, 0)
-      ..lineTo(size.width, size.height)
-      ..quadraticBezierTo(
-        size.width * 0.3,
-        size.height - 40,
-        0,
-        size.height * 0.6,
-      )
-      ..lineTo(0, 0)
-      ..close();
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }

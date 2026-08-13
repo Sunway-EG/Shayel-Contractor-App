@@ -110,10 +110,34 @@ abstract class AppLocalizations {
   /// **'Welcome'**
   String get welcome;
 
+  /// No description provided for @welcomeToShayel.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Shayel'**
+  String get welcomeToShayel;
+
+  /// No description provided for @welcomeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to your account or create a new one'**
+  String get welcomeDesc;
+
+  /// No description provided for @switchLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch language'**
+  String get switchLanguage;
+
+  /// No description provided for @createNewAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new account'**
+  String get createNewAccount;
+
   /// Instruction for phone verification
   ///
   /// In en, this message translates to:
-  /// **'Enter your phone number and we will send you a verification code in less than a minute.'**
+  /// **'Enter your phone number and we will send you a verification code'**
   String get verificationInstruction;
 
   /// Phone number field label

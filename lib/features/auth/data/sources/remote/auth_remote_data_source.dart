@@ -16,7 +16,7 @@ import '../../models/document_definition_dto.dart';
 abstract interface class AuthRemoteDataSource {
   /// Returns [LoginResponseDto] parsed from data envelope.
   /// Sends [lang] header: 'ar' when RTL (Arabic), else 'en'.
-   Future<List<DocumentDefinitionDto>> getDocuments();
+  Future<List<DocumentDefinitionDto>> getDocuments();
   Future<LoginResponseDto> login(LoginRequestDto request, {String? lang});
   Future<SendLoginOtpResponseDto> sendLoginOtp(LoginRequestDto request);
   Future<LoginResponseDto> loginWithOtp(LoginWithOtpRequestDto request);
@@ -140,32 +140,33 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
     return DriverProfileDto.fromJson(dataObj);
   }
+
   @override
-Future<List<DocumentDefinitionDto>> getDocuments() async {
-  final response = await _dio.get<Map<String, dynamic>>(
-    ApiEndpoints.documents,
-    queryParameters: {
-      'Page': 1,
-      'PageSize': 100,
-      'Search': '',
-      'Required': '',
-      'Status': 1,
-    },
-  );
+  Future<List<DocumentDefinitionDto>> getDocuments() async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      ApiEndpoints.documents,
+      queryParameters: {
+        'Page': 1,
+        'PageSize': 100,
+        'Search': '',
+        'Required': '',
+        'Status': 1,
+      },
+    );
 
-  final envelope = requireEnvelope(response);
+    final envelope = requireEnvelope(response);
 
-  final data = envelope['data'];
+    final data = envelope['data'];
 
-  if (data is! List) {
-    throw Exception('Invalid documents response');
+    if (data is! List) {
+      throw Exception('Invalid documents response');
+    }
+
+    return data
+        .whereType<Map<String, dynamic>>()
+        .map(DocumentDefinitionDto.fromJson)
+        .toList();
   }
-
-  return data
-      .whereType<Map<String, dynamic>>()
-      .map(DocumentDefinitionDto.fromJson)
-      .toList();
-}
 
   @override
   Future<void> forgetPassword({
@@ -205,7 +206,7 @@ Future<List<DocumentDefinitionDto>> getDocuments() async {
       ApiEndpoints.resetPasswordWithCode,
       body: {
         'code': code,
-        'login': login,
+        'identifier': login,
         'newPassword': newPassword,
         'confirmPassword': confirmPassword,
       },

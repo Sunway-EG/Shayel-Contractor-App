@@ -93,10 +93,10 @@ class AuthImpl implements AuthRepository {
         return switch (details.kind) {
           ApiFailureKind.network => const AuthFailureNetwork(),
           ApiFailureKind.unauthorized when invalidCredentialsOnUnauthorized =>
-            const AuthFailureInvalidCredentials(),
+            AuthFailureInvalidCredentials(message: details.message),
           ApiFailureKind.unauthorized ||
           ApiFailureKind.server => AuthFailureServer(
-            message: unauthorizedServerMessage ?? details.message,
+            message: details.message ?? unauthorizedServerMessage,
             statusCode: details.statusCode,
           ),
           ApiFailureKind.unknown => AuthFailureUnknown(
@@ -351,23 +351,24 @@ class AuthImpl implements AuthRepository {
       return _mapDriverProfile(dto);
     }, invalidCredentialsOnUnauthorized: true);
   }
-  @override
-Future<Either<AuthFailure, List<DocumentDefinition>>> getDocuments() async {
-  return _run(() async {
-    final dtos = await _remote.getDocuments();
 
-    return dtos
-        .map(
-          (dto) => DocumentDefinition(
-            id: dto.id,
-            entityId: dto.entityId,
-            nameEn: dto.nameEn,
-            nameAr: dto.nameAr,
-            required: dto.required,
-            status: dto.status,
-          ),
-        )
-        .toList();
-  });
-}
+  @override
+  Future<Either<AuthFailure, List<DocumentDefinition>>> getDocuments() async {
+    return _run(() async {
+      final dtos = await _remote.getDocuments();
+
+      return dtos
+          .map(
+            (dto) => DocumentDefinition(
+              id: dto.id,
+              entityId: dto.entityId,
+              nameEn: dto.nameEn,
+              nameAr: dto.nameAr,
+              required: dto.required,
+              status: dto.status,
+            ),
+          )
+          .toList();
+    });
+  }
 }

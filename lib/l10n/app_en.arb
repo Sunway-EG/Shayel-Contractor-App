@@ -8,7 +8,11 @@
   "@welcome": {
     "description": "Welcome greeting on login screen"
   },
-  "verificationInstruction": "Enter your phone number and we will send you a verification code in less than a minute.",
+  "welcomeToShayel": "Welcome to Shayel",
+  "welcomeDesc": "Sign in to your account or create a new one",
+  "switchLanguage": "Switch language",
+  "createNewAccount": "Create new account",
+  "verificationInstruction": "Enter your phone number and we will send you a verification code",
   "@verificationInstruction": {
     "description": "Instruction for phone verification"
   },

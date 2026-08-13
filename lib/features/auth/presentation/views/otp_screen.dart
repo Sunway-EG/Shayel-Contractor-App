@@ -9,8 +9,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/auth_screen_guard.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/string_utils.dart';
-import '../../../../core/theme/app_layout.dart';
-import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/app_update_flow.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../l10n/gen/app_localizations.dart';
@@ -250,300 +248,192 @@ class _OtpScreenState extends State<OtpScreen> {
 
           return PopScope(
             canPop: false,
-            // Do not navigate in onPopInvokedWithResult: opening/dismissing
-            // the system notification center can trigger a pop attempt and
-            // would incorrectly send the user back to login. Use the explicit
-            // back button in the header instead.
+            onPopInvokedWithResult: (bool didPop, dynamic result) {
+              if (!didPop) context.go(AppRoutePaths.login);
+            },
             child: CupertinoPageScaffold(
-              // Use mainBlue so the area under the keyboard isn't black when
-              // the scaffold is resized (transparent would show black).
-              backgroundColor: AppColors.mainBlue,
-              child: Column(
-                children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      const _OtpHeader(),
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        child: SafeArea(
-                          bottom: false,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 8,
-                            ),
-                            child: Align(
-                              alignment: AlignmentDirectional.centerStart,
-                              child: AppBackButton(
-                                onPressed: () =>
-                                    context.go(AppRoutePaths.login),
-                              ),
-                            ),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Container(
+                  color: AppColors.white,
+                  child: AutofillGroup(
+                    child: Material(
+                      type: MaterialType.transparency,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 48),
+                          Image.asset(
+                            'assets/images/shayel_logo.png',
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.contain,
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Positioned(
-                          top: AppLayout.authContentTop,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          child: ClipRRect(
-                            borderRadius: AppLayout.authContentBorderRadius,
-                            child: Container(
-                              color: AppColors.white,
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                      padding: const EdgeInsets.fromLTRB(
-                                        24,
-                                        0,
-                                        24,
-                                        8,
-                                      ),
-                                      child: AutofillGroup(
-                                        child: Material(
-                                          type: MaterialType.transparency,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            children: [
-                                              const SizedBox(height: 40),
-                                              Align(
-                                                alignment: AlignmentDirectional
-                                                    .centerStart,
-                                                child: Image.asset(
-                                                  'assets/images/shayel_logo.png',
-                                                  width: 48,
-                                                  height: 58,
-                                                  fit: BoxFit.contain,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 20),
-                                              Text(
-                                                l10n.verificationTitle,
-                                                style:
-                                                    CupertinoTheme.of(context)
-                                                        .textTheme
-                                                        .navLargeTitleTextStyle
-                                                        .copyWith(
-                                                          color: AppColors
-                                                              .darkGray,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                              ),
-                                              const SizedBox(height: 8),
-                                              Text(
-                                                instruction,
-                                                style:
-                                                    CupertinoTheme.of(context)
-                                                        .textTheme
-                                                        .textStyle
-                                                        .copyWith(
-                                                          color: AppColors
-                                                              .mediumBlueGray,
-                                                          fontSize: 15,
-                                                          height: 1.4,
-                                                        ),
-                                              ),
-                                              const SizedBox(height: 20),
-                                              Directionality(
-                                                textDirection:
-                                                    TextDirection.ltr,
-                                                child: Material(
-                                                  type:
-                                                      MaterialType.transparency,
-                                                  child: TextField(
-                                                    controller: _otpController,
-                                                    focusNode: _otpFocusNode,
-                                                    autofocus: true,
-                                                    maxLength: 6,
-                                                    textAlign: TextAlign.center,
-                                                    keyboardType:
-                                                        TextInputType.text,
-                                                    autofillHints: const [
-                                                      AutofillHints.oneTimeCode,
-                                                    ],
-                                                    inputFormatters: [
-                                                      FilteringTextInputFormatter
-                                                          .digitsOnly,
-                                                      LengthLimitingTextInputFormatter(
-                                                        6,
-                                                      ),
-                                                    ],
-                                                    style: const TextStyle(
-                                                      color: AppColors.darkGray,
-                                                      fontSize: 24,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      letterSpacing: 8,
-                                                    ),
-                                                    decoration: InputDecoration(
-                                                      counterText: '',
-                                                      hintText: '------',
-                                                      hintStyle:
-                                                          const TextStyle(
-                                                            color: AppColors
-                                                                .mediumBlueGray,
-                                                            fontSize: 24,
-                                                            letterSpacing: 8,
-                                                          ),
-                                                      filled: true,
-                                                      fillColor:
-                                                          AppColors.white,
-                                                      border: OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              10,
-                                                            ),
-                                                        borderSide:
-                                                            const BorderSide(
-                                                              color: AppColors
-                                                                  .lightGray,
-                                                            ),
-                                                      ),
-                                                      enabledBorder: OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              10,
-                                                            ),
-                                                        borderSide:
-                                                            const BorderSide(
-                                                              color: AppColors
-                                                                  .lightGray,
-                                                            ),
-                                                      ),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                  10,
-                                                                ),
-                                                            borderSide:
-                                                                const BorderSide(
-                                                                  color: AppColors
-                                                                      .mainBlue,
-                                                                  width: 2,
-                                                                ),
-                                                          ),
-                                                    ),
-                                                    onSubmitted: (_) =>
-                                                        _verify(),
-                                                  ),
-                                                ),
-                                              ),
-                                              if (widget.isForgetPassword) ...[
-                                                const SizedBox(height: 24),
-                                                _PasswordField(
-                                                  controller:
-                                                      _newPasswordController,
-                                                  label: l10n.newPassword,
-                                                  placeholder:
-                                                      l10n.enterYourPassword,
-                                                  error: _newPasswordError,
-                                                  onChanged: () {
-                                                    _validatePasswords(l10n);
-                                                    setState(() {});
-                                                  },
-                                                ),
-                                                const SizedBox(height: 16),
-                                                _PasswordField(
-                                                  controller:
-                                                      _confirmPasswordController,
-                                                  label: l10n.confirmPassword,
-                                                  placeholder:
-                                                      l10n.confirmPassword,
-                                                  error: _confirmPasswordError,
-                                                  onChanged: () {
-                                                    _validatePasswords(l10n);
-                                                    setState(() {});
-                                                  },
-                                                ),
-                                                if (_passwordError != null) ...[
-                                                  const SizedBox(height: 8),
-                                                  Align(
-                                                    alignment:
-                                                        AlignmentDirectional
-                                                            .centerStart,
-                                                    child: Text(
-                                                      _passwordError!,
-                                                      style: const TextStyle(
-                                                        color: CupertinoColors
-                                                            .systemRed,
-                                                        fontSize: 13,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ],
-                                              const SizedBox(height: 12),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    l10n.resendPrompt,
-                                                    style: const TextStyle(
-                                                      color: AppColors
-                                                          .mediumBlueGray,
-                                                      fontSize: 14,
-                                                    ),
-                                                  ),
-                                                  CupertinoButton(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 8,
-                                                        ),
-                                                    onPressed: _resend,
-                                                    child: Text(
-                                                      l10n.resendLink,
-                                                      style: const TextStyle(
-                                                        color:
-                                                            AppColors.mainBlue,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              const SizedBox(height: 16),
-                                              AppButton(
-                                                label: widget.isForgetPassword
-                                                    ? l10n.resetPassword
-                                                    : l10n.verifyAccount,
-                                                onPressed: _canSubmit
-                                                    ? _verify
-                                                    : null,
-                                                loading: isLoading,
-                                              ),
-                                              const SizedBox(height: 12),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                          const SizedBox(height: 48),
+                          Text(
+                            l10n.verificationTitle,
+                            style: CupertinoTheme.of(context)
+                                .textTheme
+                                .navLargeTitleTextStyle
+                                .copyWith(
+                                  fontSize: 18,
+                                  color: AppColors.darkGray,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            instruction,
+                            style: CupertinoTheme.of(context)
+                                .textTheme
+                                .textStyle
+                                .copyWith(
+                                  color: AppColors.mediumBlueGray,
+                                  fontSize: 14,
+                                  height: 1.4,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                          ),
+                          const SizedBox(height: 20),
+                          Directionality(
+                            textDirection: TextDirection.ltr,
+                            child: Material(
+                              type: MaterialType.transparency,
+                              child: TextField(
+                                controller: _otpController,
+                                focusNode: _otpFocusNode,
+                                autofocus: true,
+                                maxLength: 6,
+                                textAlign: TextAlign.center,
+                                keyboardType: TextInputType.text,
+                                autofillHints: const [
+                                  AutofillHints.oneTimeCode,
+                                ],
+                                inputFormatters: [
+                                  if (widget.isMfa)
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  LengthLimitingTextInputFormatter(6),
+                                ],
+                                style: const TextStyle(
+                                  color: AppColors.darkGray,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 8,
+                                ),
+                                decoration: InputDecoration(
+                                  counterText: '',
+                                  hintText: '------',
+                                  hintStyle: const TextStyle(
+                                    color: AppColors.mediumBlueGray,
+                                    fontSize: 24,
+                                    letterSpacing: 8,
+                                  ),
+                                  filled: true,
+                                  fillColor: AppColors.white,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(
+                                      color: AppColors.lightGray,
                                     ),
                                   ),
-                                ],
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(
+                                      color: AppColors.lightGray,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(
+                                      color: AppColors.mainBlue,
+                                      width: 2,
+                                    ),
+                                  ),
+                                ),
+                                onSubmitted: (_) => _verify(),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                          if (widget.isForgetPassword) ...[
+                            const SizedBox(height: 24),
+                            _PasswordField(
+                              controller: _newPasswordController,
+                              label: l10n.newPassword,
+                              placeholder: l10n.enterYourPassword,
+                              error: _newPasswordError,
+                              onChanged: () {
+                                _validatePasswords(l10n);
+                                setState(() {});
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            _PasswordField(
+                              controller: _confirmPasswordController,
+                              label: l10n.confirmPassword,
+                              placeholder: l10n.confirmPassword,
+                              error: _confirmPasswordError,
+                              onChanged: () {
+                                _validatePasswords(l10n);
+                                setState(() {});
+                              },
+                            ),
+                            if (_passwordError != null) ...[
+                              const SizedBox(height: 8),
+                              Align(
+                                alignment: AlignmentDirectional.centerStart,
+                                child: Text(
+                                  _passwordError!,
+                                  style: const TextStyle(
+                                    color: CupertinoColors.systemRed,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
+                          const SizedBox(height: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                l10n.resendPrompt,
+                                style: const TextStyle(
+                                  color: AppColors.mediumBlueGray,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              CupertinoButton(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                onPressed: _resend,
+                                child: Text(
+                                  l10n.resendLink,
+                                  style: const TextStyle(
+                                    color: AppColors.mainBlue,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: double.infinity,
+                            child: AppButton(
+                              label: widget.isForgetPassword
+                                  ? l10n.resetPassword
+                                  : l10n.verifyAccount,
+                              onPressed: _canSubmit ? _verify : null,
+                              loading: isLoading,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                        ],
+                      ),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           );
@@ -620,40 +510,4 @@ class _PasswordField extends StatelessWidget {
       ],
     );
   }
-}
-
-class _OtpHeader extends StatelessWidget {
-  const _OtpHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: _OtpHeaderClipper(),
-      child: Container(
-        width: double.infinity,
-        height: AppLayout.authHeaderHeight,
-        color: AppColors.mainBlue,
-      ),
-    );
-  }
-}
-
-class _OtpHeaderClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    return Path()
-      ..lineTo(size.width, 0)
-      ..lineTo(size.width, size.height)
-      ..quadraticBezierTo(
-        size.width * 0.3,
-        size.height - 40,
-        0,
-        size.height * 0.6,
-      )
-      ..lineTo(0, 0)
-      ..close();
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }

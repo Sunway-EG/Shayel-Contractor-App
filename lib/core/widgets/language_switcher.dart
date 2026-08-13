@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../l10n/gen/app_localizations.dart';
 import '../locale/bloc/locale_bloc.dart';
 import '../locale/bloc/locale_event.dart';
 import '../locale/bloc/locale_state.dart';
@@ -59,23 +60,13 @@ class LanguageSwitcher extends StatelessWidget {
       padding: const EdgeInsets.all(6),
       minimumSize: Size.zero,
       onPressed: () => _showLanguagePicker(context),
-      child: Container(
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: AppColors.white.withValues(alpha: 0.2),
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: CupertinoColors.black.withValues(alpha: 0.08),
-              blurRadius: 4,
-              offset: const Offset(0, 1),
-            ),
-          ],
-        ),
-        child: const Icon(
-          CupertinoIcons.globe,
-          color: AppColors.white,
-          size: 16,
+      child: Text(
+        AppLocalizations.of(context)!.switchLanguage,
+        style: const TextStyle(
+          fontSize: 14,
+          color: AppColors.mainBlue,
+          fontWeight: FontWeight.w400,
+          decoration: TextDecoration.underline,
         ),
       ),
     );

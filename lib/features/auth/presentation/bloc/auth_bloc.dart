@@ -50,8 +50,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
        _enableMfaUseCase = enableMfaUseCase,
        _disableMfaUseCase = disableMfaUseCase,
        _changePasswordUseCase = changePasswordUseCase,
-        _registerUseCase = registerUseCase,
-        _getDocumentsUseCase = getDocumentsUseCase,
+       _registerUseCase = registerUseCase,
+       _getDocumentsUseCase = getDocumentsUseCase,
        super(const AuthInitial()) {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthSendLoginOtpRequested>(_onSendLoginOtpRequested);
@@ -72,7 +72,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEnableBiometricRequested>(_onEnableBiometricRequested);
     on<AuthDisableBiometricRequested>(_onDisableBiometricRequested);
     on<AuthRegisterRequested>(_onRegisterRequested);
-on<AuthGetDocumentsRequested>(_onGetDocumentsRequested);  }
+    on<AuthGetDocumentsRequested>(_onGetDocumentsRequested);
+  }
 
   final LoginUseCase _loginUseCase;
   final SendLoginOtpUseCase _sendLoginOtpUseCase;
@@ -272,7 +273,7 @@ on<AuthGetDocumentsRequested>(_onGetDocumentsRequested);  }
   String _messageForFailure(AuthFailure failure) {
     return FailureMessageMapper.forAuth(
       failure,
-      invalidCredentialsMessage: 'auth.invalid_phone_number',
+      // invalidCredentialsMessage: 'auth.invalid_phone_number',
     );
   }
 
@@ -504,45 +505,47 @@ on<AuthGetDocumentsRequested>(_onGetDocumentsRequested);  }
       );
     }
   }
+
   Future<void> _onRegisterRequested(
-  AuthRegisterRequested event,
-  Emitter<AuthState> emit,
-) async {
-  emit(const AuthLoading());
+    AuthRegisterRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
 
-  final result = await _registerUseCase(
-    RegisterParams(
-      fullName: event.fullName,
-      phone: event.phone,
-      address: event.address,
-      documents: event.documents,
-    ),
-  );
+    final result = await _registerUseCase(
+      RegisterParams(
+        fullName: event.fullName,
+        phone: event.phone,
+        address: event.address,
+        documents: event.documents,
+      ),
+    );
 
-  result.fold(
-    (failure) {
-      emit(AuthError(_messageForFailure(failure)));
-    },
-    (_) {
-      emit(const AuthRegisterSuccess());
-    },
-  );
-}
-Future<void> _onGetDocumentsRequested(
-  AuthGetDocumentsRequested event,
-  Emitter<AuthState> emit,
-) async {
-  emit(const AuthDocumentsLoading());
+    result.fold(
+      (failure) {
+        emit(AuthError(_messageForFailure(failure)));
+      },
+      (_) {
+        emit(const AuthRegisterSuccess());
+      },
+    );
+  }
 
-  final result = await _getDocumentsUseCase(null);
+  Future<void> _onGetDocumentsRequested(
+    AuthGetDocumentsRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthDocumentsLoading());
 
-  result.fold(
-    (failure) {
-      emit(AuthDocumentsError(_messageForFailure(failure)));
-    },
-    (documents) {
-      emit(AuthDocumentsLoaded(documents));
-    },
-  );
-}
+    final result = await _getDocumentsUseCase(null);
+
+    result.fold(
+      (failure) {
+        emit(AuthDocumentsError(_messageForFailure(failure)));
+      },
+      (documents) {
+        emit(AuthDocumentsLoaded(documents));
+      },
+    );
+  }
 }

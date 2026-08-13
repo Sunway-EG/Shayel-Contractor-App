@@ -15,8 +15,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcome => 'Welcome';
 
   @override
+  String get welcomeToShayel => 'Welcome to Shayel';
+
+  @override
+  String get welcomeDesc => 'Sign in to your account or create a new one';
+
+  @override
+  String get switchLanguage => 'Switch language';
+
+  @override
+  String get createNewAccount => 'Create new account';
+
+  @override
   String get verificationInstruction =>
-      'Enter your phone number and we will send you a verification code in less than a minute.';
+      'Enter your phone number and we will send you a verification code';
 
   @override
   String get phone => 'Phone number';

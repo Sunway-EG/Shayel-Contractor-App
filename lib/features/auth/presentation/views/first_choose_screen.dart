@@ -1,123 +1,92 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/router/route_constants.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_version.dart';
+import '../../../../core/widgets/language_switcher.dart';
+import '../../../../l10n/gen/app_localizations.dart';
 
 class FirstChooseScreen extends StatelessWidget {
   const FirstChooseScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              const SizedBox(height: 90),
+    final l10n = AppLocalizations.of(context)!;
+    return CupertinoPageScaffold(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        color: AppColors.white,
 
-              /// Logo
-              Image.asset("assets/images/logo.png", width: 60, height: 60),
-
-              const SizedBox(height: 20),
-
-              /// Title
-              const Text(
-                "مرحباً في شايل",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+        child: Column(
+          children: [
+            const SizedBox(height: 48),
+            Image.asset(
+              'assets/images/shayel_logo.png',
+              width: 100,
+              height: 100,
+              fit: BoxFit.contain,
+            ),
+            const SizedBox(height: 48),
+            Text(
+              l10n.welcomeToShayel,
+              style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle
+                  .copyWith(
+                    fontSize: 18,
+                    color: AppColors.darkGray,
+                    fontWeight: FontWeight.w400,
+                  ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              l10n.welcomeDesc,
+              style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+                color: AppColors.mediumBlueGray,
+                fontSize: 14,
+                height: 1.4,
+                fontWeight: FontWeight.w400,
               ),
-
-              const SizedBox(height: 8),
-
-              /// Subtitle
-              const Text(
-                "اكتب كلمة مرورك لتسجيل الدخول أو تبديل حسابك",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15, color: Colors.grey),
+            ),
+            const Spacer(),
+            SizedBox(
+              width: double.infinity,
+              child: AppButton(
+                label: l10n.signIn,
+                onPressed: () => context.go(AppRoutePaths.login),
               ),
-
-              const Spacer(),
-
-              /// Login Button
-              SizedBox(
+            ),
+            const SizedBox(height: 16),
+            GestureDetector(
+              onTap: () => context.go(AppRoutePaths.register),
+              child: Container(
                 width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.push(AppRoutePaths.login);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff0066C3),
-                    foregroundColor: Colors.white,
-                    elevation: 5,
-                    shadowColor: Colors.black26,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 14,
+                ),
+                decoration: BoxDecoration(
+                  color: CupertinoColors.transparent,
+                  border: Border.all(color: AppColors.mainBlue, width: 1.5),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text(
+                    l10n.createNewAccount,
+                    style: const TextStyle(
+                      color: AppColors.mainBlue,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ),
-                  child: const Text(
-                    "تسجيل الدخول",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
-
-              const SizedBox(height: 20),
-
-              /// Create Account Button
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: OutlinedButton(
-                  onPressed: () {
-                    context.push(AppRoutePaths.register);
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xff0066C3),
-                    side: const BorderSide(
-                      color: Color(0xff0066C3),
-                      width: 1.2,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text(
-                    "إنشاء حساب جديد",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                  ),
-                ),
-              ),
-
-              const Spacer(),
-
-              /// Switch Account
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  "تبديل الحساب",
-                  style: TextStyle(
-                    color: Color(0xff0066C3),
-                    fontSize: 16,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 4),
-
-              const Text(
-                "التطبيق الإصدار 0.1",
-                style: TextStyle(color: Colors.black54, fontSize: 14),
-              ),
-
-              const SizedBox(height: 20),
-            ],
-          ),
+            ),
+            const Spacer(),
+            const LanguageSwitcher(),
+            const SizedBox(height: 5),
+            const Center(child: AppVersionWidget()),
+            const SizedBox(height: 24),
+          ],
         ),
       ),
     );

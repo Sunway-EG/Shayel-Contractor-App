@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_layout.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../l10n/gen/app_localizations.dart';
 import '../bloc/auth_bloc.dart';
@@ -76,147 +75,86 @@ class _MfaChannelScreenState extends State<MfaChannelScreen> {
           if (!didPop) context.go(AppRoutePaths.login);
         },
         child: CupertinoPageScaffold(
-          backgroundColor: CupertinoColors.transparent,
-          child: Column(
-            children: [
-              const _MfaChannelHeader(),
-              Expanded(
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Positioned(
-                      top: AppLayout.authContentTop,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: ClipRRect(
-                        borderRadius: AppLayout.authContentBorderRadius,
-                        child: Container(
-                          color: AppColors.white,
-                          child: SingleChildScrollView(
-                            padding: const EdgeInsets.symmetric(horizontal: 24),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                const SizedBox(height: 48),
-                                Align(
-                                  alignment: AlignmentDirectional.centerStart,
-                                  child: Image.asset(
-                                    'assets/images/shayel_logo.png',
-                                    width: 56,
-                                    height: 68,
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                                const SizedBox(height: 24),
-                                Text(
-                                  l10n.verificationTitle,
-                                  style: CupertinoTheme.of(context)
-                                      .textTheme
-                                      .navLargeTitleTextStyle
-                                      .copyWith(
-                                        color: AppColors.darkGray,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  l10n.verificationSubtitle,
-                                  style: CupertinoTheme.of(context)
-                                      .textTheme
-                                      .textStyle
-                                      .copyWith(
-                                        color: AppColors.mediumBlueGray,
-                                        fontSize: 15,
-                                        height: 1.4,
-                                      ),
-                                ),
-                                const SizedBox(height: 28),
-                                _MfaChannelOptionCard(
-                                  icon: CupertinoIcons.chat_bubble_text_fill,
-                                  title: l10n.sendViaSms,
-                                  subtitle: widget.phone,
-                                  isSelected: _selectedChannel == 2,
-                                  onTap: () =>
-                                      setState(() => _selectedChannel = 2),
-                                ),
-                                const SizedBox(height: 12),
-                                _MfaChannelOptionCard(
-                                  icon: CupertinoIcons.envelope_fill,
-                                  title: l10n.sendViaEmail,
-                                  subtitle: widget.email,
-                                  isSelected: _selectedChannel == 1,
-                                  onTap: () =>
-                                      setState(() => _selectedChannel = 1),
-                                ),
-                                const SizedBox(height: 28),
-                                BlocBuilder<AuthBloc, AuthState>(
-                                  builder: (context, authState) {
-                                    return AppButton(
-                                      label: l10n.continueButton,
-                                      onPressed: () {
-                                        context.read<AuthBloc>().add(
-                                          AuthSendMfaCodeRequested(
-                                            channel: _selectedChannel,
-                                          ),
-                                        );
-                                      },
-                                      loading: authState is AuthLoading,
-                                    );
-                                  },
-                                ),
-                                const SizedBox(height: 24),
-                              ],
-                            ),
-                          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Container(
+              color: AppColors.white,
+              child: Column(
+                children: [
+                  const SizedBox(height: 48),
+                  Image.asset(
+                    'assets/images/shayel_logo.png',
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(height: 48),
+                  Text(
+                    l10n.verificationTitle,
+                    style: CupertinoTheme.of(context)
+                        .textTheme
+                        .navLargeTitleTextStyle
+                        .copyWith(
+                          fontSize: 18,
+                          color: AppColors.darkGray,
+                          fontWeight: FontWeight.w400,
                         ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    l10n.verificationSubtitle,
+                    style: CupertinoTheme.of(context).textTheme.textStyle
+                        .copyWith(
+                          color: AppColors.mediumBlueGray,
+                          fontSize: 14,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400,
+                        ),
+                  ),
+                  const SizedBox(height: 28),
+                  _MfaChannelOptionCard(
+                    icon: CupertinoIcons.chat_bubble_text_fill,
+                    title: l10n.sendViaSms,
+                    subtitle: widget.phone,
+                    isSelected: _selectedChannel == 2,
+                    onTap: () => setState(() => _selectedChannel = 2),
+                  ),
+                  const SizedBox(height: 12),
+                  _MfaChannelOptionCard(
+                    icon: CupertinoIcons.envelope_fill,
+                    title: l10n.sendViaEmail,
+                    subtitle: widget.email,
+                    isSelected: _selectedChannel == 1,
+                    onTap: () => setState(() => _selectedChannel = 1),
+                  ),
+                  const SizedBox(height: 28),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, authState) {
+                      return SizedBox(
+                        width: double.infinity,
+                        child: AppButton(
+                          label: l10n.continueButton,
+                          onPressed: () {
+                            context.read<AuthBloc>().add(
+                              AuthSendMfaCodeRequested(
+                                channel: _selectedChannel,
+                              ),
+                            );
+                          },
+                          loading: authState is AuthLoading,
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
-}
-
-class _MfaChannelHeader extends StatelessWidget {
-  const _MfaChannelHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: _MfaChannelHeaderClipper(),
-      child: Container(
-        width: double.infinity,
-        height: AppLayout.authHeaderHeight,
-        color: AppColors.mainBlue,
-      ),
-    );
-  }
-}
-
-class _MfaChannelHeaderClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    return Path()
-      ..lineTo(size.width, 0)
-      ..lineTo(size.width, size.height)
-      ..quadraticBezierTo(
-        size.width * 0.3,
-        size.height - 40,
-        0,
-        size.height * 0.6,
-      )
-      ..lineTo(0, 0)
-      ..close();
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
 
 class _MfaChannelOptionCard extends StatelessWidget {

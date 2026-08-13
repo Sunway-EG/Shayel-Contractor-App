@@ -15,11 +15,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get welcome => 'مرحباً بك';
 
   @override
-  String get verificationInstruction =>
-      'أدخل رقم موبيلك و هنبعتلك رمز التحقق في اقل من دقيقة.';
+  String get welcomeToShayel => 'مرحباً في شايل';
 
   @override
-  String get phone => 'رقم الموبايل';
+  String get welcomeDesc => 'سجّل الدخول إلى حسابك أو أنشئ حسابًا جديدًا';
+
+  @override
+  String get switchLanguage => 'تغيير اللغة';
+
+  @override
+  String get createNewAccount => 'إنشاء حساب جديد';
+
+  @override
+  String get verificationInstruction => 'أدخل رقم موبيلك و هنبعتلك رمز التحقق';
+
+  @override
+  String get phone => 'رقم الهاتف';
 
   @override
   String get enterYourPhone => 'أدخل رقم موبيلك';
@@ -40,7 +51,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get email => 'البريد الإلكتروني';
 
   @override
-  String get password => 'الرقم السري';
+  String get password => 'كلمة المرور';
 
   @override
   String get signIn => 'تسجيل الدخول';
@@ -64,7 +75,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get home => 'الرئيسية';
 
   @override
-  String get forgetPassword => 'نسيت كلمة السر؟';
+  String get forgetPassword => 'نسيت كلمة المرور؟';
 
   @override
   String get verificationTitle => 'رمز التحقق';
@@ -88,19 +99,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String otpInstructionSms(String phone) {
-    return 'ارسلنا لك رمز التحقيق برسالة نصية على رقمك ($phone)، اكتبه هنا علشان تقدر تستكمل فتح حسابك.';
+    return 'ارسلنا لك رمز التحقيق برسالة نصية على رقمك ($phone)، يرجى إدخال الرمز أدناه للمتابعة.';
   }
 
   @override
   String otpInstructionEmail(String email) {
-    return 'ارسلنا لك رمز التحقيق على بريدك الالكتروني $email، اكتبه هنا علشان تقدر تستكمل فتح حسابك.';
+    return 'ارسلنا لك رمز التحقيق على بريدك الالكتروني $email، يرجى إدخال الرمز أدناه للمتابعة.';
   }
 
   @override
-  String get resendPrompt => 'لسه مجاش رسالة ?';
+  String get resendPrompt => 'لم تحصل على الرمز؟';
 
   @override
-  String get resendLink => 'إبعته تاني';
+  String get resendLink => 'إعادة إرسال';
 
   @override
   String get verifyAccount => 'تحقق من حسابك';

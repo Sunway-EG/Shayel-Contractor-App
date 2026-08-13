@@ -20,7 +20,10 @@ final class AuthFailureNetwork extends AuthFailure {
 }
 
 final class AuthFailureInvalidCredentials extends AuthFailure {
-  const AuthFailureInvalidCredentials();
+  const AuthFailureInvalidCredentials({this.message});
+  final String? message;
+  @override
+  List<Object?> get props => [message];
 }
 
 final class AuthFailureUnknown extends AuthFailure {

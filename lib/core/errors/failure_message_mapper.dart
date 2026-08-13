@@ -5,10 +5,11 @@ import '../../features/auth/domain/failures/auth_failure.dart';
 class FailureMessageMapper {
   static String forAuth(
     AuthFailure failure, {
-    String invalidCredentialsMessage = 'invalid_credentials',
+    String invalidCredentialsMessage = 'auth.invalid_credentials',
   }) {
     return switch (failure) {
-      AuthFailureInvalidCredentials() => invalidCredentialsMessage,
+      AuthFailureInvalidCredentials(:final message) =>
+        message ?? invalidCredentialsMessage,
       AuthFailureServer(:final message) => message ?? 'server_error',
       AuthFailureNetwork() => 'network_error',
       AuthFailureUnknown(:final message) => message ?? 'unknown_error',
