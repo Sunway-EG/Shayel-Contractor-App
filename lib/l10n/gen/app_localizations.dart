@@ -1735,6 +1735,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong. Please try again.'**
   String get errorDefault;
+
+  /// No description provided for @continuee.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continuee;
+
+  /// No description provided for @trackYourPackageEasily.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your package easily'**
+  String get trackYourPackageEasily;
+
+  /// No description provided for @trackYourPackageEasilyDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your package ID and get real-time updates on your shipment’s journey.'**
+  String get trackYourPackageEasilyDesc;
+
+  /// No description provided for @realtimeNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Realtime notifications'**
+  String get realtimeNotifications;
+
+  /// No description provided for @realtimeNotificationsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Get a realtime notification about your package status. You can customize the notification easily.'**
+  String get realtimeNotificationsDesc;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
 }
 
 class _AppLocalizationsDelegate

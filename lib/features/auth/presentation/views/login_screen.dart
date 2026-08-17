@@ -36,7 +36,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _phoneError;
   bool _biometricAvailable = false;
   bool _biometricEnabled = false;
-  bool _didAutoOpenBiometric = false;
   bool _rememberMe = false;
 
   @override
@@ -131,26 +130,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _maybeAutoOpenBiometric(BuildContext context) {
-    if (!_biometricAvailable || !_biometricEnabled || _didAutoOpenBiometric) {
-      return;
-    }
-    _didAutoOpenBiometric = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      final l10n = AppLocalizations.of(context)!;
-      context.read<AuthBloc>().add(
-        AuthBiometricLoginRequested(
-          localizedReason: l10n.biometricLocalizedReasonSignIn,
-        ),
-      );
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    _maybeAutoOpenBiometric(context);
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {

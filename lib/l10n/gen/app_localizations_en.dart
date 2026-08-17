@@ -887,4 +887,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorDefault => 'Something went wrong. Please try again.';
+
+  @override
+  String get continuee => 'Continue';
+
+  @override
+  String get trackYourPackageEasily => 'Track your package easily';
+
+  @override
+  String get trackYourPackageEasilyDesc =>
+      'Enter your package ID and get real-time updates on your shipment’s journey.';
+
+  @override
+  String get realtimeNotifications => 'Realtime notifications';
+
+  @override
+  String get realtimeNotificationsDesc =>
+      'Get a realtime notification about your package status. You can customize the notification easily.';
+
+  @override
+  String get skip => 'Skip';
 }

@@ -1109,5 +1109,12 @@
   "error405": "This action is not allowed.",
   "error422": "The given data was invalid.",
   "error500": "Server error. Please try again later.",
-  "errorDefault": "Something went wrong. Please try again."
+  "errorDefault": "Something went wrong. Please try again.",
+  "continuee": "Continue",
+  "trackYourPackageEasily": "Track your package easily",
+  "trackYourPackageEasilyDesc": "Enter your package ID and get real-time updates on your shipment’s journey.",
+  "realtimeNotifications": "Realtime notifications",
+  "realtimeNotificationsDesc": "Get a realtime notification about your package status. You can customize the notification easily.",
+  "skip": "Skip"
+
 }

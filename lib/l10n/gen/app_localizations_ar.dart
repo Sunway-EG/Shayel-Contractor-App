@@ -882,4 +882,24 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get errorDefault => 'حدث خطأ ما. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get continuee => 'متابعة';
+
+  @override
+  String get trackYourPackageEasily => 'تتبع شحنتك بسهولة';
+
+  @override
+  String get trackYourPackageEasilyDesc =>
+      'أدخل رقم الشحنة واحصل على تحديثات فورية عن رحلة شحنتك.';
+
+  @override
+  String get realtimeNotifications => 'إشعارات فورية';
+
+  @override
+  String get realtimeNotificationsDesc =>
+      'احصل على إشعارات فورية حول حالة شحنتك. يمكنك تخصيص الإشعارات بسهولة.';
+
+  @override
+  String get skip => 'تخطي';
 }
