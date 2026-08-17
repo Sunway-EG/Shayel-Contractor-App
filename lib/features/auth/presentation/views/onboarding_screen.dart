@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/router/route_constants.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
@@ -18,153 +19,147 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 252, 252, 255),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              /// Header
-              Row(
-  children: [
-    TextButton(
-      onPressed: () {
-        context.go(AppRoutePaths.firstChoose);
-      },
-      child: const Text(
-        "تخطي",
-        style: TextStyle(
-          color: Color(0xff005AA9),
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-
-    const Spacer(),
-
-    Row(
-      // mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Image.asset(
-          "assets/images/Frame 157.png",
-          height: 50,
-        ),
-        Image.asset(
-          "assets/images/image 18.png",
-          height: 50,
-        ),
-      ],
-    ),
-  ],
-),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  2,
-                  (index) => _dot(index == currentPage),
-                ),
-              ),
-
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    setState(() {
-                      currentPage = index;
-                    });
+        child: Column(
+          children: [
+            /// Header
+            Row(
+              children: [
+                const SizedBox(width: 10),
+                TextButton(
+                  onPressed: () {
+                    context.go(AppRoutePaths.firstChoose);
                   },
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Positioned(
-                          top: 200,
-                          child: Container(
-                            width: 220,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(
-                                    0xFF2196F3,
-                                  ).withValues(alpha: .5),
-                                  blurRadius: 60,
-                                  spreadRadius: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Image.asset(
-                          "assets/images/content.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ],
+                  child: const Text(
+                    "تخطي",
+                    style: TextStyle(
+                      color: Color(0xff005AA9),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
+                ),
 
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Positioned(
-                          top: 200,
-                          child: Container(
-                            width: 220,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(
-                                    0xFF2196F3,
-                                  ).withValues(alpha: .5),
-                                  blurRadius: 60,
-                                  spreadRadius: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Image.asset(
-                          "assets/images/Container.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ],
+                const Spacer(),
+                Row(
+                  // mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/images/Frame 160.svg',
+                      width: 100,
+                      height: 50,
                     ),
+                    const SizedBox(width: 20),
+                    // Image.asset("assets/images/Frame 157.png",height: 50 ),
+                    // Image.asset("assets/images/image 18.png", height: 50),
                   ],
                 ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                height: 45,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (currentPage == 0) {
-                      // لو في أول صفحة روح للثانية
-                      _pageController.nextPage(
-                        duration: const Duration(milliseconds: 400),
-                        curve: Curves.easeInOut,
-                      );
-                    } else {
-                      // لو في آخر صفحة افتح شاشة التسجيل
-                      context.go(AppRoutePaths.firstChoose);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff0066C3),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(2, (index) => _dot(index == currentPage)),
+            ),
+
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    currentPage = index;
+                  });
+                },
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned(
+                        top: 200,
+                        child: Container(
+                          width: 220,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(
+                                  0xFF2196F3,
+                                ).withValues(alpha: .5),
+                                blurRadius: 60,
+                                spreadRadius: 20,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Image.asset(
+                        "assets/images/content.png",
+                        fit: BoxFit.contain,
+                      ),
+                    ],
                   ),
-                  child: const Text(
-                    "متابعة",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned(
+                        top: 200,
+                        child: Container(
+                          width: 220,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(
+                                  0xFF2196F3,
+                                ).withValues(alpha: .5),
+                                blurRadius: 60,
+                                spreadRadius: 20,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Image.asset(
+                        "assets/images/Container.png",
+                        fit: BoxFit.contain,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 45,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (currentPage == 0) {
+                    // لو في أول صفحة روح للثانية
+                    _pageController.nextPage(
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.easeInOut,
+                    );
+                  } else {
+                    // لو في آخر صفحة افتح شاشة التسجيل
+                    context.go(AppRoutePaths.firstChoose);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xff0066C3),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
+                child: const Text(
+                  "متابعة",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
               ),
-              const SizedBox(height: 20),
-            ],
-          ),
+            ),
+            const SizedBox(height: 20),
+          ],
         ),
       ),
     );

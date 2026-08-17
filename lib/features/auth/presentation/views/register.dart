@@ -41,13 +41,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       allowMultiple: true,
     );
 
-    if (result == null) {
-      return;
-    }
-    print('Uploading document ID: $documentId');
-    setState(() {
-      for (final file in result.files) {
-        if (file.path == null) continue;
+  if (result == null) {
+    return;
+  }
+  setState(() {
+    for (final file in result.files) {
+      if (file.path == null) continue;
 
         documents.add(
           RegisterDocument(
@@ -206,9 +205,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           );
                         }
 
-                        if (state is AuthDocumentsLoaded) {
-                          print('DOCUMENTS FROM API: ${state.documents}');
-                          documentDefinitions = state.documents;
+    if (state is AuthDocumentsLoaded) {
+      documentDefinitions = state.documents;
 
                           return Column(
                             children: [
@@ -288,38 +286,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ? () {
                                 final phone = phoneController.text.trim();
 
-                                final phoneWithCountryCode =
-                                    phone.startsWith('+02')
-                                    ? phone
-                                    : '+02$phone';
-                                context.read<AuthBloc>().add(
-                                  AuthRegisterRequested(
-                                    fullName: nameController.text.trim(),
-                                    phone: phoneController.text.trim(),
-                                    address: addressController.text.trim(),
-                                    documents: documents,
-                                  ),
-                                );
-                              }
-                            : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xff006BB6),
-                          disabledBackgroundColor: const Color(0xff006BB6),
-                          foregroundColor: Colors.white,
-                          elevation: 1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
-                        child: const Text(
-                          'تأكيد',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+        final phoneWithCountryCode = phone.startsWith('+2')
+            ? phone
+            : '+2$phone'; 
+
+
+                            context.read<AuthBloc>().add(
+                              AuthRegisterRequested(
+                                fullName: nameController.text.trim(),
+                                phone: phoneController.text.trim(),
+                                address: addressController.text.trim(),
+                                documents: documents,
+                              ),
+                            );
+                          }
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff006BB6),
+                      disabledBackgroundColor: const Color(0xff006BB6),
+                      foregroundColor: Colors.white,
+                      elevation: 1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
                       ),
                     ),
+                    child: const Text(
+                      'تأكيد',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
 
                     const SizedBox(height: 15),
                   ],
