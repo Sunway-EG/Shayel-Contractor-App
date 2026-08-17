@@ -19,11 +19,9 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final nameController = TextEditingController(text: 'أحمد');
-  final phoneController = TextEditingController(text: '10 234 5678');
-  final addressController = TextEditingController(
-    text: '102 طريق أولين شرقي موبين، VIC 3000',
-  );
+  final nameController = TextEditingController(text: 'الاسم بالكامل');
+  final phoneController = TextEditingController(text: 'رقم الهاتف');
+  final addressController = TextEditingController(text: 'العنوان بالكامل');
   final List<RegisterDocument> documents = [];
   List<DocumentDefinition> documentDefinitions = [];
   bool agree = false;
@@ -41,12 +39,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       allowMultiple: true,
     );
 
-  if (result == null) {
-    return;
-  }
-  setState(() {
-    for (final file in result.files) {
-      if (file.path == null) continue;
+    if (result == null) {
+      return;
+    }
+    setState(() {
+      for (final file in result.files) {
+        if (file.path == null) continue;
 
         documents.add(
           RegisterDocument(
@@ -74,7 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthRegisterSuccess) {
-            _showSuccessDialog();
+            _showSuccessDialog(context);
           }
         },
         child: PopScope(
@@ -90,7 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               elevation: 0,
               centerTitle: true,
               leading: IconButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => context.go(AppRoutePaths.firstChoose),
                 icon: const Icon(
                   Icons.arrow_back_ios_new,
                   size: 20,
@@ -205,8 +203,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           );
                         }
 
-    if (state is AuthDocumentsLoaded) {
-      documentDefinitions = state.documents;
+                        if (state is AuthDocumentsLoaded) {
+                          documentDefinitions = state.documents;
 
                           return Column(
                             children: [
@@ -284,41 +282,97 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: ElevatedButton(
                         onPressed: agree
                             ? () {
+                                // =========================================
+                                // 1. Validation - الاسم
+                                // =========================================
+                                if (nameController.text.trim().isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'برجاء إدخال الاسم بالكامل',
+                                      ),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                // =========================================
+                                // 2. Validation - رقم الهاتف
+                                // =========================================
+                                if (phoneController.text.trim().isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('برجاء إدخال رقم الهاتف'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                // =========================================
+                                // 3. Validation - المستندات المطلوبة
+                                // =========================================
+                                for (final definition in documentDefinitions) {
+                                  if (definition.required) {
+                                    final hasUploadedDocument = documents.any(
+                                      (document) =>
+                                          document.documentId == definition.id,
+                                    );
+
+                                    if (!hasUploadedDocument) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'برجاء رفع المستند المطلوب: ${definition.nameAr}',
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                  }
+                                }
+
+                                // =========================================
+                                // 4. كل الـ Validation تمام
+                                // نكمل Register عادي
+                                // =========================================
                                 final phone = phoneController.text.trim();
 
-        final phoneWithCountryCode = phone.startsWith('+2')
-            ? phone
-            : '+2$phone'; 
+                                final phoneWithCountryCode =
+                                    phone.startsWith('+2') ? phone : '+2$phone';
 
-
-                            context.read<AuthBloc>().add(
-                              AuthRegisterRequested(
-                                fullName: nameController.text.trim(),
-                                phone: phoneController.text.trim(),
-                                address: addressController.text.trim(),
-                                documents: documents,
-                              ),
-                            );
-                          }
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff006BB6),
-                      disabledBackgroundColor: const Color(0xff006BB6),
-                      foregroundColor: Colors.white,
-                      elevation: 1,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
+                                context.read<AuthBloc>().add(
+                                  AuthRegisterRequested(
+                                    fullName: nameController.text.trim(),
+                                    phone: phoneWithCountryCode,
+                                    address: addressController.text.trim(),
+                                    documents: documents,
+                                  ),
+                                );
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff006BB6),
+                          disabledBackgroundColor: const Color(0xff006BB6),
+                          foregroundColor: Colors.white,
+                          elevation: 1,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        child: const Text(
+                          'تأكيد',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
-                    child: const Text(
-                      'تأكيد',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
 
                     const SizedBox(height: 15),
                   ],
@@ -359,10 +413,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         textAlign: TextAlign.right,
 
         onTap: () {
-          controller.selection = TextSelection(
-            baseOffset: 0,
-            extentOffset: controller.text.length,
-          );
+          if (controller.text.isNotEmpty) {
+            controller.clear();
+          }
         },
 
         style: const TextStyle(
@@ -438,10 +491,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               keyboardType: TextInputType.phone,
               textAlign: TextAlign.right,
               onTap: () {
-                phoneController.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: phoneController.text.length,
-                );
+                if (phoneController.text.isNotEmpty) {
+                  phoneController.clear();
+                }
               },
 
               style: const TextStyle(fontSize: 14),
@@ -466,10 +518,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       maxLines: 4,
       textAlign: TextAlign.right,
       onTap: () {
-        addressController.selection = TextSelection(
-          baseOffset: 0,
-          extentOffset: addressController.text.length,
-        );
+        if (addressController.text.isNotEmpty) {
+          addressController.clear();
+        }
       },
       style: const TextStyle(
         fontSize: 14,
@@ -697,49 +748,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void _showSuccessDialog() {
-    showDialog(
+  void _showSuccessDialog(BuildContext context) {
+    showModalBottomSheet(
       context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(10, 24, 10, 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: const Color(0xff1D2A3A), width: 4),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x55000000),
-                  blurRadius: 8,
-                  offset: Offset(0, 5),
-                ),
-              ],
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black54,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (bottomSheetContext) {
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(10, 32, 10, 10),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
             ),
+          ),
+          child: SafeArea(
+            top: false,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // الدائرة الخضراء
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: const BoxDecoration(
-                    color: Color(0xff3BA957),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.assignment_turned_in_outlined,
-                    color: Colors.white,
-                    size: 34,
+                Center(
+                  child: SizedBox(
+                    width: 180,
+                    height: 150,
+                    child: Transform.scale(
+                      scale: 1.8,
+                      child: Image.asset(
+                        'assets/images/Custom_Icon.png',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
                 ),
 
-                const SizedBox(height: 14),
+                // const SizedBox(height: 1),
 
+                // العنوان
                 const Text(
                   'لقد رفعت معلوماتك',
                   textAlign: TextAlign.center,
@@ -750,10 +799,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
 
+                // الوصف
                 const Text(
-                  "You'll check and open your account to receive trips\n"
+                  "You'll check, and open your account to receive trips\n"
                   "from shayel very soon\n"
                   "maybe check your paper take 2 days",
                   textAlign: TextAlign.center,
@@ -764,13 +814,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 14),
 
+                // الزر
                 SizedBox(
                   width: double.infinity,
-                  height: 28,
+                  height: 34,
                   child: ElevatedButton(
                     onPressed: () {
+                      // هنا حط الـ navigation بتاعك
                       context.go(AppRoutePaths.firstChoose);
                     },
                     style: ElevatedButton.styleFrom(
@@ -783,7 +835,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     child: const Text(
-                      'الذهاب لصفحة الدخول',
+                      'الذهاب للصفحة الرئيسية',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w600,

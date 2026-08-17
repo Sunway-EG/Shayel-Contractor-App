@@ -340,7 +340,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
           if (index == 0) {
             context.go(AppRoutePaths.home);
           } else {
-            // TODO: Register the remaining shell destinations when their screens exist.
+            
           }
         },
         items: const [

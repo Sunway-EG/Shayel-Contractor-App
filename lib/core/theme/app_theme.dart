@@ -1,9 +1,41 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
 
 /// Sun-Way design system theme.
 /// English and Arabic now use the Zain font family globally.
+ThemeData buildMaterialTheme([
+  String? languageCode,
+  Brightness brightness = Brightness.light,
+]) {
+  final base = ThemeData(
+    brightness: brightness,
+    fontFamily: 'Zain',
+  );
+
+  return base.copyWith(
+    textTheme: base.textTheme.apply(fontFamily: 'Zain'),
+    primaryTextTheme: base.primaryTextTheme.apply(fontFamily: 'Zain'),
+    appBarTheme: base.appBarTheme.copyWith(
+      titleTextStyle: base.appBarTheme.titleTextStyle?.copyWith(
+            fontFamily: 'Zain',
+          ) ??
+          const TextStyle(fontFamily: 'Zain'),
+      toolbarTextStyle: base.appBarTheme.toolbarTextStyle?.copyWith(
+            fontFamily: 'Zain',
+          ) ??
+          const TextStyle(fontFamily: 'Zain'),
+    ),
+    dialogTheme: base.dialogTheme.copyWith(
+      titleTextStyle: base.dialogTheme.titleTextStyle?.copyWith(
+            fontFamily: 'Zain',
+          ) ??
+          const TextStyle(fontFamily: 'Zain'),
+    ),
+  );
+}
+
 CupertinoThemeData buildAppTheme([String? languageCode]) {
   return CupertinoThemeData(
     primaryColor: AppColors.mainBlue,
