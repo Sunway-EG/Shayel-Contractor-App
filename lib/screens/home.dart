@@ -252,37 +252,37 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _QuickCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
+// class _QuickCard extends StatelessWidget {
+//   final IconData icon;
+//   final String title;
 
-  const _QuickCard({required this.icon, required this.title});
+//   const _QuickCard({required this.icon, required this.title});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(color: Colors.grey.withValues(alpha: .08), blurRadius: 8),
-        ],
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: const Color(0xff0066C3)),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 12),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: const EdgeInsets.symmetric(vertical: 18),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(14),
+//         boxShadow: [
+//           BoxShadow(color: Colors.grey.withValues(alpha: .08), blurRadius: 8),
+//         ],
+//       ),
+//       child: Column(
+//         children: [
+//           Icon(icon, color: const Color(0xff0066C3)),
+//           const SizedBox(height: 8),
+//           Text(
+//             title,
+//             textAlign: TextAlign.center,
+//             style: const TextStyle(fontSize: 12),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class _LogoutButton extends StatelessWidget {
   const _LogoutButton({required this.onLogout});

@@ -152,13 +152,16 @@ class ShayelContractorApp extends StatelessWidget {
               : localeState is LocaleInitial
               ? localeState.locale
               : const Locale('ar');
-          return CupertinoApp.router(
-            title: 'Shayel Contractor',
-            theme: buildAppTheme(locale.languageCode),
-            locale: locale,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            routerConfig: createAppRouter(),
+          return Theme(
+            data: buildMaterialTheme(locale.languageCode),
+            child: CupertinoApp.router(
+              title: 'Shayel Contractor',
+              theme: buildAppTheme(locale.languageCode),
+              locale: locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              routerConfig: createAppRouter(),
+            ),
           );
         },
       ),

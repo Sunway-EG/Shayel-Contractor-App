@@ -40,18 +40,29 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
                 ),
 
                 const Spacer(),
-                Row(
-                  // mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                Stack(
                   children: [
-                    SvgPicture.asset(
-                      'assets/images/Frame 160.svg',
-                      width: 100,
-                      height: 50,
+                    Row(
+                      // mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/images/Frame 160.svg',
+                          width: 100,
+                          height: 50,
+                        ),
+                        const SizedBox(width: 20),
+                        // Image.asset("assets/images/Frame 157.png",height: 50 ),
+                        // Image.asset("assets/images/image 18.png", height: 50),
+                      ],
                     ),
-                    const SizedBox(width: 20),
-                    // Image.asset("assets/images/Frame 157.png",height: 50 ),
-                    // Image.asset("assets/images/image 18.png", height: 50),
+                    Positioned(
+                      top: 5,
+                      child: Image.asset(
+                        "assets/images/image 18.png",
+                        height: 50,
+                      ),
+                    ),
                   ],
                 ),
               ],
