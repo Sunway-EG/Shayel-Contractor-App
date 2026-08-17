@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appTitle => 'شايل للسائق';
+  String get appTitle => 'شايل للمقاول';
 
   @override
   String get welcome => 'مرحباً بك';
@@ -34,6 +34,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get enterYourPhone => 'أدخل رقم موبيلك';
+
+  @override
+  String get enterYourFullName => 'أدخل اسمك الكامل';
+
+  @override
+  String get enterYourAddress => 'أدخل تفاصيل العنوان';
 
   @override
   String get enterValidPhone => 'أدخل رقم موبايل صحيح';
@@ -761,21 +767,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get locationPermissionDisclosureTitle =>
-      'كيف يستخدم شايل للسائق موقعك';
+      'كيف يستخدم شايل للمقاول موقعك';
 
   @override
   String get locationPermissionDisclosureBody =>
-      'يجمع تطبيق شايل للسائق موقع جهازك—بما في ذلك في الخلفية عندما لا يكون التطبيق ظاهراً على الشاشة—أثناء كونك متصلاً أو أثناء تنفيذ الرحلات. نستخدمه لعرض موضعك على الخريطة، والتبديل بدقة بين وضعي الاتصال، والتخطيط لمسارات الاستلام والتسليم، ومشاركة الموقع المباشر مع شركتك. يُرسل الموقع فقط إلى خوادم شايل عند الحاجة لهذه ميزات السائق.\n\nسيُطلب منك أولاً السماح بالموقع أثناء استخدام التطبيق. إذا لزم التتبع المباشر الكامل، ستظهر شاشة ثانية تشرح الوصول في الخلفية، ثم خطوة إذن أخرى من النظام (مثل «السماح طوال الوقت»). اضغط «متابعة» للبدء.';
+      'يجمع تطبيق شايل للمقاول موقع جهازك—بما في ذلك في الخلفية عندما لا يكون التطبيق ظاهراً على الشاشة—أثناء كونك متصلاً أو أثناء تنفيذ الرحلات. نستخدمه لعرض موضعك على الخريطة، والتبديل بدقة بين وضعي الاتصال، والتخطيط لمسارات الاستلام والتسليم، ومشاركة الموقع المباشر مع شركتك. يُرسل الموقع فقط إلى خوادم شايل عند الحاجة لهذه ميزات مقاول.\n\nسيُطلب منك أولاً السماح بالموقع أثناء استخدام التطبيق. إذا لزم التتبع المباشر الكامل، ستظهر شاشة ثانية تشرح الوصول في الخلفية، ثم خطوة إذن أخرى من النظام (مثل «السماح طوال الوقت»). اضغط «متابعة» للبدء.';
 
   @override
   String get locationBackgroundPermissionDisclosureTitle => 'الموقع في الخلفية';
 
   @override
   String get locationBackgroundPermissionDisclosureBody =>
-      'لكي تصل شركتك بتحديثات مباشرة موثوقة أثناء القيادة، يحتاج شايل للسائق إلى إذن للوصول إلى الموقع في الخلفية (عندما يكون التطبيق خلف تطبيقات أخرى أو الشاشة مطفأة). يُستخدم ذلك فقط لميزات السائق الموضحة في الشاشة السابقة—وليس للإعلانات.\n\nاضغط «متابعة» لفتح طلب الإذن التالي من النظام. على بعض الأجهزة يجب اختيار «السماح طوال الوقت» أو تفعيل الموقع في الخلفية من الإعدادات.';
+      'لكي تصل شركتك بتحديثات مباشرة موثوقة أثناء القيادة، يحتاج شايل للمقاول إلى إذن للوصول إلى الموقع في الخلفية (عندما يكون التطبيق خلف تطبيقات أخرى أو الشاشة مطفأة). يُستخدم ذلك فقط لميزات مقاول الموضحة في الشاشة السابقة—وليس للإعلانات.\n\nاضغط «متابعة» لفتح طلب الإذن التالي من النظام. على بعض الأجهزة يجب اختيار «السماح طوال الوقت» أو تفعيل الموقع في الخلفية من الإعدادات.';
 
   @override
-  String get locationTrackingNotificationTitle => 'شايل للسائق متصل';
+  String get locationTrackingNotificationTitle => 'شايل للمقاول متصل';
 
   @override
   String get locationTrackingNotificationText =>
@@ -786,21 +792,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get notificationPermissionDisclosureBody =>
-      'يرسل تطبيق شايل للسائق إشعارات عن الرحلات والجداول والتحديثات المهمة. لإيصالها يستخدم التطبيق الإشعارات الفورية ورمز جهاز يُخزَّن على خوادمنا. اضغط «متابعة» لفتح طلب إذن النظام.';
+      'يرسل تطبيق شايل للمقاول إشعارات عن الرحلات والجداول والتحديثات المهمة. لإيصالها يستخدم التطبيق الإشعارات الفورية ورمز جهاز يُخزَّن على خوادمنا. اضغط «متابعة» لفتح طلب إذن النظام.';
 
   @override
   String get cameraPermissionDisclosureTitle => 'الوصول إلى الكاميرا';
 
   @override
   String get cameraPermissionDisclosureBody =>
-      'يستخدم تطبيق شايل للسائق الكاميرا فقط عندما تختار التقاط صورة—مثلاً لصورة الملف الشخصي أو المستندات المطلوبة. تُرفع الصور التي تلتقطها إلى خوادمنا لحساب السائق. اضغط «متابعة» لفتح طلب إذن النظام.';
+      'يستخدم تطبيق شايل للمقاول الكاميرا فقط عندما تختار التقاط صورة—مثلاً لصورة الملف الشخصي أو المستندات المطلوبة. تُرفع الصور التي تلتقطها إلى خوادمنا لحساب مقاول. اضغط «متابعة» لفتح طلب إذن النظام.';
 
   @override
   String get photosPermissionDisclosureTitle => 'الصور والملفات';
 
   @override
   String get photosPermissionDisclosureBody =>
-      'يصل تطبيق شايل للسائق إلى الصور التي تختارها من معرض الصور أو تخزين الجهاز لرفع صور الملف الشخصي أو المستندات. لا نصل إلا للملفات التي تختارها أنت. اضغط «متابعة» لفتح طلب إذن النظام.';
+      'يصل تطبيق شايل للمقاول إلى الصور التي تختارها من معرض الصور أو تخزين الجهاز لرفع صور الملف الشخصي أو المستندات. لا نصل إلا للملفات التي تختارها أنت. اضغط «متابعة» لفتح طلب إذن النظام.';
 
   @override
   String get appUpdateRequiredTitle => 'التحديث مطلوب';
@@ -810,11 +816,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get appUpdateRequiredMessage =>
-      'يلزم إصدار جديد من تطبيق شايل للسائق للمتابعة. يرجى التحديث إلى أحدث إصدار.';
+      'يلزم إصدار جديد من تطبيق شايل للمقاول للمتابعة. يرجى التحديث إلى أحدث إصدار.';
 
   @override
   String get appUpdateAvailableMessage =>
-      'يتوفر إصدار جديد من تطبيق شايل للسائق يتضمن تحسينات وإصلاحات.';
+      'يتوفر إصدار جديد من تطبيق شايل للمقاول يتضمن تحسينات وإصلاحات.';
 
   @override
   String appUpdateLatestVersion(String version) {
@@ -899,6 +905,31 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get realtimeNotificationsDesc =>
       'احصل على إشعارات فورية حول حالة شحنتك. يمكنك تخصيص الإشعارات بسهولة.';
+
+  @override
+  String get uploadYourDocuments => 'ارفع مستنداتك';
+
+  @override
+  String get contractorInformation => 'معلومات المقاول';
+
+  @override
+  String get fullName => 'الاسم الكامل';
+
+  @override
+  String get addressDetails => 'تفاصيل العنوان';
+
+  @override
+  String get uploadImageOrBrowse => 'رفع صورة أو تصفح';
+
+  @override
+  String get pngJpgUpTo => 'PNG, JPG حتى 10 ميجابايت';
+
+  @override
+  String get registerConfirm =>
+      'أؤكد أن تفاصيل الشحنة المقدمة صحيحة وأوافق على المضي قدماً في التسليم.';
+
+  @override
+  String get confirm => 'تأكيد';
 
   @override
   String get skip => 'تخطي';

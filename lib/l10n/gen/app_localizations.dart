@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// Application title shown in app bar
   ///
   /// In en, this message translates to:
-  /// **'Shayel Driver'**
+  /// **'Shayel Contractor'**
   String get appTitle;
 
   /// Welcome greeting on login screen
@@ -151,6 +151,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter your phone number'**
   String get enterYourPhone;
+
+  /// full name placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your full name'**
+  String get enterYourFullName;
+
+  /// address details placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your address details'**
+  String get enterYourAddress;
 
   /// Phone validation error
   ///
@@ -1517,13 +1529,13 @@ abstract class AppLocalizations {
   /// Title for in-app location disclosure before system permission
   ///
   /// In en, this message translates to:
-  /// **'How Shayel Driver uses your location'**
+  /// **'How Shayel Contractor uses your location'**
   String get locationPermissionDisclosureTitle;
 
   /// Prominent disclosure for location including background use (Google Play User Data policy)
   ///
   /// In en, this message translates to:
-  /// **'Shayel Driver collects your device location—including in the background when the app is not on screen—while you are online or working on trips. We use it to show your position on the map, switch online/offline accurately, plan routes for pickups and deliveries, and share live location with your company. Location is sent only to Shayel servers as needed for these driver features.\n\nYou will first be asked to allow location while using the app. If full live tracking is needed, a second screen will explain background access, followed by another system permission step (for example “Allow all the time”). Tap Continue to start.'**
+  /// **'Shayel Contractor collects your device location—including in the background when the app is not on screen—while you are online or working on trips. We use it to show your position on the map, switch online/offline accurately, plan routes for pickups and deliveries, and share live location with your company. Location is sent only to Shayel servers as needed for these contractor features.\n\nYou will first be asked to allow location while using the app. If full live tracking is needed, a second screen will explain background access, followed by another system permission step (for example “Allow all the time”). Tap Continue to start.'**
   String get locationPermissionDisclosureBody;
 
   /// Title for second disclosure before background / always location permission
@@ -1535,13 +1547,13 @@ abstract class AppLocalizations {
   /// Prominent disclosure before ACCESS_BACKGROUND_LOCATION / always permission step
   ///
   /// In en, this message translates to:
-  /// **'So your company can receive reliable live updates while you drive, Shayel Driver needs permission to access location in the background (when the app is behind other apps or the screen is off). This is only used for the driver features described on the previous screen—not for advertising.\n\nTap Continue to open the next system permission. On some devices you must choose “Allow all the time” or enable background location in Settings.'**
+  /// **'So your company can receive reliable live updates while you drive, Shayel Contractor needs permission to access location in the background (when the app is behind other apps or the screen is off). This is only used for the contractor features described on the previous screen—not for advertising.\n\nTap Continue to open the next system permission. On some devices you must choose “Allow all the time” or enable background location in Settings.'**
   String get locationBackgroundPermissionDisclosureBody;
 
   /// Android foreground service notification title while sharing live location
   ///
   /// In en, this message translates to:
-  /// **'Shayel Driver is online'**
+  /// **'Shayel Contractor is online'**
   String get locationTrackingNotificationTitle;
 
   /// Android foreground service notification body while sharing live location
@@ -1559,7 +1571,7 @@ abstract class AppLocalizations {
   /// Prominent disclosure for notifications (Google Play User Data policy)
   ///
   /// In en, this message translates to:
-  /// **'Shayel Driver sends notifications about trips, schedules, and important updates. To deliver them, the app uses push notifications and a device token stored on our servers. Tap Continue to open the system permission request.'**
+  /// **'Shayel Contractor sends notifications about trips, schedules, and important updates. To deliver them, the app uses push notifications and a device token stored on our servers. Tap Continue to open the system permission request.'**
   String get notificationPermissionDisclosureBody;
 
   /// Title for in-app camera disclosure before system permission
@@ -1571,7 +1583,7 @@ abstract class AppLocalizations {
   /// Prominent disclosure for camera (Google Play User Data policy)
   ///
   /// In en, this message translates to:
-  /// **'Shayel Driver uses the camera only when you choose to take a photo—for example for your profile picture or required documents. Photos you take are uploaded to our servers for your driver account. Tap Continue to open the system permission request.'**
+  /// **'Shayel Contractor uses the camera only when you choose to take a photo—for example for your profile picture or required documents. Photos you take are uploaded to our servers for your contractor account. Tap Continue to open the system permission request.'**
   String get cameraPermissionDisclosureBody;
 
   /// Title for in-app photos/library disclosure before system permission
@@ -1583,7 +1595,7 @@ abstract class AppLocalizations {
   /// Prominent disclosure for photo library (Google Play User Data policy)
   ///
   /// In en, this message translates to:
-  /// **'Shayel Driver accesses images you select from your photo library or device storage to upload profile or document images. We only access files you choose. Tap Continue to open the system permission request.'**
+  /// **'Shayel Contractor accesses images you select from your photo library or device storage to upload profile or document images. We only access files you choose. Tap Continue to open the system permission request.'**
   String get photosPermissionDisclosureBody;
 
   /// Title for blocking force update screen
@@ -1601,13 +1613,13 @@ abstract class AppLocalizations {
   /// Default message for force update screen
   ///
   /// In en, this message translates to:
-  /// **'A new version of Shayel Driver is required to continue. Please update to the latest version.'**
+  /// **'A new version of Shayel Contractor is required to continue. Please update to the latest version.'**
   String get appUpdateRequiredMessage;
 
   /// Default message for optional update prompt
   ///
   /// In en, this message translates to:
-  /// **'A new version of Shayel Driver is available with improvements and fixes.'**
+  /// **'A new version of Shayel Contractor is available with improvements and fixes.'**
   String get appUpdateAvailableMessage;
 
   /// Shows the latest app version on the update prompt
@@ -1765,6 +1777,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Get a realtime notification about your package status. You can customize the notification easily.'**
   String get realtimeNotificationsDesc;
+
+  /// No description provided for @uploadYourDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload your documents'**
+  String get uploadYourDocuments;
+
+  /// No description provided for @contractorInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Contractor information'**
+  String get contractorInformation;
+
+  /// No description provided for @fullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get fullName;
+
+  /// No description provided for @addressDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Address details'**
+  String get addressDetails;
+
+  /// No description provided for @uploadImageOrBrowse.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload Image or browse'**
+  String get uploadImageOrBrowse;
+
+  /// No description provided for @pngJpgUpTo.
+  ///
+  /// In en, this message translates to:
+  /// **'PNG, JPG up to 10MB'**
+  String get pngJpgUpTo;
+
+  /// No description provided for @registerConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'I confirm that the shipment details provided are correct and I agree to proceed with the delivery.'**
+  String get registerConfirm;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
 
   /// No description provided for @skip.
   ///
