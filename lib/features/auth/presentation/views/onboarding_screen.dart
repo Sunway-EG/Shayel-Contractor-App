@@ -1,7 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/router/route_constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_button.dart';
+import '../../../../l10n/gen/app_localizations.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
@@ -16,62 +21,46 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 252, 252, 255),
-      body: SafeArea(
+    final l10n = AppLocalizations.of(context)!;
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        padding: const EdgeInsetsDirectional.symmetric(horizontal: 24),
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              'assets/images/mini_logo.svg',
+              width: 30,
+              height: 25,
+              fit: BoxFit.contain,
+            ),
+            Image.asset('assets/images/shayel_img.png', width: 50, height: 25),
+          ],
+        ),
+        middle: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(2, (index) => _dot(index == currentPage)),
+        ),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => context.go(AppRoutePaths.firstChoose),
+          child: Text(
+            l10n.skip,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: AppColors.mainBlue,
+            ),
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsetsGeometry.symmetric(
+          horizontal: 24,
+          vertical: 48,
+        ),
         child: Column(
           children: [
-            /// Header
-            Row(
-              children: [
-                const SizedBox(width: 10),
-                TextButton(
-                  onPressed: () {
-                    context.go(AppRoutePaths.firstChoose);
-                  },
-                  child: const Text(
-                    "تخطي",
-                    style: TextStyle(
-                      color: Color(0xff005AA9),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-
-                const Spacer(),
-                Stack(
-                  children: [
-                    Row(
-                      // mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/images/Frame 160.svg',
-                          width: 100,
-                          height: 50,
-                        ),
-                        const SizedBox(width: 20),
-                        // Image.asset("assets/images/Frame 157.png",height: 50 ),
-                        // Image.asset("assets/images/image 18.png", height: 50),
-                      ],
-                    ),
-                    Positioned(
-                      top: 5,
-                      child: Image.asset(
-                        "assets/images/image 18.png",
-                        height: 50,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(2, (index) => _dot(index == currentPage)),
-            ),
-
             Expanded(
               child: PageView(
                 controller: _pageController,
@@ -81,60 +70,60 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
                   });
                 },
                 children: [
-                  Stack(
-                    alignment: Alignment.center,
+                  Column(
                     children: [
-                      Positioned(
-                        top: 200,
-                        child: Container(
-                          width: 220,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(
-                                  0xFF2196F3,
-                                ).withValues(alpha: .5),
-                                blurRadius: 60,
-                                spreadRadius: 20,
-                              ),
-                            ],
-                          ),
+                      Image.asset(
+                        Directionality.of(context) == TextDirection.rtl
+                            ? 'assets/images/onboarding1_ar.png'
+                            : 'assets/images/onboarding1_en.png',
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        l10n.trackYourPackageEasily,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.darkGray,
                         ),
                       ),
-                      Image.asset(
-                        "assets/images/content.png",
-                        fit: BoxFit.contain,
+                      const SizedBox(height: 8),
+                      Text(
+                        l10n.trackYourPackageEasilyDesc,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: CupertinoColors.systemGrey,
+                        ),
                       ),
                     ],
                   ),
-
-                  Stack(
-                    alignment: Alignment.center,
+                  Column(
                     children: [
-                      Positioned(
-                        top: 200,
-                        child: Container(
-                          width: 220,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(
-                                  0xFF2196F3,
-                                ).withValues(alpha: .5),
-                                blurRadius: 60,
-                                spreadRadius: 20,
-                              ),
-                            ],
-                          ),
+                      Image.asset(
+                        Directionality.of(context) == TextDirection.rtl
+                            ? 'assets/images/onboarding2_ar.png'
+                            : 'assets/images/onboarding2_en.png',
+                        fit: BoxFit.contain,
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        l10n.realtimeNotifications,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.darkGray,
                         ),
                       ),
-                      Image.asset(
-                        "assets/images/Container.png",
-                        fit: BoxFit.contain,
+                      const SizedBox(height: 8),
+                      Text(
+                        l10n.realtimeNotificationsDesc,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: CupertinoColors.systemGrey,
+                        ),
                       ),
                     ],
                   ),
@@ -143,33 +132,20 @@ class _OnBoardingScreen2State extends State<OnBoardingScreen> {
             ),
             SizedBox(
               width: double.infinity,
-              height: 45,
-              child: ElevatedButton(
+              child: AppButton(
                 onPressed: () {
                   if (currentPage == 0) {
-                    // لو في أول صفحة روح للثانية
                     _pageController.nextPage(
                       duration: const Duration(milliseconds: 400),
                       curve: Curves.easeInOut,
                     );
                   } else {
-                    // لو في آخر صفحة افتح شاشة التسجيل
                     context.go(AppRoutePaths.firstChoose);
                   }
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xff0066C3),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  "متابعة",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
+                label: l10n.continuee,
               ),
             ),
-            const SizedBox(height: 20),
           ],
         ),
       ),

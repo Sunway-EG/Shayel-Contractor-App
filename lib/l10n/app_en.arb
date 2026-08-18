@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "Shayel Driver",
+  "appTitle": "Shayel Contractor",
   "@appTitle": {
     "description": "Application title shown in app bar"
   },
@@ -23,6 +23,14 @@
   "enterYourPhone": "Enter your phone number",
   "@enterYourPhone": {
     "description": "Phone input placeholder"
+  },
+  "enterYourFullName": "Enter your full name",
+  "@enterYourFullName": {
+    "description": "full name placeholder"
+  },
+  "enterYourAddress": "Enter your address details",
+  "@enterYourAddress": {
+    "description": "address details placeholder"
   },
   "enterValidPhone": "Enter a valid phone number",
   "@enterValidPhone": {
@@ -992,11 +1000,11 @@
   "@prominentDisclosureNotNow": {
     "description": "Decline the in-app permission disclosure"
   },
-  "locationPermissionDisclosureTitle": "How Shayel Driver uses your location",
+  "locationPermissionDisclosureTitle": "How Shayel Contractor uses your location",
   "@locationPermissionDisclosureTitle": {
     "description": "Title for in-app location disclosure before system permission"
   },
-  "locationPermissionDisclosureBody": "Shayel Driver collects your device location—including in the background when the app is not on screen—while you are online or working on trips. We use it to show your position on the map, switch online/offline accurately, plan routes for pickups and deliveries, and share live location with your company. Location is sent only to Shayel servers as needed for these driver features.\n\nYou will first be asked to allow location while using the app. If full live tracking is needed, a second screen will explain background access, followed by another system permission step (for example “Allow all the time”). Tap Continue to start.",
+  "locationPermissionDisclosureBody": "Shayel Contractor collects your device location—including in the background when the app is not on screen—while you are online or working on trips. We use it to show your position on the map, switch online/offline accurately, plan routes for pickups and deliveries, and share live location with your company. Location is sent only to Shayel servers as needed for these contractor features.\n\nYou will first be asked to allow location while using the app. If full live tracking is needed, a second screen will explain background access, followed by another system permission step (for example “Allow all the time”). Tap Continue to start.",
   "@locationPermissionDisclosureBody": {
     "description": "Prominent disclosure for location including background use (Google Play User Data policy)"
   },
@@ -1004,11 +1012,11 @@
   "@locationBackgroundPermissionDisclosureTitle": {
     "description": "Title for second disclosure before background / always location permission"
   },
-  "locationBackgroundPermissionDisclosureBody": "So your company can receive reliable live updates while you drive, Shayel Driver needs permission to access location in the background (when the app is behind other apps or the screen is off). This is only used for the driver features described on the previous screen—not for advertising.\n\nTap Continue to open the next system permission. On some devices you must choose “Allow all the time” or enable background location in Settings.",
+  "locationBackgroundPermissionDisclosureBody": "So your company can receive reliable live updates while you drive, Shayel Contractor needs permission to access location in the background (when the app is behind other apps or the screen is off). This is only used for the contractor features described on the previous screen—not for advertising.\n\nTap Continue to open the next system permission. On some devices you must choose “Allow all the time” or enable background location in Settings.",
   "@locationBackgroundPermissionDisclosureBody": {
     "description": "Prominent disclosure before ACCESS_BACKGROUND_LOCATION / always permission step"
   },
-  "locationTrackingNotificationTitle": "Shayel Driver is online",
+  "locationTrackingNotificationTitle": "Shayel Contractor is online",
   "@locationTrackingNotificationTitle": {
     "description": "Android foreground service notification title while sharing live location"
   },
@@ -1020,7 +1028,7 @@
   "@notificationPermissionDisclosureTitle": {
     "description": "Title for in-app notification disclosure before system permission"
   },
-  "notificationPermissionDisclosureBody": "Shayel Driver sends notifications about trips, schedules, and important updates. To deliver them, the app uses push notifications and a device token stored on our servers. Tap Continue to open the system permission request.",
+  "notificationPermissionDisclosureBody": "Shayel Contractor sends notifications about trips, schedules, and important updates. To deliver them, the app uses push notifications and a device token stored on our servers. Tap Continue to open the system permission request.",
   "@notificationPermissionDisclosureBody": {
     "description": "Prominent disclosure for notifications (Google Play User Data policy)"
   },
@@ -1028,7 +1036,7 @@
   "@cameraPermissionDisclosureTitle": {
     "description": "Title for in-app camera disclosure before system permission"
   },
-  "cameraPermissionDisclosureBody": "Shayel Driver uses the camera only when you choose to take a photo—for example for your profile picture or required documents. Photos you take are uploaded to our servers for your driver account. Tap Continue to open the system permission request.",
+  "cameraPermissionDisclosureBody": "Shayel Contractor uses the camera only when you choose to take a photo—for example for your profile picture or required documents. Photos you take are uploaded to our servers for your contractor account. Tap Continue to open the system permission request.",
   "@cameraPermissionDisclosureBody": {
     "description": "Prominent disclosure for camera (Google Play User Data policy)"
   },
@@ -1036,7 +1044,7 @@
   "@photosPermissionDisclosureTitle": {
     "description": "Title for in-app photos/library disclosure before system permission"
   },
-  "photosPermissionDisclosureBody": "Shayel Driver accesses images you select from your photo library or device storage to upload profile or document images. We only access files you choose. Tap Continue to open the system permission request.",
+  "photosPermissionDisclosureBody": "Shayel Contractor accesses images you select from your photo library or device storage to upload profile or document images. We only access files you choose. Tap Continue to open the system permission request.",
   "@photosPermissionDisclosureBody": {
     "description": "Prominent disclosure for photo library (Google Play User Data policy)"
   },
@@ -1048,11 +1056,11 @@
   "@appUpdateAvailableTitle": {
     "description": "Title for optional update prompt"
   },
-  "appUpdateRequiredMessage": "A new version of Shayel Driver is required to continue. Please update to the latest version.",
+  "appUpdateRequiredMessage": "A new version of Shayel Contractor is required to continue. Please update to the latest version.",
   "@appUpdateRequiredMessage": {
     "description": "Default message for force update screen"
   },
-  "appUpdateAvailableMessage": "A new version of Shayel Driver is available with improvements and fixes.",
+  "appUpdateAvailableMessage": "A new version of Shayel Contractor is available with improvements and fixes.",
   "@appUpdateAvailableMessage": {
     "description": "Default message for optional update prompt"
   },
@@ -1109,5 +1117,23 @@
   "error405": "This action is not allowed.",
   "error422": "The given data was invalid.",
   "error500": "Server error. Please try again later.",
-  "errorDefault": "Something went wrong. Please try again."
+  "errorDefault": "Something went wrong. Please try again.",
+  "continuee": "Continue",
+  "trackYourPackageEasily": "Track your package easily",
+  "trackYourPackageEasilyDesc": "Enter your package ID and get real-time updates on your shipment’s journey.",
+  "realtimeNotifications": "Realtime notifications",
+  "realtimeNotificationsDesc": "Get a realtime notification about your package status. You can customize the notification easily.",
+  "uploadYourDocuments": "Upload your documents",
+  "contractorInformation": "Contractor information",
+  "fullName": "Full Name",
+  "addressDetails": "Address details",
+  "uploadImageOrBrowse": "Upload Image or browse",
+  "pngJpgUpTo": "PNG, JPG up to 10MB",
+  "registerConfirm": "I confirm that the shipment details provided are correct and I agree to proceed with the delivery.",
+  "yourRequestSuccessfullyRegistered": "Your request successfully registered",
+  "yourRequestSuccessfullyRegisteredDesc": "We’ll check your documents. and open your account to receive trips from shayel very soon, maybe checking your paper takes 2 days",
+  "goToHomepage": "Go to homepage",
+  "confirm": "Confirm",
+  "skip": "Skip"
+
 }

@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_sficon/flutter_sficon.dart';
+
 import '../../../../core/router/route_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +18,6 @@ import '../../../../core/widgets/app_update_flow.dart';
 import '../../../../core/widgets/app_version.dart';
 import '../../../../core/widgets/language_switcher.dart';
 import '../../../../l10n/gen/app_localizations.dart';
-import '../../../profile/presentation/bloc/profile_bloc.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -35,11 +39,14 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
   String? _passwordError;
   bool _obscurePassword = true;
   bool _isPhoneInput = true; // Default to phone input
+  bool _biometricAvailable = false;
+  bool _biometricEnabled = false;
   bool _rememberMe = false;
 
   @override
   void initState() {
     super.initState();
+    _checkBiometricStatus();
     _rememberMe = AuthStorage.instance.rememberMe;
     final remembered = AuthStorage.instance.rememberedLogin;
     if (_rememberMe && remembered != null && remembered.isNotEmpty) {
@@ -67,6 +74,17 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
     _loginFocusNode.dispose();
     _passwordFocusNode.dispose();
     super.dispose();
+  }
+
+  Future<void> _checkBiometricStatus() async {
+    final isAvailable = await BiometricService.instance.isAvailable();
+    final isEnabled = await BiometricService.instance.isBiometricEnabled();
+    if (mounted) {
+      setState(() {
+        _biometricAvailable = isAvailable;
+        _biometricEnabled = isEnabled;
+      });
+    }
   }
 
   void _updateInputType(String value) {
@@ -265,10 +283,6 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                         l10n.biometricLocalizedReasonEnable,
                   ),
                 );
-                // Sync biometric preference with backend
-                context.read<ProfileBloc>().add(
-                  const ProfileUpdateRequested(biometricFingerprint: true),
-                );
               }
             }
             if (!context.mounted) return;
@@ -310,7 +324,6 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
       },
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, authState) {
-          final isLoading = authState is AuthLoading;
           return PopScope(
             canPop: false,
             onPopInvokedWithResult: (bool didPop, dynamic result) {
@@ -581,13 +594,52 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                         ],
                       ),
                       const SizedBox(height: 24),
-                      SizedBox(
-                        width: double.infinity,
-                        child: AppButton(
-                          label: l10n.signIn,
-                          onPressed: () => _submit(l10n),
-                          loading: isLoading,
-                        ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: AppButton(
+                              label: l10n.signIn,
+                              onPressed: () => _submit(l10n),
+                              loading: authState is AuthLoading,
+                            ),
+                          ),
+                          if (_biometricAvailable && _biometricEnabled) ...[
+                            const SizedBox(width: 0),
+                            CupertinoButton(
+                              padding: const EdgeInsets.all(12),
+                              minimumSize: Size.zero,
+                              onPressed: authState is AuthLoading
+                                  ? null
+                                  : () {
+                                      context.read<AuthBloc>().add(
+                                        AuthBiometricLoginRequested(
+                                          localizedReason: l10n
+                                              .biometricLocalizedReasonSignIn,
+                                        ),
+                                      );
+                                    },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: AppColors.mainBlue,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Platform.isIOS
+                                    ? const SFIcon(
+                                        SFIcons.sf_faceid,
+                                        color: AppColors.white,
+                                        fontSize: 24,
+                                      )
+                                    : const Icon(
+                                        Icons.fingerprint,
+                                        color: AppColors.white,
+                                        size: 24,
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                       const SizedBox(height: 12),
                       CupertinoButton(

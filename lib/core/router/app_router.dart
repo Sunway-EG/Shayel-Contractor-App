@@ -209,7 +209,7 @@ class _SplashScreenState extends State<_SplashScreen>
               opacity: _textOpacity,
               child: SlideTransition(
                 position: _textSlide,
-                child: Image.asset("assets/images/image 18.png", width: 90),
+                child: Image.asset("assets/images/shayel_img.png", width: 90),
               ),
             ),
             const SizedBox(height: 30),
@@ -339,9 +339,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
         onTap: (index) {
           if (index == 0) {
             context.go(AppRoutePaths.home);
-          } else {
-            
-          }
+          } else {}
         },
         items: const [
           BottomNavigationBarItem(

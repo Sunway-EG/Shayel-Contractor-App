@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Shayel Driver';
+  String get appTitle => 'Shayel Contractor';
 
   @override
   String get welcome => 'Welcome';
@@ -35,6 +35,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get enterYourPhone => 'Enter your phone number';
+
+  @override
+  String get enterYourFullName => 'Enter your full name';
+
+  @override
+  String get enterYourAddress => 'Enter your address details';
 
   @override
   String get enterValidPhone => 'Enter a valid phone number';
@@ -766,11 +772,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locationPermissionDisclosureTitle =>
-      'How Shayel Driver uses your location';
+      'How Shayel Contractor uses your location';
 
   @override
   String get locationPermissionDisclosureBody =>
-      'Shayel Driver collects your device location—including in the background when the app is not on screen—while you are online or working on trips. We use it to show your position on the map, switch online/offline accurately, plan routes for pickups and deliveries, and share live location with your company. Location is sent only to Shayel servers as needed for these driver features.\n\nYou will first be asked to allow location while using the app. If full live tracking is needed, a second screen will explain background access, followed by another system permission step (for example “Allow all the time”). Tap Continue to start.';
+      'Shayel Contractor collects your device location—including in the background when the app is not on screen—while you are online or working on trips. We use it to show your position on the map, switch online/offline accurately, plan routes for pickups and deliveries, and share live location with your company. Location is sent only to Shayel servers as needed for these contractor features.\n\nYou will first be asked to allow location while using the app. If full live tracking is needed, a second screen will explain background access, followed by another system permission step (for example “Allow all the time”). Tap Continue to start.';
 
   @override
   String get locationBackgroundPermissionDisclosureTitle =>
@@ -778,10 +784,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locationBackgroundPermissionDisclosureBody =>
-      'So your company can receive reliable live updates while you drive, Shayel Driver needs permission to access location in the background (when the app is behind other apps or the screen is off). This is only used for the driver features described on the previous screen—not for advertising.\n\nTap Continue to open the next system permission. On some devices you must choose “Allow all the time” or enable background location in Settings.';
+      'So your company can receive reliable live updates while you drive, Shayel Contractor needs permission to access location in the background (when the app is behind other apps or the screen is off). This is only used for the contractor features described on the previous screen—not for advertising.\n\nTap Continue to open the next system permission. On some devices you must choose “Allow all the time” or enable background location in Settings.';
 
   @override
-  String get locationTrackingNotificationTitle => 'Shayel Driver is online';
+  String get locationTrackingNotificationTitle => 'Shayel Contractor is online';
 
   @override
   String get locationTrackingNotificationText =>
@@ -792,21 +798,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationPermissionDisclosureBody =>
-      'Shayel Driver sends notifications about trips, schedules, and important updates. To deliver them, the app uses push notifications and a device token stored on our servers. Tap Continue to open the system permission request.';
+      'Shayel Contractor sends notifications about trips, schedules, and important updates. To deliver them, the app uses push notifications and a device token stored on our servers. Tap Continue to open the system permission request.';
 
   @override
   String get cameraPermissionDisclosureTitle => 'Camera access';
 
   @override
   String get cameraPermissionDisclosureBody =>
-      'Shayel Driver uses the camera only when you choose to take a photo—for example for your profile picture or required documents. Photos you take are uploaded to our servers for your driver account. Tap Continue to open the system permission request.';
+      'Shayel Contractor uses the camera only when you choose to take a photo—for example for your profile picture or required documents. Photos you take are uploaded to our servers for your contractor account. Tap Continue to open the system permission request.';
 
   @override
   String get photosPermissionDisclosureTitle => 'Photos and files';
 
   @override
   String get photosPermissionDisclosureBody =>
-      'Shayel Driver accesses images you select from your photo library or device storage to upload profile or document images. We only access files you choose. Tap Continue to open the system permission request.';
+      'Shayel Contractor accesses images you select from your photo library or device storage to upload profile or document images. We only access files you choose. Tap Continue to open the system permission request.';
 
   @override
   String get appUpdateRequiredTitle => 'Update required';
@@ -816,11 +822,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appUpdateRequiredMessage =>
-      'A new version of Shayel Driver is required to continue. Please update to the latest version.';
+      'A new version of Shayel Contractor is required to continue. Please update to the latest version.';
 
   @override
   String get appUpdateAvailableMessage =>
-      'A new version of Shayel Driver is available with improvements and fixes.';
+      'A new version of Shayel Contractor is available with improvements and fixes.';
 
   @override
   String appUpdateLatestVersion(String version) {
@@ -887,4 +893,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorDefault => 'Something went wrong. Please try again.';
+
+  @override
+  String get continuee => 'Continue';
+
+  @override
+  String get trackYourPackageEasily => 'Track your package easily';
+
+  @override
+  String get trackYourPackageEasilyDesc =>
+      'Enter your package ID and get real-time updates on your shipment’s journey.';
+
+  @override
+  String get realtimeNotifications => 'Realtime notifications';
+
+  @override
+  String get realtimeNotificationsDesc =>
+      'Get a realtime notification about your package status. You can customize the notification easily.';
+
+  @override
+  String get uploadYourDocuments => 'Upload your documents';
+
+  @override
+  String get contractorInformation => 'Contractor information';
+
+  @override
+  String get fullName => 'Full Name';
+
+  @override
+  String get addressDetails => 'Address details';
+
+  @override
+  String get uploadImageOrBrowse => 'Upload Image or browse';
+
+  @override
+  String get pngJpgUpTo => 'PNG, JPG up to 10MB';
+
+  @override
+  String get registerConfirm =>
+      'I confirm that the shipment details provided are correct and I agree to proceed with the delivery.';
+
+  @override
+  String get yourRequestSuccessfullyRegistered =>
+      'Your request successfully registered';
+
+  @override
+  String get yourRequestSuccessfullyRegisteredDesc =>
+      'We’ll check your documents. and open your account to receive trips from shayel very soon, maybe checking your paper takes 2 days';
+
+  @override
+  String get goToHomepage => 'Go to homepage';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get skip => 'Skip';
 }

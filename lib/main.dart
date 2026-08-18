@@ -89,7 +89,7 @@ Future<void> _runApp({bool useSentry = false}) async {
     disableMfaUseCase: disableMfaUseCase,
     changePasswordUseCase: changePasswordUseCase,
     registerUseCase: registerUseCase,
-     getDocumentsUseCase: getDocumentsUseCase,
+    getDocumentsUseCase: getDocumentsUseCase,
   );
 
   final localeBloc = LocaleBloc();
@@ -152,16 +152,13 @@ class ShayelContractorApp extends StatelessWidget {
               : localeState is LocaleInitial
               ? localeState.locale
               : const Locale('ar');
-          return Theme(
-            data: buildMaterialTheme(locale.languageCode),
-            child: CupertinoApp.router(
-              title: 'Shayel Contractor',
-              theme: buildAppTheme(locale.languageCode),
-              locale: locale,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              routerConfig: createAppRouter(),
-            ),
+          return CupertinoApp.router(
+            title: 'Shayel Contractor',
+            theme: buildAppTheme(locale.languageCode),
+            locale: locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            routerConfig: createAppRouter(),
           );
         },
       ),
