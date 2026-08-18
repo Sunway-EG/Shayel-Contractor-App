@@ -4,7 +4,7 @@ import 'package:chucker_flutter/chucker_flutter.dart';
 import '../../features/profile/presentation/views/profile_screen.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
 import 'route_constants.dart';
-import '../../features/auth/presentation/views/register.dart';
+import '../../features/auth/presentation/views/register_screen.dart';
 import '../../screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

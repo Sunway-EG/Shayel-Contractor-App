@@ -926,7 +926,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get registerConfirm =>
-      'أؤكد أن تفاصيل الشحنة المقدمة صحيحة وأوافق على المضي قدماً في التسليم.';
+      'آوكد ان البيانات الشخصية  المقدمة كلها صحيحة و. آوافق علي الشروط و الاحكام';
 
   @override
   String get yourRequestSuccessfullyRegistered => 'تم تسجيل طلبك بنجاح';

@@ -45,6 +45,7 @@ class AppBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isRTL = Directionality.of(context) == TextDirection.rtl;
+    final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
     // final currentIndex = selectedIndex >= 0 ? selectedIndex : getSelectedIndexFromRoute(context);
     final currentIndex = getSelectedIndexFromRoute(context);
 
@@ -72,55 +73,59 @@ class AppBottomNavBar extends StatelessWidget {
     }
 
     return Container(
-      height: 80,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          const BoxShadow(
-            color: AppColors.lightGray,
-            blurRadius: 4,
-            offset: Offset(0, -2),
+      padding: EdgeInsets.only(bottom: bottomPadding),
+      child: SizedBox(
+        height: 80,
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              const BoxShadow(
+                color: AppColors.lightGray,
+                blurRadius: 4,
+                offset: Offset(0, -2),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        bottom: false,
-        child: Row(
-          textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _BottomNavItem(
-              label: l10n.homeNav,
-              icon: 'assets/images/home.svg',
-              isSelected: currentIndex == 0,
-              // onTap: () => handleItemTap(0),
-              onTap: () {},
+          child: SafeArea(
+            top: false,
+            bottom: false,
+            child: Row(
+              textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _BottomNavItem(
+                  label: l10n.homeNav,
+                  icon: 'assets/images/home.svg',
+                  isSelected: currentIndex == 0,
+                  // onTap: () => handleItemTap(0),
+                  onTap: () {},
+                ),
+                _BottomNavItem(
+                  label: l10n.orders,
+                  icon: 'assets/images/orders.svg',
+                  isSelected: currentIndex == 1,
+                  // onTap: () => handleItemTap(1),
+                  onTap: () {},
+                ),
+                _BottomNavItem(
+                  label: l10n.market,
+                  icon: 'assets/images/market.svg',
+                  isSelected: currentIndex == 2,
+                  // onTap: () => handleItemTap(2),
+                  onTap: () {},
+                ),
+                _BottomNavItem(
+                  label: l10n.account,
+                  icon: 'assets/images/account.svg',
+                  isSelected: currentIndex == 3,
+                  onTap: () => handleItemTap(3),
+                ),
+              ],
             ),
-            _BottomNavItem(
-              label: l10n.orders,
-              icon: 'assets/images/orders.svg',
-              isSelected: currentIndex == 1,
-              // onTap: () => handleItemTap(1),
-              onTap: () {},
-            ),
-            _BottomNavItem(
-              label: l10n.market,
-              icon: 'assets/images/market.svg',
-              isSelected: currentIndex == 2,
-              // onTap: () => handleItemTap(2),
-              onTap: () {},
-            ),
-            _BottomNavItem(
-              label: l10n.account,
-              icon: 'assets/images/account.svg',
-              isSelected: currentIndex == 3,
-              onTap: () => handleItemTap(3),
-            ),
-          ],
+          ),
         ),
       ),
     );

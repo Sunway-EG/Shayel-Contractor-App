@@ -45,7 +45,7 @@ class AppNavBar extends StatelessWidget
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.mainBlue,
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: SafeArea(
         bottom: false,
         child: SizedBox(

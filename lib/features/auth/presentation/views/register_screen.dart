@@ -387,11 +387,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                   const SizedBox(height: 15),
 
-                  _label(l10n.phoneNumber),
+                  _label(l10n.phone),
 
                   const SizedBox(height: 5),
 
-                  _phoneField(placeholder: l10n.phoneNumber),
+                  _phoneField(placeholder: l10n.phone),
                   if (_phoneError != null) ...[
                     const SizedBox(height: 8),
                     Align(

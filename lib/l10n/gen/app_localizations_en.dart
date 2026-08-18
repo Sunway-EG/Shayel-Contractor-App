@@ -931,7 +931,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get registerConfirm =>
-      'I confirm that the shipment details provided are correct and I agree to proceed with the delivery.';
+      'I confirm that all personal information provided is correct and I agree to the terms and conditions.';
 
   @override
   String get yourRequestSuccessfullyRegistered =>

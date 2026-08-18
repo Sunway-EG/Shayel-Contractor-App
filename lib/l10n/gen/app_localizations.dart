@@ -1817,7 +1817,7 @@ abstract class AppLocalizations {
   /// No description provided for @registerConfirm.
   ///
   /// In en, this message translates to:
-  /// **'I confirm that the shipment details provided are correct and I agree to proceed with the delivery.'**
+  /// **'I confirm that all personal information provided is correct and I agree to the terms and conditions.'**
   String get registerConfirm;
 
   /// No description provided for @yourRequestSuccessfullyRegistered.
