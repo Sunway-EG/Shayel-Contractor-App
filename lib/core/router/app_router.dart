@@ -339,9 +339,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
         onTap: (index) {
           if (index == 0) {
             context.go(AppRoutePaths.home);
-          } else {
-            // TODO: Register the remaining shell destinations when their screens exist.
-          }
+          } else {}
         },
         items: const [
           BottomNavigationBarItem(

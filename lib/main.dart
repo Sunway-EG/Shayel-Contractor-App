@@ -89,7 +89,7 @@ Future<void> _runApp({bool useSentry = false}) async {
     disableMfaUseCase: disableMfaUseCase,
     changePasswordUseCase: changePasswordUseCase,
     registerUseCase: registerUseCase,
-     getDocumentsUseCase: getDocumentsUseCase,
+    getDocumentsUseCase: getDocumentsUseCase,
   );
 
   final localeBloc = LocaleBloc();

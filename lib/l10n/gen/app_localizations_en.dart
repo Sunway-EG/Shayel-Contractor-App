@@ -934,6 +934,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'I confirm that the shipment details provided are correct and I agree to proceed with the delivery.';
 
   @override
+  String get yourRequestSuccessfullyRegistered =>
+      'Your request successfully registered';
+
+  @override
+  String get yourRequestSuccessfullyRegisteredDesc =>
+      'We’ll check your documents. and open your account to receive trips from shayel very soon, maybe checking your paper takes 2 days';
+
+  @override
+  String get goToHomepage => 'Go to homepage';
+
+  @override
   String get confirm => 'Confirm';
 
   @override

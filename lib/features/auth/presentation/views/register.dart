@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -291,7 +292,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthRegisterSuccess) {
-          _showSuccessDialog();
+          _showSuccessDialog(context);
         } else if (state is AuthError) {
           // Show error dialog
           final displayMessage = state.getDisplayMessage(l10n);
@@ -318,6 +319,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         },
         child: CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
+            backgroundColor: CupertinoColors.transparent,
             leading: CupertinoButton(
               child: const Icon(CupertinoIcons.back),
               onPressed: () => context.go(AppRoutePaths.firstChoose),
@@ -411,6 +413,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(height: 5),
 
                   _addressField(placeholder: l10n.addressDetails),
+                  if (_addressError != null) ...[
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(
+                        _addressError!,
+                        style: const TextStyle(
+                          color: CupertinoColors.systemRed,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ],
 
                   const SizedBox(height: 24),
 
@@ -447,7 +462,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       if (state is AuthDocumentsError) {
                         return Text(
                           state.message,
-                          style: const TextStyle(color: Colors.red),
+                          style: const TextStyle(color: AppColors.red),
                         );
                       }
 
@@ -761,7 +776,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 '*',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.red,
+                  color: AppColors.red,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -802,13 +817,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           dashPattern: [10, 5],
           strokeWidth: 1,
         ),
-        // child: Container(
-        //   height: 70,
-        //   decoration: BoxDecoration(
-        //     color: AppColors.white,
-        //     borderRadius: BorderRadius.circular(7),
-        //     border: Border.all(color: const Color(0xff70ace0), width: 1.2),
-        //   ),
         child: Row(
           children: [
             const SizedBox(width: 12),
@@ -898,16 +906,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               });
             },
             child: Container(
-              width: 34,
-              height: 34,
+              width: 35,
+              height: 35,
               decoration: const BoxDecoration(
                 color: Color(0xffffeeee),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
-                Icons.delete_outline,
-                size: 19,
-                color: Color(0xffef3d3d),
+                CupertinoIcons.delete,
+                size: 15,
+                color: AppColors.red,
               ),
             ),
           ),
@@ -916,102 +924,63 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void _showSuccessDialog() {
-    showDialog(
+  void _showSuccessDialog(BuildContext context) {
+    showModalBottomSheet(
       context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(10, 24, 10, 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: const Color(0xff1D2A3A), width: 4),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x55000000),
-                  blurRadius: 8,
-                  offset: Offset(0, 5),
-                ),
-              ],
+      isScrollControlled: true,
+      backgroundColor: CupertinoColors.transparent,
+      barrierColor: Colors.black54,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (bottomSheetContext) {
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // الدائرة الخضراء
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: const BoxDecoration(
-                    color: Color(0xff3BA957),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.assignment_turned_in_outlined,
-                    color: Colors.white,
-                    size: 34,
-                  ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                'assets/images/register_success.svg',
+                fit: BoxFit.cover,
+              ),
+              const SizedBox(height: 24),
+              Text(
+                AppLocalizations.of(context)!.yourRequestSuccessfullyRegistered,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.darkGray,
                 ),
-
-                const SizedBox(height: 14),
-
-                const Text(
-                  'لقد رفعت معلوماتك',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff222222),
-                  ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                AppLocalizations.of(
+                  context,
+                )!.yourRequestSuccessfullyRegisteredDesc,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: CupertinoColors.systemGrey,
                 ),
-
-                const SizedBox(height: 6),
-
-                const Text(
-                  "You'll check and open your account to receive trips\n"
-                  "from shayel very soon\n"
-                  "maybe check your paper take 2 days",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 9,
-                    height: 1.5,
-                    color: Color(0xff777777),
-                  ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: AppButton(
+                  onPressed: () => context.go(AppRoutePaths.firstChoose),
+                  label: AppLocalizations.of(context)!.goToHomepage,
                 ),
-
-                const SizedBox(height: 10),
-
-                SizedBox(
-                  width: double.infinity,
-                  height: 28,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.go(AppRoutePaths.firstChoose);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff006BB6),
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      padding: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                    child: const Text(
-                      'الذهاب لصفحة الدخول',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },

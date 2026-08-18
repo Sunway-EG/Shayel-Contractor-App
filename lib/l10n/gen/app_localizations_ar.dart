@@ -929,6 +929,16 @@ class AppLocalizationsAr extends AppLocalizations {
       'أؤكد أن تفاصيل الشحنة المقدمة صحيحة وأوافق على المضي قدماً في التسليم.';
 
   @override
+  String get yourRequestSuccessfullyRegistered => 'تم تسجيل طلبك بنجاح';
+
+  @override
+  String get yourRequestSuccessfullyRegisteredDesc =>
+      'سنراجع مستنداتك، وسنفتح حسابك لتلقي الرحلات من شايل قريبًا جدًا، ربما تستغرق مراجعة أوراقك يومين.';
+
+  @override
+  String get goToHomepage => 'الذهاب إلى الصفحة الرئيسية';
+
+  @override
   String get confirm => 'تأكيد';
 
   @override

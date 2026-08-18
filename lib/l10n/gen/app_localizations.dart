@@ -1820,6 +1820,24 @@ abstract class AppLocalizations {
   /// **'I confirm that the shipment details provided are correct and I agree to proceed with the delivery.'**
   String get registerConfirm;
 
+  /// No description provided for @yourRequestSuccessfullyRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request successfully registered'**
+  String get yourRequestSuccessfullyRegistered;
+
+  /// No description provided for @yourRequestSuccessfullyRegisteredDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'We’ll check your documents. and open your account to receive trips from shayel very soon, maybe checking your paper takes 2 days'**
+  String get yourRequestSuccessfullyRegisteredDesc;
+
+  /// No description provided for @goToHomepage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to homepage'**
+  String get goToHomepage;
+
   /// No description provided for @confirm.
   ///
   /// In en, this message translates to:

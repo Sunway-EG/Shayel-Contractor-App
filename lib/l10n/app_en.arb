@@ -1130,6 +1130,9 @@
   "uploadImageOrBrowse": "Upload Image or browse",
   "pngJpgUpTo": "PNG, JPG up to 10MB",
   "registerConfirm": "I confirm that the shipment details provided are correct and I agree to proceed with the delivery.",
+  "yourRequestSuccessfullyRegistered": "Your request successfully registered",
+  "yourRequestSuccessfullyRegisteredDesc": "We’ll check your documents. and open your account to receive trips from shayel very soon, maybe checking your paper takes 2 days",
+  "goToHomepage": "Go to homepage",
   "confirm": "Confirm",
   "skip": "Skip"
 
