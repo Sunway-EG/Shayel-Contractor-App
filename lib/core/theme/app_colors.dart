@@ -14,6 +14,9 @@ abstract final class AppColors {
   /// Main / dark blue - primary actions, headers.
   static const Color mainBlue = Color(0xFF005BAA);
 
+  /// Main gray - backgrounds (25).
+  static const Color mainGray = Color(0xF6F6F6F6);
+
   /// White (for text on main blue).
   static const Color white = Color(0xFFFFFFFF);
 

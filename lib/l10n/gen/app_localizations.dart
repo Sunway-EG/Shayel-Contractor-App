@@ -1838,6 +1838,126 @@ abstract class AppLocalizations {
   /// **'Go to homepage'**
   String get goToHomepage;
 
+  /// No description provided for @orders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get orders;
+
+  /// No description provided for @market.
+  ///
+  /// In en, this message translates to:
+  /// **'Market'**
+  String get market;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @enterPasswordEnableBiometric.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password to enable biometric login.'**
+  String get enterPasswordEnableBiometric;
+
+  /// No description provided for @biometric.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric'**
+  String get biometric;
+
+  /// No description provided for @enableBiometric.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to enable biometric login for faster access?'**
+  String get enableBiometric;
+
+  /// No description provided for @biometricDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable to finger print and Pin to open the app.'**
+  String get biometricDesc;
+
+  /// No description provided for @languages.
+  ///
+  /// In en, this message translates to:
+  /// **'Languages'**
+  String get languages;
+
+  /// No description provided for @helpAndCenter.
+  ///
+  /// In en, this message translates to:
+  /// **'Help and center'**
+  String get helpAndCenter;
+
+  /// No description provided for @helpAndCenterDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat or call with our support team for assistance.'**
+  String get helpAndCenterDesc;
+
+  /// No description provided for @logoutDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enable the biometric or your password to make it easy for login again.'**
+  String get logoutDesc;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @totalTripsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total trips count'**
+  String get totalTripsCount;
+
+  /// No description provided for @unpaidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpaid amount'**
+  String get unpaidAmount;
+
+  /// No description provided for @personalInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal information'**
+  String get personalInformation;
+
+  /// No description provided for @shipping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping'**
+  String get shipping;
+
+  /// No description provided for @transfersAndFinancialEntitlements.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfers and financial entitlements'**
+  String get transfersAndFinancialEntitlements;
+
+  /// No description provided for @contactSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact support'**
+  String get contactSupport;
+
   /// No description provided for @confirm.
   ///
   /// In en, this message translates to:

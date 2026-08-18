@@ -13,6 +13,7 @@ import '../../domain/use_cases/logout_usecase.dart';
 import '../../domain/use_cases/reset_password_usecase.dart';
 import '../../domain/use_cases/send_login_otp_usecase.dart';
 import '../../domain/use_cases/send_mfa_code_usecase.dart';
+import '../../domain/use_cases/validate_password_usecase.dart';
 import '../../domain/use_cases/verify_mfa_usecase.dart';
 import '../../domain/use_cases/enable_mfa_usecase.dart';
 import '../../domain/use_cases/disable_mfa_usecase.dart';
@@ -36,6 +37,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required EnableMfaUseCase enableMfaUseCase,
     required DisableMfaUseCase disableMfaUseCase,
     required ChangePasswordUseCase changePasswordUseCase,
+    required ValidatePasswordUseCase validatePasswordUseCase,
     required RegisterUseCase registerUseCase,
     required GetDocumentsUseCase getDocumentsUseCase,
   }) : _loginUseCase = loginUseCase,
@@ -50,6 +52,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
        _enableMfaUseCase = enableMfaUseCase,
        _disableMfaUseCase = disableMfaUseCase,
        _changePasswordUseCase = changePasswordUseCase,
+       _validatePasswordUseCase = validatePasswordUseCase,
        _registerUseCase = registerUseCase,
        _getDocumentsUseCase = getDocumentsUseCase,
        super(const AuthInitial()) {
@@ -71,6 +74,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthBiometricLoginRequested>(_onBiometricLoginRequested);
     on<AuthEnableBiometricRequested>(_onEnableBiometricRequested);
     on<AuthDisableBiometricRequested>(_onDisableBiometricRequested);
+    on<AuthValidatePasswordRequested>(_onValidatePasswordRequested);
+    on<AuthValidatePasswordAndEnableBiometricRequested>(
+      _onValidatePasswordAndEnableBiometricRequested,
+    );
     on<AuthRegisterRequested>(_onRegisterRequested);
     on<AuthGetDocumentsRequested>(_onGetDocumentsRequested);
   }
@@ -87,6 +94,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final EnableMfaUseCase _enableMfaUseCase;
   final DisableMfaUseCase _disableMfaUseCase;
   final ChangePasswordUseCase _changePasswordUseCase;
+  final ValidatePasswordUseCase _validatePasswordUseCase;
   final RegisterUseCase _registerUseCase;
   final GetDocumentsUseCase _getDocumentsUseCase;
   String? _passwordResetToken;
@@ -471,7 +479,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final success = await BiometricService.instance.enableBiometric(
       login: event.login,
       password: event.password,
-      authenticateReason: event.localizedAuthenticateReason,
+      reason: event.localizedAuthenticateReason,
     );
 
     if (success) {
@@ -503,6 +511,52 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           errorCode: 'biometric_disable_failed',
         ),
       );
+    }
+  }
+
+  Future<void> _onValidatePasswordRequested(
+    AuthValidatePasswordRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+
+    final result = await _validatePasswordUseCase(event.password);
+
+    result.fold(
+      (failure) {
+        emit(AuthError(_messageForFailure(failure)));
+      },
+      (success) {
+        emit(AuthValidatePasswordSuccess(success: success));
+      },
+    );
+  }
+
+  Future<void> _onValidatePasswordAndEnableBiometricRequested(
+    AuthValidatePasswordAndEnableBiometricRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    if (state is AuthLoading) return;
+    emit(const AuthLoading());
+
+    final validation = await _validatePasswordUseCase(event.password);
+
+    final isValid = validation.fold((failure) {
+      emit(AuthError(_messageForFailure(failure)));
+      return false;
+    }, (success) => success);
+    if (!isValid) return;
+
+    final success = await BiometricService.instance.enableBiometric(
+      login: event.login,
+      password: event.password,
+      reason: event.reason,
+    );
+
+    if (success) {
+      emit(const AuthEnableBiometricSuccess());
+    } else {
+      emit(const AuthError('Failed to enable biometric login'));
     }
   }
 

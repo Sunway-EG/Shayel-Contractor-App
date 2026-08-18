@@ -939,6 +939,70 @@ class AppLocalizationsAr extends AppLocalizations {
   String get goToHomepage => 'الذهاب إلى الصفحة الرئيسية';
 
   @override
+  String get orders => 'الطلبات';
+
+  @override
+  String get market => 'السوق';
+
+  @override
+  String get account => 'الحساب';
+
+  @override
+  String get enterPasswordEnableBiometric =>
+      'أدخل كلمة المرور لتفعيل تسجيل الدخول باستخدام البصمة.';
+
+  @override
+  String get biometric => 'التحقق بالبصمة';
+
+  @override
+  String get enableBiometric =>
+      'هل ترغب في تفعيل تسجيل الدخول باستخدام البصمة للدخول بشكل أسرع؟';
+
+  @override
+  String get biometricDesc => 'قم بتفعيل بصمة الإصبع ورمز الأمان لفتح التطبيق.';
+
+  @override
+  String get languages => 'اللغات';
+
+  @override
+  String get helpAndCenter => 'الدعم الفنى';
+
+  @override
+  String get helpAndCenterDesc =>
+      'تواصل مع فريق الدعم لدينا عبر الدردشة أو الاتصال للحصول على المساعدة.';
+
+  @override
+  String get logoutDesc =>
+      'يرجى تفعيل خاصية التحقق بالبصمة أو كلمة المرور لتسهيل عملية تسجيل الدخول مرة أخرى.';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get saveChanges => 'حفظ التعديلات';
+
+  @override
+  String get back => 'رجوع';
+
+  @override
+  String get totalTripsCount => 'عدد النقلات كلها';
+
+  @override
+  String get unpaidAmount => 'المبلغ المستحق';
+
+  @override
+  String get personalInformation => 'المعلومات الشخصية';
+
+  @override
+  String get shipping => 'الشحن';
+
+  @override
+  String get transfersAndFinancialEntitlements => 'النقلات و استحقاق المالية';
+
+  @override
+  String get contactSupport => 'تواصل مع الدعم';
+
+  @override
   String get confirm => 'تأكيد';
 
   @override

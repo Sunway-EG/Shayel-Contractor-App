@@ -21,7 +21,7 @@ abstract interface class AuthRemoteDataSource {
   Future<SendLoginOtpResponseDto> sendLoginOtp(LoginRequestDto request);
   Future<LoginResponseDto> loginWithOtp(LoginWithOtpRequestDto request);
   Future<void> logout();
-  Future<DriverProfileDto> getProfile();
+  Future<ContractorProfileDto> getProfile();
   Future<void> forgetPassword({
     required String identifier,
     required int channel,
@@ -52,7 +52,8 @@ abstract interface class AuthRemoteDataSource {
   Future<LoginResponseDto> verifyMfa({required String code});
   Future<void> enableMfa({required int channel});
   Future<void> disableMfa();
-  Future<DriverProfileDto> updateProfile(UpdateProfileRequestDto request);
+  Future<ContractorProfileDto> updateProfile(UpdateProfileRequestDto request);
+  Future<bool> validatePassword({required String password});
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -132,13 +133,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<DriverProfileDto> getProfile() async {
+  Future<ContractorProfileDto> getProfile() async {
     final response = await _dio.get<Map<String, dynamic>>(ApiEndpoints.profile);
     final dataObj = requireEnvelopeDataMap(
       response,
       missingDataMessage: 'Missing data in profile response',
     );
-    return DriverProfileDto.fromJson(dataObj);
+    return ContractorProfileDto.fromJson(dataObj);
   }
 
   @override
@@ -261,7 +262,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<DriverProfileDto> updateProfile(
+  Future<ContractorProfileDto> updateProfile(
     UpdateProfileRequestDto request,
   ) async {
     final formData = request.toFormData();
@@ -275,11 +276,42 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
     final dataObj = envelope['data'] as Map<String, dynamic>?;
     if (dataObj != null) {
-      return DriverProfileDto.fromJson(dataObj);
+      return ContractorProfileDto.fromJson(dataObj);
     }
     // API returns success with data: null (e.g. "Authentication operation completed")
     // Fetch the profile to return updated data
     return getProfile();
+  }
+
+  @override
+  Future<bool> validatePassword({required String password}) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      ApiEndpoints.validatePassword,
+      data: {'password': password},
+    );
+    final data = response.data;
+    if (data == null) {
+      throw DioException(requestOptions: response.requestOptions);
+    }
+    final success = data['success'] as bool? ?? false;
+    final message = data['message'] as String? ?? '';
+    if (!success) {
+      final errors = data['errors'];
+      final errorMessage = message.isNotEmpty
+          ? message
+          : (errors is Map
+                        ? (errors['message'] ?? errors.toString())
+                        : data['message'])
+                    ?.toString() ??
+                'Request failed';
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        type: DioExceptionType.badResponse,
+        error: errorMessage,
+      );
+    }
+    return success;
   }
 
   @override

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../failures/auth_failure.dart';
-import '../entities/driver_profile.dart';
+import '../entities/contractor_profile.dart';
 import '../repositories/auth_repository.dart';
 import 'usecase.dart';
 
@@ -26,13 +26,15 @@ class UpdateProfileParams {
 }
 
 class UpdateProfileUseCase
-    implements UseCase<DriverProfile, UpdateProfileParams> {
+    implements UseCase<ContractorProfile, UpdateProfileParams> {
   UpdateProfileUseCase(this._repository);
 
   final AuthRepository _repository;
 
   @override
-  Future<Either<AuthFailure, DriverProfile>> call(UpdateProfileParams params) {
+  Future<Either<AuthFailure, ContractorProfile>> call(
+    UpdateProfileParams params,
+  ) {
     return _repository.updateProfile(
       fullName: params.fullName,
       fullNameAr: params.fullNameAr,

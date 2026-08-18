@@ -11,7 +11,7 @@ export 'domain/use_cases/reset_password_usecase.dart';
 export 'domain/use_cases/usecase.dart';
 
 // Domain - Entities
-export 'domain/entities/driver_profile.dart';
+export 'domain/entities/contractor_profile.dart';
 export 'domain/entities/login_result.dart';
 
 // Domain - Failures

@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/theme/app_colors.dart';
+import '../core/widgets/main_scaffold.dart';
 import '../features/auth/presentation/bloc/auth_bloc.dart';
 import '../features/auth/presentation/bloc/auth_event.dart';
 import '../features/auth/presentation/bloc/auth_state.dart';
@@ -22,14 +22,16 @@ class HomeScreen extends StatelessWidget {
         }
       },
       child: CupertinoPageScaffold(
-        child: Center(
-          child: // Logout Button
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _LogoutButton(
-              onLogout: () {
-                context.read<AuthBloc>().add(const AuthLogoutRequested());
-              },
+        child: MainScaffold(
+          child: Center(
+            child: // Logout Button
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: _LogoutButton(
+                onLogout: () {
+                  context.read<AuthBloc>().add(const AuthLogoutRequested());
+                },
+              ),
             ),
           ),
         ),

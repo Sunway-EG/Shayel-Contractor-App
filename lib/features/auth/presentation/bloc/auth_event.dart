@@ -194,6 +194,30 @@ class AuthDisableBiometricRequested extends AuthEvent {
   @override
   List<Object?> get props => [];
 }
+
+class AuthValidatePasswordRequested extends AuthEvent {
+  const AuthValidatePasswordRequested({required this.password});
+
+  final String password;
+
+  @override
+  List<Object?> get props => [password];
+}
+
+class AuthValidatePasswordAndEnableBiometricRequested extends AuthEvent {
+  const AuthValidatePasswordAndEnableBiometricRequested({
+    required this.password,
+    required this.login,
+    required this.reason,
+  });
+  final String password;
+  final String login;
+  final String reason;
+
+  @override
+  List<Object?> get props => [password, login, reason];
+}
+
 class AuthRegisterRequested extends AuthEvent {
   const AuthRegisterRequested({
     required this.fullName,
@@ -208,12 +232,7 @@ class AuthRegisterRequested extends AuthEvent {
   final List<RegisterDocument> documents;
 
   @override
-  List<Object?> get props => [
-        fullName,
-        phone,
-        address,
-        documents,
-      ];
+  List<Object?> get props => [fullName, phone, address, documents];
 }
 
 class AuthGetDocumentsRequested extends AuthEvent {

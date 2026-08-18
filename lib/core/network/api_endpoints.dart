@@ -14,7 +14,7 @@ abstract final class ApiEndpoints {
   static const String verifyMfa = '/auth/verify-mfa';
   static const String enableMfa = '/auth/enable-mfa';
   static const String disableMfa = '/auth/disable-mfa';
-
+  static const String validatePassword = '/auth/validate-password';
   static const register = '/auth/register';
   static const documents = '/documents';
 

@@ -1,6 +1,5 @@
 import 'core/router/app_router.dart';
 import 'core/services/app_update_service.dart';
-import 'package:flutter/material.dart';
 
 import 'dart:async';
 
@@ -18,18 +17,22 @@ import 'core/theme/app_theme.dart';
 import 'features/auth/data/sources/remote/auth_remote_data_source.dart';
 import 'features/auth/data/repositories/auth_impl.dart';
 import 'features/auth/domain/use_cases/forget_password_usecase.dart';
+import 'features/auth/domain/use_cases/get_profile_usecase.dart';
 import 'features/auth/domain/use_cases/login_usecase.dart';
 import 'features/auth/domain/use_cases/login_with_otp_usecase.dart';
 import 'features/auth/domain/use_cases/logout_usecase.dart';
 import 'features/auth/domain/use_cases/reset_password_usecase.dart';
 import 'features/auth/domain/use_cases/send_login_otp_usecase.dart';
 import 'features/auth/domain/use_cases/send_mfa_code_usecase.dart';
+import 'features/auth/domain/use_cases/update_profile_usecase.dart';
+import 'features/auth/domain/use_cases/validate_password_usecase.dart';
 import 'features/auth/domain/use_cases/verify_mfa_usecase.dart';
 import 'features/auth/domain/use_cases/enable_mfa_usecase.dart';
 import 'features/auth/domain/use_cases/disable_mfa_usecase.dart';
 import 'features/auth/domain/use_cases/change_password_usecase.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
+import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'l10n/gen/app_localizations.dart';
 import 'features/auth/domain/use_cases/register_usecase.dart';
 import 'features/auth/domain/use_cases/get_documents_usecase.dart';
@@ -71,7 +74,10 @@ Future<void> _runApp({bool useSentry = false}) async {
   final verifyMfaUseCase = VerifyMfaUseCase(authRepository);
   final enableMfaUseCase = EnableMfaUseCase(authRepository);
   final disableMfaUseCase = DisableMfaUseCase(authRepository);
+  final getProfileUseCase = GetProfileUseCase(authRepository);
+  final updateProfileUseCase = UpdateProfileUseCase(authRepository);
   final changePasswordUseCase = ChangePasswordUseCase(authRepository);
+  final validatePasswordUseCase = ValidatePasswordUseCase(authRepository);
   final registerUseCase = RegisterUseCase(authRepository);
   final getDocumentsUseCase = GetDocumentsUseCase(authRepository);
   // Initialize BloC with use cases
@@ -88,8 +94,13 @@ Future<void> _runApp({bool useSentry = false}) async {
     enableMfaUseCase: enableMfaUseCase,
     disableMfaUseCase: disableMfaUseCase,
     changePasswordUseCase: changePasswordUseCase,
+    validatePasswordUseCase: validatePasswordUseCase,
     registerUseCase: registerUseCase,
     getDocumentsUseCase: getDocumentsUseCase,
+  );
+  final profileBloc = ProfileBloc(
+    getProfileUseCase: getProfileUseCase,
+    updateProfileUseCase: updateProfileUseCase,
   );
 
   final localeBloc = LocaleBloc();
@@ -102,6 +113,7 @@ Future<void> _runApp({bool useSentry = false}) async {
       providers: [
         BlocProvider.value(value: authBloc),
         BlocProvider.value(value: localeBloc),
+        BlocProvider.value(value: profileBloc),
       ],
       child: useSentry
           ? SentryWidget(child: const ShayelContractorApp())
@@ -144,24 +156,22 @@ class ShayelContractorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldMessenger(
-      child: BlocBuilder<LocaleBloc, LocaleState>(
-        builder: (context, localeState) {
-          final locale = localeState is LocaleLoaded
-              ? localeState.locale
-              : localeState is LocaleInitial
-              ? localeState.locale
-              : const Locale('ar');
-          return CupertinoApp.router(
-            title: 'Shayel Contractor',
-            theme: buildAppTheme(locale.languageCode),
-            locale: locale,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            routerConfig: createAppRouter(),
-          );
-        },
-      ),
+    return BlocBuilder<LocaleBloc, LocaleState>(
+      builder: (context, localeState) {
+        final locale = localeState is LocaleLoaded
+            ? localeState.locale
+            : localeState is LocaleInitial
+            ? localeState.locale
+            : const Locale('ar');
+        return CupertinoApp.router(
+          title: 'Shayel Contractor',
+          theme: buildAppTheme(locale.languageCode),
+          locale: locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: createAppRouter(),
+        );
+      },
     );
   }
 }

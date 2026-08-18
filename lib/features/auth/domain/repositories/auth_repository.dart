@@ -1,12 +1,11 @@
 import '../entities/register_document.dart';
 import 'package:dartz/dartz.dart';
 
-import '../entities/driver_profile.dart';
+import '../entities/contractor_profile.dart';
 import '../entities/login_result.dart';
 import '../entities/send_login_otp_result.dart';
 import '../failures/auth_failure.dart';
 import '../entities/document_definition.dart';
-
 
 abstract interface class AuthRepository {
   /// Returns [LoginResult] on success. [locale] is used for the lang header (e.g. 'ar' for RTL).
@@ -37,7 +36,7 @@ abstract interface class AuthRepository {
 
   Future<Either<AuthFailure, void>> logout();
 
-  Future<Either<AuthFailure, DriverProfile>> getProfile();
+  Future<Either<AuthFailure, ContractorProfile>> getProfile();
 
   Future<Either<AuthFailure, void>> forgetPassword({
     required String identifier,
@@ -71,7 +70,7 @@ abstract interface class AuthRepository {
 
   Future<Either<AuthFailure, void>> disableMfa();
 
-  Future<Either<AuthFailure, DriverProfile>> updateProfile({
+  Future<Either<AuthFailure, ContractorProfile>> updateProfile({
     String? fullName,
     String? fullNameAr,
     String? userName,
@@ -79,6 +78,9 @@ abstract interface class AuthRepository {
     String? phone,
     String? profilePicturePath,
     bool? biometricFingerprint,
+  });
+  Future<Either<AuthFailure, bool>> validatePassword({
+    required String password,
   });
   Future<Either<AuthFailure, List<DocumentDefinition>>> getDocuments();
 }

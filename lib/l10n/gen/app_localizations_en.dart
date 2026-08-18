@@ -945,6 +945,71 @@ class AppLocalizationsEn extends AppLocalizations {
   String get goToHomepage => 'Go to homepage';
 
   @override
+  String get orders => 'Orders';
+
+  @override
+  String get market => 'Market';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get enterPasswordEnableBiometric =>
+      'Enter your password to enable biometric login.';
+
+  @override
+  String get biometric => 'Biometric';
+
+  @override
+  String get enableBiometric =>
+      'Would you like to enable biometric login for faster access?';
+
+  @override
+  String get biometricDesc => 'Enable to finger print and Pin to open the app.';
+
+  @override
+  String get languages => 'Languages';
+
+  @override
+  String get helpAndCenter => 'Help and center';
+
+  @override
+  String get helpAndCenterDesc =>
+      'Chat or call with our support team for assistance.';
+
+  @override
+  String get logoutDesc =>
+      'Please enable the biometric or your password to make it easy for login again.';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get totalTripsCount => 'Total trips count';
+
+  @override
+  String get unpaidAmount => 'Unpaid amount';
+
+  @override
+  String get personalInformation => 'Personal information';
+
+  @override
+  String get shipping => 'Shipping';
+
+  @override
+  String get transfersAndFinancialEntitlements =>
+      'Transfers and financial entitlements';
+
+  @override
+  String get contactSupport => 'Contact support';
+
+  @override
   String get confirm => 'Confirm';
 
   @override

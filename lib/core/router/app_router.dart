@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:chucker_flutter/chucker_flutter.dart';
+import '../../features/profile/presentation/views/profile_screen.dart';
+import '../../features/settings/presentation/views/settings_screen.dart';
 import 'route_constants.dart';
 import '../../features/auth/presentation/views/register.dart';
 import '../../screens/home.dart';
@@ -122,7 +124,7 @@ class _SplashScreenState extends State<_SplashScreen>
     }
 
     final destination = AuthStorage.instance.isLoggedIn()
-        ? AppRoutePaths.home
+        ? AppRoutePaths.settings
         : AppRoutePaths.onboarding;
     AppRouterHolder.instance.router?.go(destination);
 
@@ -238,7 +240,7 @@ GoRouter createAppRouter() {
 
       // If logged in and trying to access auth routes, redirect to home
       if (isLoggedIn && isAuthRoute && state.uri.path != AppRoutePaths.splash) {
-        return AppRoutePaths.home;
+        return AppRoutePaths.settings;
       }
 
       // If not logged in and trying to access protected routes, redirect to login
@@ -302,16 +304,17 @@ GoRouter createAppRouter() {
         path: AppRoutePaths.changePassword,
         builder: (context, state) => const ChangePasswordScreen(),
       ),
-      ShellRoute(
-        builder: (context, state, child) {
-          return ScaffoldWithNavBar(child: child);
-        },
-        routes: [
-          GoRoute(
-            path: AppRoutePaths.home,
-            builder: (context, state) => const HomeScreen(),
-          ),
-        ],
+      GoRoute(
+        path: AppRoutePaths.home,
+        builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: AppRoutePaths.settings,
+        builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutePaths.profile,
+        builder: (context, state) => const ProfileScreen(),
       ),
     ],
   );
@@ -320,48 +323,6 @@ GoRouter createAppRouter() {
   AppRouterHolder.instance.setRouter(router);
 
   return router;
-}
-
-class ScaffoldWithNavBar extends StatelessWidget {
-  const ScaffoldWithNavBar({required this.child, super.key});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: const Color(0xff0066C3),
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          if (index == 0) {
-            context.go(AppRoutePaths.home);
-          } else {}
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: 'الرئيسية',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.description_outlined),
-            label: 'الطلبات',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.support_agent),
-            label: 'الدعم',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'الحساب',
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _ErrorScreen extends StatelessWidget {

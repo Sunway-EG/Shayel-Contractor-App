@@ -173,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     '${AppRoutePaths.otp}?contact=$contact&viaSms=$isPhone&forgetPassword=true',
                   );
                 } else {
-                  context.go(AppRoutePaths.home);
+                  context.go(AppRoutePaths.settings);
                 }
               },
             );

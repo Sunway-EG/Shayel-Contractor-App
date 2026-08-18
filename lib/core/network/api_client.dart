@@ -56,6 +56,7 @@ class AuthInterceptor extends Interceptor {
     '/auth/verify-mfa',
     '/auth/verify-email',
     '/auth/resend-verification',
+    '/auth/validate-password',
   ];
 
   @override

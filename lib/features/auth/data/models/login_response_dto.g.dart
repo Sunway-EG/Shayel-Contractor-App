@@ -23,7 +23,7 @@ Map<String, dynamic> _$LoginResponseDtoToJson(LoginResponseDto instance) =>
       'accessToken': instance.accessToken,
       'refreshToken': instance.refreshToken,
       'expiresIn': instance.expiresIn,
-      'user': instance.user?.toJson(),
+      'user': instance.user,
       'redirect': instance.redirect,
       'isOnline': instance.isOnline,
     };
@@ -49,65 +49,67 @@ Map<String, dynamic> _$LoginUserDtoToJson(LoginUserDto instance) =>
       'permissions': instance.permissions,
     };
 
-DriverProfileDto _$DriverProfileDtoFromJson(Map<String, dynamic> json) =>
-    DriverProfileDto(
-      id: (json['id'] as num).toInt(),
-      email: json['email'] as String,
-      fullName: json['fullName'] as String?,
-      fullNameAr: json['fullNameAr'] as String?,
-      nationalId: json['nationalId'] as String?,
-      userName: json['userName'] as String?,
-      phone: json['phone'] as String?,
-      userType: json['userType'] as String?,
-      mfaChannel: (json['mfaChannel'] as num?)?.toInt(),
-      emailVerified: json['emailVerified'] as bool?,
-      phoneVerified: json['phoneVerified'] as bool?,
-      status: (json['status'] as num?)?.toInt(),
-      profilePicture: json['profilePicture'] as String?,
-      driverRating: (json['driverRating'] as num?)?.toDouble(),
-      tripsCount: (json['tripsCount'] as num?)?.toInt(),
-      biometricFingerprint: json['biometricFingerprint'] as bool?,
-      permissions: json['permissions'] as Map<String, dynamic>?,
-      vehicles: json['vehicles'] as List<dynamic>?,
-      documents: (json['documents'] as List<dynamic>?)
-          ?.map(
-            (e) => DriverProfileDocumentDto.fromJson(e as Map<String, dynamic>),
-          )
-          .toList(),
-      createdAt: json['createdAt'] as String?,
-      updatedAt: json['updatedAt'] as String?,
-      isOnline: json['isOnline'] as bool?,
-    );
-
-Map<String, dynamic> _$DriverProfileDtoToJson(DriverProfileDto instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'fullName': instance.fullName,
-      'fullNameAr': instance.fullNameAr,
-      'nationalId': instance.nationalId,
-      'userName': instance.userName,
-      'email': instance.email,
-      'phone': instance.phone,
-      'userType': instance.userType,
-      'mfaChannel': instance.mfaChannel,
-      'emailVerified': instance.emailVerified,
-      'phoneVerified': instance.phoneVerified,
-      'status': instance.status,
-      'profilePicture': instance.profilePicture,
-      'driverRating': instance.driverRating,
-      'tripsCount': instance.tripsCount,
-      'biometricFingerprint': instance.biometricFingerprint,
-      'permissions': instance.permissions,
-      'vehicles': instance.vehicles,
-      'documents': instance.documents?.map((e) => e.toJson()).toList(),
-      'createdAt': instance.createdAt,
-      'updatedAt': instance.updatedAt,
-      'isOnline': instance.isOnline,
-    };
-
-DriverProfileDocumentDto _$DriverProfileDocumentDtoFromJson(
+ContractorProfileDto _$ContractorProfileDtoFromJson(
   Map<String, dynamic> json,
-) => DriverProfileDocumentDto(
+) => ContractorProfileDto(
+  id: (json['id'] as num).toInt(),
+  email: json['email'] as String,
+  fullName: json['fullName'] as String?,
+  fullNameAr: json['fullNameAr'] as String?,
+  nationalId: json['nationalId'] as String?,
+  userName: json['userName'] as String?,
+  phone: json['phone'] as String?,
+  userType: json['userType'] as String?,
+  mfaChannel: (json['mfaChannel'] as num?)?.toInt(),
+  emailVerified: json['emailVerified'] as bool?,
+  phoneVerified: json['phoneVerified'] as bool?,
+  status: (json['status'] as num?)?.toInt(),
+  profilePicture: json['profilePicture'] as String?,
+  driverRating: (json['driverRating'] as num?)?.toDouble(),
+  tripsCount: (json['tripsCount'] as num?)?.toInt(),
+  biometricFingerprint: json['biometricFingerprint'] as bool?,
+  permissions: json['permissions'] as Map<String, dynamic>?,
+  vehicles: json['vehicles'] as List<dynamic>?,
+  documents: (json['documents'] as List<dynamic>?)
+      ?.map(
+        (e) => ContractorProfileDocumentDto.fromJson(e as Map<String, dynamic>),
+      )
+      .toList(),
+  createdAt: json['createdAt'] as String?,
+  updatedAt: json['updatedAt'] as String?,
+  isOnline: json['isOnline'] as bool?,
+);
+
+Map<String, dynamic> _$ContractorProfileDtoToJson(
+  ContractorProfileDto instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'fullName': instance.fullName,
+  'fullNameAr': instance.fullNameAr,
+  'nationalId': instance.nationalId,
+  'userName': instance.userName,
+  'email': instance.email,
+  'phone': instance.phone,
+  'userType': instance.userType,
+  'mfaChannel': instance.mfaChannel,
+  'emailVerified': instance.emailVerified,
+  'phoneVerified': instance.phoneVerified,
+  'status': instance.status,
+  'profilePicture': instance.profilePicture,
+  'driverRating': instance.driverRating,
+  'tripsCount': instance.tripsCount,
+  'biometricFingerprint': instance.biometricFingerprint,
+  'permissions': instance.permissions,
+  'vehicles': instance.vehicles,
+  'documents': instance.documents,
+  'createdAt': instance.createdAt,
+  'updatedAt': instance.updatedAt,
+  'isOnline': instance.isOnline,
+};
+
+ContractorProfileDocumentDto _$ContractorProfileDocumentDtoFromJson(
+  Map<String, dynamic> json,
+) => ContractorProfileDocumentDto(
   id: (json['id'] as num).toInt(),
   documentId: (json['documentId'] as num?)?.toInt(),
   fileUrl: json['fileUrl'] as String?,
@@ -115,30 +117,34 @@ DriverProfileDocumentDto _$DriverProfileDocumentDtoFromJson(
   status: (json['status'] as num?)?.toInt(),
   document: json['document'] == null
       ? null
-      : DriverDocumentDto.fromJson(json['document'] as Map<String, dynamic>),
+      : ContractorDocumentDto.fromJson(
+          json['document'] as Map<String, dynamic>,
+        ),
 );
 
-Map<String, dynamic> _$DriverProfileDocumentDtoToJson(
-  DriverProfileDocumentDto instance,
+Map<String, dynamic> _$ContractorProfileDocumentDtoToJson(
+  ContractorProfileDocumentDto instance,
 ) => <String, dynamic>{
   'id': instance.id,
   'documentId': instance.documentId,
   'fileUrl': instance.fileUrl,
   'expiryDate': instance.expiryDate,
   'status': instance.status,
-  'document': instance.document?.toJson(),
+  'document': instance.document,
 };
 
-DriverDocumentDto _$DriverDocumentDtoFromJson(Map<String, dynamic> json) =>
-    DriverDocumentDto(
-      id: (json['id'] as num).toInt(),
-      nameEn: json['nameEn'] as String?,
-      nameAr: json['nameAr'] as String?,
-    );
+ContractorDocumentDto _$ContractorDocumentDtoFromJson(
+  Map<String, dynamic> json,
+) => ContractorDocumentDto(
+  id: (json['id'] as num).toInt(),
+  nameEn: json['nameEn'] as String?,
+  nameAr: json['nameAr'] as String?,
+);
 
-Map<String, dynamic> _$DriverDocumentDtoToJson(DriverDocumentDto instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'nameEn': instance.nameEn,
-      'nameAr': instance.nameAr,
-    };
+Map<String, dynamic> _$ContractorDocumentDtoToJson(
+  ContractorDocumentDto instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'nameEn': instance.nameEn,
+  'nameAr': instance.nameAr,
+};

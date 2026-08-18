@@ -100,9 +100,18 @@ class AuthDisableBiometricSuccess extends AuthState {
   const AuthDisableBiometricSuccess();
 }
 
+class AuthValidatePasswordSuccess extends AuthState {
+  const AuthValidatePasswordSuccess({required this.success});
+
+  final bool success;
+  @override
+  List<Object?> get props => [success];
+}
+
 class AuthRegisterSuccess extends AuthState {
   const AuthRegisterSuccess();
 }
+
 class AuthDocumentsLoading extends AuthState {
   const AuthDocumentsLoading();
 }

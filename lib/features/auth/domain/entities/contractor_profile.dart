@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-class DriverProfile extends Equatable {
-  const DriverProfile({
+class ContractorProfile extends Equatable {
+  const ContractorProfile({
     required this.id,
     required this.email,
     this.fullName,
@@ -19,7 +19,7 @@ class DriverProfile extends Equatable {
     this.tripsCount,
     this.biometricFingerprint,
     this.isOnline,
-    this.documents = const <DriverProfileDocument>[],
+    this.documents = const <ContractorProfileDocument>[],
   });
 
   final int id;
@@ -39,7 +39,7 @@ class DriverProfile extends Equatable {
   final int? tripsCount;
   final bool? biometricFingerprint;
   final bool? isOnline;
-  final List<DriverProfileDocument> documents;
+  final List<ContractorProfileDocument> documents;
 
   @override
   List<Object?> get props => [
@@ -64,8 +64,8 @@ class DriverProfile extends Equatable {
   ];
 }
 
-class DriverProfileDocument extends Equatable {
-  const DriverProfileDocument({
+class ContractorProfileDocument extends Equatable {
+  const ContractorProfileDocument({
     required this.id,
     this.documentId,
     this.fileUrl,
@@ -79,7 +79,7 @@ class DriverProfileDocument extends Equatable {
   final String? fileUrl;
   final String? expiryDate;
   final int? status;
-  final DriverProfileDocumentType? document;
+  final ContractorProfileDocumentType? document;
 
   @override
   List<Object?> get props => [
@@ -92,8 +92,12 @@ class DriverProfileDocument extends Equatable {
   ];
 }
 
-class DriverProfileDocumentType extends Equatable {
-  const DriverProfileDocumentType({required this.id, this.nameEn, this.nameAr});
+class ContractorProfileDocumentType extends Equatable {
+  const ContractorProfileDocumentType({
+    required this.id,
+    this.nameEn,
+    this.nameAr,
+  });
 
   final int id;
   final String? nameEn;

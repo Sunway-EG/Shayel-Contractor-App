@@ -66,8 +66,8 @@ class LoginUserDto {
 
 /// Used by getProfile API (may have different structure than LoginUserDto)
 @JsonSerializable()
-class DriverProfileDto {
-  const DriverProfileDto({
+class ContractorProfileDto {
+  const ContractorProfileDto({
     required this.id,
     required this.email,
     this.fullName,
@@ -122,7 +122,7 @@ class DriverProfileDto {
   final bool? biometricFingerprint;
   final Map<String, dynamic>? permissions;
   final List<dynamic>? vehicles;
-  final List<DriverProfileDocumentDto>? documents;
+  final List<ContractorProfileDocumentDto>? documents;
   @JsonKey(name: 'createdAt')
   final String? createdAt;
   @JsonKey(name: 'updatedAt')
@@ -130,14 +130,14 @@ class DriverProfileDto {
   @JsonKey(name: 'isOnline')
   final bool? isOnline;
 
-  factory DriverProfileDto.fromJson(Map<String, dynamic> json) =>
-      _$DriverProfileDtoFromJson(json);
-  Map<String, dynamic> toJson() => _$DriverProfileDtoToJson(this);
+  factory ContractorProfileDto.fromJson(Map<String, dynamic> json) =>
+      _$ContractorProfileDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$ContractorProfileDtoToJson(this);
 }
 
 @JsonSerializable()
-class DriverProfileDocumentDto {
-  const DriverProfileDocumentDto({
+class ContractorProfileDocumentDto {
+  const ContractorProfileDocumentDto({
     required this.id,
     this.documentId,
     this.fileUrl,
@@ -154,16 +154,16 @@ class DriverProfileDocumentDto {
   @JsonKey(name: 'expiryDate')
   final String? expiryDate;
   final int? status;
-  final DriverDocumentDto? document;
+  final ContractorDocumentDto? document;
 
-  factory DriverProfileDocumentDto.fromJson(Map<String, dynamic> json) =>
-      _$DriverProfileDocumentDtoFromJson(json);
-  Map<String, dynamic> toJson() => _$DriverProfileDocumentDtoToJson(this);
+  factory ContractorProfileDocumentDto.fromJson(Map<String, dynamic> json) =>
+      _$ContractorProfileDocumentDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$ContractorProfileDocumentDtoToJson(this);
 }
 
 @JsonSerializable()
-class DriverDocumentDto {
-  const DriverDocumentDto({required this.id, this.nameEn, this.nameAr});
+class ContractorDocumentDto {
+  const ContractorDocumentDto({required this.id, this.nameEn, this.nameAr});
 
   final int id;
   @JsonKey(name: 'nameEn')
@@ -171,7 +171,7 @@ class DriverDocumentDto {
   @JsonKey(name: 'nameAr')
   final String? nameAr;
 
-  factory DriverDocumentDto.fromJson(Map<String, dynamic> json) =>
-      _$DriverDocumentDtoFromJson(json);
-  Map<String, dynamic> toJson() => _$DriverDocumentDtoToJson(this);
+  factory ContractorDocumentDto.fromJson(Map<String, dynamic> json) =>
+      _$ContractorDocumentDtoFromJson(json);
+  Map<String, dynamic> toJson() => _$ContractorDocumentDtoToJson(this);
 }

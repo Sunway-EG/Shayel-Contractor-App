@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/network/api_failure_mapper.dart';
 import '../../../../core/network/safe_api_call.dart';
 import '../../../../core/utils/string_utils.dart';
-import '../../domain/entities/driver_profile.dart';
+import '../../domain/entities/contractor_profile.dart';
 import '../../domain/entities/login_result.dart';
 import '../../domain/entities/send_login_otp_result.dart';
 import '../../domain/failures/auth_failure.dart';
@@ -37,8 +37,8 @@ String? _phoneWithPlus2(String? phone) {
   return '+2$digits';
 }
 
-DriverProfile _mapDriverProfile(DriverProfileDto dto) {
-  return DriverProfile(
+ContractorProfile _mapContractorProfile(ContractorProfileDto dto) {
+  return ContractorProfile(
     id: dto.id,
     email: dto.email,
     fullName: dto.fullName,
@@ -57,8 +57,8 @@ DriverProfile _mapDriverProfile(DriverProfileDto dto) {
     biometricFingerprint: dto.biometricFingerprint,
     isOnline: dto.isOnline,
     documents: (dto.documents ?? const [])
-        .map<DriverProfileDocument>(
-          (doc) => DriverProfileDocument(
+        .map<ContractorProfileDocument>(
+          (doc) => ContractorProfileDocument(
             id: doc.id,
             documentId: doc.documentId,
             fileUrl: doc.fileUrl,
@@ -66,7 +66,7 @@ DriverProfile _mapDriverProfile(DriverProfileDto dto) {
             status: doc.status,
             document: doc.document == null
                 ? null
-                : DriverProfileDocumentType(
+                : ContractorProfileDocumentType(
                     id: doc.document!.id,
                     nameEn: doc.document!.nameEn,
                     nameAr: doc.document!.nameAr,
@@ -192,10 +192,10 @@ class AuthImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, DriverProfile>> getProfile() async {
+  Future<Either<AuthFailure, ContractorProfile>> getProfile() async {
     return _run(() async {
       final dto = await _remote.getProfile();
-      return _mapDriverProfile(dto);
+      return _mapContractorProfile(dto);
     });
   }
 
@@ -295,6 +295,15 @@ class AuthImpl implements AuthRepository {
   }
 
   @override
+  Future<Either<AuthFailure, bool>> validatePassword({
+    required String password,
+  }) async {
+    return _run(() async {
+      return await _remote.validatePassword(password: password);
+    });
+  }
+
+  @override
   Future<Either<AuthFailure, void>> register({
     required String fullName,
     required String phone,
@@ -322,7 +331,7 @@ class AuthImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, DriverProfile>> updateProfile({
+  Future<Either<AuthFailure, ContractorProfile>> updateProfile({
     String? fullName,
     String? fullNameAr,
     String? userName,
@@ -348,7 +357,7 @@ class AuthImpl implements AuthRepository {
           biometricFingerprint: biometricFingerprint,
         ),
       );
-      return _mapDriverProfile(dto);
+      return _mapContractorProfile(dto);
     }, invalidCredentialsOnUnauthorized: true);
   }
 

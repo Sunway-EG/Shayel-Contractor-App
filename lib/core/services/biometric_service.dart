@@ -53,15 +53,30 @@ class BiometricService {
     }
   }
 
+  Future<bool> isBiometricEnabledForThisUser({required String login}) async {
+    try {
+      final enabled = await _secureStorage.read(key: _biometricEnabledKey);
+      if (enabled == 'true') {
+        if (await getSavedLogin() == login) {
+          return true;
+        }
+      }
+      return false;
+    } catch (e) {
+      debugPrint('Error checking biometric enabled status: $e');
+      return false;
+    }
+  }
+
   /// Enable biometric login and save credentials
   Future<bool> enableBiometric({
     required String login,
     required String password,
-    required String authenticateReason,
+    required String reason,
   }) async {
     try {
       // First authenticate with biometric to enable
-      final authenticated = await authenticate(reason: authenticateReason);
+      final authenticated = await authenticate(reason: reason);
 
       if (!authenticated) {
         return false;
@@ -113,12 +128,22 @@ class BiometricService {
   }
 
   /// Authenticate using biometric
-  Future<bool> authenticate({required String reason}) async {
+  Future<bool> authenticate({
+    required String reason,
+    bool useErrorDialogs = true,
+    bool stickyAuth = true,
+  }) async {
     try {
       final isAvailable = await this.isAvailable();
-      if (!isAvailable) return false;
+      if (!isAvailable) {
+        return false;
+      }
 
-      return await _localAuth.authenticate(localizedReason: reason);
+      return await _localAuth.authenticate(
+        localizedReason: reason,
+        biometricOnly: false,
+        persistAcrossBackgrounding: stickyAuth,
+      );
     } catch (e) {
       debugPrint('Error during biometric authentication: $e');
       return false;
@@ -127,7 +152,7 @@ class BiometricService {
 
   /// Authenticate and get saved credentials for login
   Future<Map<String, String>?> authenticateAndGetCredentials({
-    required String reason,
+    String reason = 'Authenticate to login',
   }) async {
     try {
       final authenticated = await authenticate(reason: reason);
