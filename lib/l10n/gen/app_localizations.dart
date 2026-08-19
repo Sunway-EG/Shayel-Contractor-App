@@ -128,6 +128,12 @@ abstract class AppLocalizations {
   /// **'Switch language'**
   String get switchLanguage;
 
+  /// No description provided for @createAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get createAccount;
+
   /// No description provided for @createNewAccount.
   ///
   /// In en, this message translates to:

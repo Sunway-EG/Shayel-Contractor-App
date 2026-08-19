@@ -24,6 +24,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get switchLanguage => 'تغيير اللغة';
 
   @override
+  String get createAccount => 'إنشاء حساب';
+
+  @override
   String get createNewAccount => 'إنشاء حساب جديد';
 
   @override

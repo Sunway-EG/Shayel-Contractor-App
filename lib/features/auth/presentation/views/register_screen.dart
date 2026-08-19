@@ -333,7 +333,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(width: 5),
                 Text(
-                  l10n.uploadYourDocuments,
+                  l10n.createAccount,
                   style: const TextStyle(
                     color: AppColors.mainBlue,
                     fontSize: 18,

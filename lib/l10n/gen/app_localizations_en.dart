@@ -24,6 +24,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get switchLanguage => 'Switch language';
 
   @override
+  String get createAccount => 'Create account';
+
+  @override
   String get createNewAccount => 'Create new account';
 
   @override

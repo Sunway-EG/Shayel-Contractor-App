@@ -203,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 48),
                       Text(
-                        l10n.welcomeToShayel,
+                        l10n.signIn,
                         style: CupertinoTheme.of(context)
                             .textTheme
                             .navLargeTitleTextStyle

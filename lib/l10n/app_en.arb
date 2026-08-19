@@ -11,6 +11,7 @@
   "welcomeToShayel": "Welcome to Shayel",
   "welcomeDesc": "Sign in to your account or create a new one",
   "switchLanguage": "Switch language",
+  "createAccount": "Create account",
   "createNewAccount": "Create new account",
   "verificationInstruction": "Enter your phone number and we will send you a verification code",
   "@verificationInstruction": {
