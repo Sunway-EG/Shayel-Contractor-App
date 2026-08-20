@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           _Title(title: l10n.tripsRequest, fontSize: 16),
                           CupertinoButton(
-                            onPressed: () {},
+                            onPressed: () => context.go(AppRoutePaths.requests),
                             padding: EdgeInsets.zero,
                             child: _Title(
                               title: l10n.showAll,

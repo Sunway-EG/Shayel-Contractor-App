@@ -677,10 +677,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toDate => 'To';
 
   @override
-  String get applyFilter => 'Apply';
+  String get apply => 'Apply';
 
   @override
-  String get clearFilter => 'Clear';
+  String get clear => 'Clear';
 
   @override
   String get documents => 'Documents';
@@ -1020,7 +1020,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enterTripID => 'Enter trip ID';
 
   @override
+  String get tripRequest => 'Trip request';
+
+  @override
   String get tripsRequest => 'Trips request';
+
+  @override
+  String get tripsRequestDesc => 'All trips request you have.';
 
   @override
   String get tripsReview => 'Trips review';
@@ -1076,6 +1082,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get draft => 'Draft';
+
+  @override
+  String get tripInProgress => 'Trip in progress';
+
+  @override
+  String get newRequests => 'New requests';
+
+  @override
+  String get alreadyBooked => 'Already booked';
+
+  @override
+  String get searchForTrip => 'Search for trip';
+
+  @override
+  String get filter => 'Filter';
+
+  @override
+  String get applyFilter => 'Apply filter';
+
+  @override
+  String get clearFilter => 'Clear filter';
+
+  @override
+  String get searchForPlace => 'Search for place';
+
+  @override
+  String get searchForPlaceDesc =>
+      'Search for a city or region with available trips that you can access.';
+
+  @override
+  String get movingFrom => 'Moving from';
 
   @override
   String get confirm => 'Confirm';

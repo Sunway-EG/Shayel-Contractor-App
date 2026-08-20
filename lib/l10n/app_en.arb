@@ -879,13 +879,13 @@
   "@toDate": {
     "description": "To date filter label"
   },
-  "applyFilter": "Apply",
-  "@applyFilter": {
-    "description": "Apply filter button"
+  "apply": "Apply",
+  "@apply": {
+    "description": "Apply button"
   },
-  "clearFilter": "Clear",
-  "@clearFilter": {
-    "description": "Clear filter button"
+  "clear": "Clear",
+  "@clear": {
+    "description": "Clear button"
   },
   "documents": "Documents",
   "@documents": {
@@ -1155,7 +1155,9 @@
   "trackTheTrip": "Track the trip",
   "trackTheTripDesc": "Enter your trip ID and get the realtime tracking.",
   "enterTripID": "Enter trip ID",
+  "tripRequest": "Trip request",
   "tripsRequest": "Trips request",
+  "tripsRequestDesc": "All trips request you have.",
   "tripsReview": "Trips review",
   "showAll": "Show All",
   "sunwayAdminSendThisTripFromAgo": "Sunway admin send this trip from 4 hours ago.",
@@ -1174,6 +1176,16 @@
   "reviewed": "Reviewed",
   "cancelled": "Cancelled",
   "draft": "Draft",
+  "tripInProgress": "Trip in progress",
+  "newRequests": "New requests",
+  "alreadyBooked": "Already booked",
+  "searchForTrip": "Search for trip",
+  "filter": "Filter",
+  "applyFilter": "Apply filter",
+  "clearFilter": "Clear filter",
+  "searchForPlace": "Search for place",
+  "searchForPlaceDesc": "Search for a city or region with available trips that you can access.",
+  "movingFrom": "Moving from",
   "confirm": "Confirm",
   "skip": "Skip"
 

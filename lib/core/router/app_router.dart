@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:chucker_flutter/chucker_flutter.dart';
 import '../../features/profile/presentation/views/profile_screen.dart';
+import '../../features/requests/presentation/views/requests_screen.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
 import 'route_constants.dart';
 import '../../features/auth/presentation/views/register_screen.dart';
@@ -315,6 +316,10 @@ GoRouter createAppRouter() {
       GoRoute(
         path: AppRoutePaths.profile,
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: AppRoutePaths.requests,
+        builder: (context, state) => const RequestsScreen(),
       ),
     ],
   );

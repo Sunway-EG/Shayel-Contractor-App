@@ -675,10 +675,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get toDate => 'إلى';
 
   @override
-  String get applyFilter => 'تطبيق';
+  String get apply => 'تطبيق';
 
   @override
-  String get clearFilter => 'مسح';
+  String get clear => 'مسح';
 
   @override
   String get documents => 'المستندات';
@@ -1013,7 +1013,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get enterTripID => 'أدخل رقم الرحلة';
 
   @override
+  String get tripRequest => 'طلب رحلة';
+
+  @override
   String get tripsRequest => 'طلبات الرحلات';
+
+  @override
+  String get tripsRequestDesc => 'جميع طلبات الرحلات لديك.';
 
   @override
   String get tripsReview => 'مراجعة الرحلات';
@@ -1069,6 +1075,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get draft => 'مسودة';
+
+  @override
+  String get tripInProgress => 'رحلة قيد التنفيذ';
+
+  @override
+  String get newRequests => 'طلبات جديدة';
+
+  @override
+  String get alreadyBooked => 'محجوزة بالفعل';
+
+  @override
+  String get searchForTrip => 'البحث عن رحلة';
+
+  @override
+  String get filter => 'تصنيف';
+
+  @override
+  String get applyFilter => 'اعرض التصنيف';
+
+  @override
+  String get clearFilter => 'مسح التصنيف';
+
+  @override
+  String get searchForPlace => 'بحث عن المكان';
+
+  @override
+  String get searchForPlaceDesc =>
+      'ابحث عن مدينة او منطقة متاح فيها رحلات يمكنك الوصول إليها';
+
+  @override
+  String get movingFrom => 'التحرك من';
 
   @override
   String get confirm => 'تأكيد';

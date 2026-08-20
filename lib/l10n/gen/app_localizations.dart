@@ -1358,17 +1358,17 @@ abstract class AppLocalizations {
   /// **'To'**
   String get toDate;
 
-  /// Apply filter button
+  /// Apply button
   ///
   /// In en, this message translates to:
   /// **'Apply'**
-  String get applyFilter;
+  String get apply;
 
-  /// Clear filter button
+  /// Clear button
   ///
   /// In en, this message translates to:
   /// **'Clear'**
-  String get clearFilter;
+  String get clear;
 
   /// Documents section title
   ///
@@ -1976,11 +1976,23 @@ abstract class AppLocalizations {
   /// **'Enter trip ID'**
   String get enterTripID;
 
+  /// No description provided for @tripRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip request'**
+  String get tripRequest;
+
   /// No description provided for @tripsRequest.
   ///
   /// In en, this message translates to:
   /// **'Trips request'**
   String get tripsRequest;
+
+  /// No description provided for @tripsRequestDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'All trips request you have.'**
+  String get tripsRequestDesc;
 
   /// No description provided for @tripsReview.
   ///
@@ -2089,6 +2101,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Draft'**
   String get draft;
+
+  /// No description provided for @tripInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip in progress'**
+  String get tripInProgress;
+
+  /// No description provided for @newRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'New requests'**
+  String get newRequests;
+
+  /// No description provided for @alreadyBooked.
+  ///
+  /// In en, this message translates to:
+  /// **'Already booked'**
+  String get alreadyBooked;
+
+  /// No description provided for @searchForTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for trip'**
+  String get searchForTrip;
+
+  /// No description provided for @filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filter;
+
+  /// No description provided for @applyFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply filter'**
+  String get applyFilter;
+
+  /// No description provided for @clearFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filter'**
+  String get clearFilter;
+
+  /// No description provided for @searchForPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for place'**
+  String get searchForPlace;
+
+  /// No description provided for @searchForPlaceDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for a city or region with available trips that you can access.'**
+  String get searchForPlaceDesc;
+
+  /// No description provided for @movingFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving from'**
+  String get movingFrom;
 
   /// No description provided for @confirm.
   ///
