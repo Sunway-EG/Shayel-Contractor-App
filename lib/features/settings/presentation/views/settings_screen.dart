@@ -191,7 +191,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
-          // context.go(AppRoutePaths.home);
+          context.go(AppRoutePaths.home);
         }
       },
       child: MultiBlocListener(

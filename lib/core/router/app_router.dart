@@ -5,7 +5,7 @@ import '../../features/profile/presentation/views/profile_screen.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
 import 'route_constants.dart';
 import '../../features/auth/presentation/views/register_screen.dart';
-import '../../screens/home.dart';
+import '../../features/home/presentation/views/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -124,7 +124,7 @@ class _SplashScreenState extends State<_SplashScreen>
     }
 
     final destination = AuthStorage.instance.isLoggedIn()
-        ? AppRoutePaths.settings
+        ? AppRoutePaths.home
         : AppRoutePaths.onboarding;
     AppRouterHolder.instance.router?.go(destination);
 
@@ -240,7 +240,7 @@ GoRouter createAppRouter() {
 
       // If logged in and trying to access auth routes, redirect to home
       if (isLoggedIn && isAuthRoute && state.uri.path != AppRoutePaths.splash) {
-        return AppRoutePaths.settings;
+        return AppRoutePaths.home;
       }
 
       // If not logged in and trying to access protected routes, redirect to login

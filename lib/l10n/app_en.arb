@@ -657,10 +657,6 @@
   "@onTheWayToLoading": {
     "description": "On the way to loading status"
   },
-  "completed": "Completed",
-  "@completed": {
-    "description": "Completed status"
-  },
   "tripScheduleUpdated": "Trip Schedule Updated",
   "@tripScheduleUpdated": {
     "description": "Trip schedule update title"
@@ -1134,7 +1130,7 @@
   "yourRequestSuccessfullyRegistered": "Your request successfully registered",
   "yourRequestSuccessfullyRegisteredDesc": "We’ll check your documents. and open your account to receive trips from shayel very soon, maybe checking your paper takes 2 days",
   "goToHomepage": "Go to homepage",
-  "orders": "Orders",
+  "requests": "Requests",
   "market": "Market",
   "account": "Account",
   "enterPasswordEnableBiometric": "Enter your password to enable biometric login.",
@@ -1156,6 +1152,28 @@
   "shipping": "Shipping",
   "transfersAndFinancialEntitlements": "Transfers and financial entitlements",
   "contactSupport": "Contact support",
+  "trackTheTrip": "Track the trip",
+  "trackTheTripDesc": "Enter your trip ID and get the realtime tracking.",
+  "enterTripID": "Enter trip ID",
+  "tripsRequest": "Trips request",
+  "tripsReview": "Trips review",
+  "showAll": "Show All",
+  "sunwayAdminSendThisTripFromAgo": "Sunway admin send this trip from 4 hours ago.",
+  "tripDate": "Trip date",
+  "tripFrom": "Trip from",
+  "tripTo": "Trip to",
+  "vehicleType": "Vehicle type",
+  "tripCost": "Trip cost",
+  "bookTrip": "Book trip",
+  "all": "All",
+  "requested": "Requested",
+  "pending": "Pending",
+  "scheduled": "Scheduled",
+  "inProgress": "In progress",
+  "completed": "Completed",
+  "reviewed": "Reviewed",
+  "cancelled": "Cancelled",
+  "draft": "Draft",
   "confirm": "Confirm",
   "skip": "Skip"
 

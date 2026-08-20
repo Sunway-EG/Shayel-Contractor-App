@@ -504,9 +504,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get onTheWayToLoading => 'في الطريق للتحميل';
 
   @override
-  String get completed => 'مكتملة';
-
-  @override
   String get tripScheduleUpdated => 'تحديث موعد الرحلة';
 
   @override
@@ -942,7 +939,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get goToHomepage => 'الذهاب إلى الصفحة الرئيسية';
 
   @override
-  String get orders => 'الطلبات';
+  String get requests => 'الطلبات';
 
   @override
   String get market => 'السوق';
@@ -1004,6 +1001,74 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get contactSupport => 'تواصل مع الدعم';
+
+  @override
+  String get trackTheTrip => 'تتبع الرحلة';
+
+  @override
+  String get trackTheTripDesc =>
+      'أدخل رقم الرحلة واحصل على التتبع في الوقت الفعلي.';
+
+  @override
+  String get enterTripID => 'أدخل رقم الرحلة';
+
+  @override
+  String get tripsRequest => 'طلبات الرحلات';
+
+  @override
+  String get tripsReview => 'مراجعة الرحلات';
+
+  @override
+  String get showAll => 'أظهر الكل';
+
+  @override
+  String get sunwayAdminSendThisTripFromAgo =>
+      'أرسل مسؤول شايل هذه الرحلة منذ 4 ساعات.';
+
+  @override
+  String get tripDate => 'موعد الرحلة';
+
+  @override
+  String get tripFrom => 'الرحلة من';
+
+  @override
+  String get tripTo => 'الرحلة إلى';
+
+  @override
+  String get vehicleType => 'نوع المركبة';
+
+  @override
+  String get tripCost => 'سعر الرحلة';
+
+  @override
+  String get bookTrip => 'احجز الرحلة';
+
+  @override
+  String get all => 'الكل';
+
+  @override
+  String get requested => 'مطلوبة';
+
+  @override
+  String get pending => 'في الإنتظار';
+
+  @override
+  String get scheduled => 'مجدولة';
+
+  @override
+  String get inProgress => 'في الطريق';
+
+  @override
+  String get completed => 'مكتملة';
+
+  @override
+  String get reviewed => 'تمت المراجعة';
+
+  @override
+  String get cancelled => 'ملغاة';
+
+  @override
+  String get draft => 'مسودة';
 
   @override
   String get confirm => 'تأكيد';

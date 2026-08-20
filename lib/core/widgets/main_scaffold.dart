@@ -21,14 +21,14 @@ class MainScaffold extends StatelessWidget {
     switch (location) {
       case AppRoutePaths.home:
         return 0;
-      case AppRoutePaths.orders:
+      case AppRoutePaths.requests:
         return 1;
       case AppRoutePaths.market:
         return 2;
       case AppRoutePaths.settings:
         return 3;
       default:
-        return 3; // Default to home
+        return 0; // Default to home
     }
   }
 

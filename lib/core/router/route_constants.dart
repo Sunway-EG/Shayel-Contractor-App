@@ -10,7 +10,7 @@ class AppRoutePaths {
   static const firstChoose = '/first-choose';
   static const register = '/register';
   static const home = '/home';
-  static const orders = '/orders';
+  static const requests = '/requests';
   static const market = '/market';
   static const settings = '/settings';
   static const profile = '/profile';

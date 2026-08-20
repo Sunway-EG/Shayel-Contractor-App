@@ -505,9 +505,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onTheWayToLoading => 'On the way to loading';
 
   @override
-  String get completed => 'Completed';
-
-  @override
   String get tripScheduleUpdated => 'Trip Schedule Updated';
 
   @override
@@ -948,7 +945,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get goToHomepage => 'Go to homepage';
 
   @override
-  String get orders => 'Orders';
+  String get requests => 'Requests';
 
   @override
   String get market => 'Market';
@@ -1011,6 +1008,74 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get contactSupport => 'Contact support';
+
+  @override
+  String get trackTheTrip => 'Track the trip';
+
+  @override
+  String get trackTheTripDesc =>
+      'Enter your trip ID and get the realtime tracking.';
+
+  @override
+  String get enterTripID => 'Enter trip ID';
+
+  @override
+  String get tripsRequest => 'Trips request';
+
+  @override
+  String get tripsReview => 'Trips review';
+
+  @override
+  String get showAll => 'Show All';
+
+  @override
+  String get sunwayAdminSendThisTripFromAgo =>
+      'Sunway admin send this trip from 4 hours ago.';
+
+  @override
+  String get tripDate => 'Trip date';
+
+  @override
+  String get tripFrom => 'Trip from';
+
+  @override
+  String get tripTo => 'Trip to';
+
+  @override
+  String get vehicleType => 'Vehicle type';
+
+  @override
+  String get tripCost => 'Trip cost';
+
+  @override
+  String get bookTrip => 'Book trip';
+
+  @override
+  String get all => 'All';
+
+  @override
+  String get requested => 'Requested';
+
+  @override
+  String get pending => 'Pending';
+
+  @override
+  String get scheduled => 'Scheduled';
+
+  @override
+  String get inProgress => 'In progress';
+
+  @override
+  String get completed => 'Completed';
+
+  @override
+  String get reviewed => 'Reviewed';
+
+  @override
+  String get cancelled => 'Cancelled';
+
+  @override
+  String get draft => 'Draft';
 
   @override
   String get confirm => 'Confirm';

@@ -30,14 +30,14 @@ class AppBottomNavBar extends StatelessWidget {
     switch (location) {
       case AppRoutePaths.home:
         return 0;
-      case AppRoutePaths.orders:
+      case AppRoutePaths.requests:
         return 1;
       case AppRoutePaths.market:
         return 2;
       case AppRoutePaths.settings:
         return 3;
       default:
-        return 3; // Default to home
+        return 0; // Default to home
     }
   }
 
@@ -61,7 +61,7 @@ class AppBottomNavBar extends StatelessWidget {
           context.go(AppRoutePaths.home);
           break;
         case 1:
-          context.go(AppRoutePaths.orders);
+          context.go(AppRoutePaths.requests);
           break;
         case 2:
           context.go(AppRoutePaths.market);
@@ -100,12 +100,11 @@ class AppBottomNavBar extends StatelessWidget {
                   label: l10n.homeNav,
                   icon: 'assets/images/home.svg',
                   isSelected: currentIndex == 0,
-                  // onTap: () => handleItemTap(0),
-                  onTap: () {},
+                  onTap: () => handleItemTap(0),
                 ),
                 _BottomNavItem(
-                  label: l10n.orders,
-                  icon: 'assets/images/orders.svg',
+                  label: l10n.requests,
+                  icon: 'assets/images/requests.svg',
                   isSelected: currentIndex == 1,
                   // onTap: () => handleItemTap(1),
                   onTap: () {},

@@ -303,7 +303,7 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                     '${AppRoutePaths.otp}?contact=${Uri.encodeComponent(contact)}&viaSms=$isPhone&forgetPassword=true',
                   );
                 } else {
-                  context.go(AppRoutePaths.settings);
+                  context.go(AppRoutePaths.home);
                 }
               },
             );

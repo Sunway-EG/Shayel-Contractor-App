@@ -1040,12 +1040,6 @@ abstract class AppLocalizations {
   /// **'On the way to loading'**
   String get onTheWayToLoading;
 
-  /// Completed status
-  ///
-  /// In en, this message translates to:
-  /// **'Completed'**
-  String get completed;
-
   /// Trip schedule update title
   ///
   /// In en, this message translates to:
@@ -1844,11 +1838,11 @@ abstract class AppLocalizations {
   /// **'Go to homepage'**
   String get goToHomepage;
 
-  /// No description provided for @orders.
+  /// No description provided for @requests.
   ///
   /// In en, this message translates to:
-  /// **'Orders'**
-  String get orders;
+  /// **'Requests'**
+  String get requests;
 
   /// No description provided for @market.
   ///
@@ -1963,6 +1957,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Contact support'**
   String get contactSupport;
+
+  /// No description provided for @trackTheTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Track the trip'**
+  String get trackTheTrip;
+
+  /// No description provided for @trackTheTripDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your trip ID and get the realtime tracking.'**
+  String get trackTheTripDesc;
+
+  /// No description provided for @enterTripID.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter trip ID'**
+  String get enterTripID;
+
+  /// No description provided for @tripsRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Trips request'**
+  String get tripsRequest;
+
+  /// No description provided for @tripsReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Trips review'**
+  String get tripsReview;
+
+  /// No description provided for @showAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Show All'**
+  String get showAll;
+
+  /// No description provided for @sunwayAdminSendThisTripFromAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunway admin send this trip from 4 hours ago.'**
+  String get sunwayAdminSendThisTripFromAgo;
+
+  /// No description provided for @tripDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip date'**
+  String get tripDate;
+
+  /// No description provided for @tripFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip from'**
+  String get tripFrom;
+
+  /// No description provided for @tripTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip to'**
+  String get tripTo;
+
+  /// No description provided for @vehicleType.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle type'**
+  String get vehicleType;
+
+  /// No description provided for @tripCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip cost'**
+  String get tripCost;
+
+  /// No description provided for @bookTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Book trip'**
+  String get bookTrip;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// No description provided for @requested.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested'**
+  String get requested;
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pending;
+
+  /// No description provided for @scheduled.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled'**
+  String get scheduled;
+
+  /// No description provided for @inProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get inProgress;
+
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// No description provided for @reviewed.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviewed'**
+  String get reviewed;
+
+  /// No description provided for @cancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get cancelled;
+
+  /// No description provided for @draft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get draft;
 
   /// No description provided for @confirm.
   ///

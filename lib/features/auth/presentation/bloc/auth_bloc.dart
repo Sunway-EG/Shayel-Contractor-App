@@ -598,6 +598,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthDocumentsError(_messageForFailure(failure)));
       },
       (documents) {
+        documents.sort((a, b) => a.id.compareTo(b.id));
         emit(AuthDocumentsLoaded(documents));
       },
     );
