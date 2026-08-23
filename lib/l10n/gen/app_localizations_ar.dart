@@ -54,6 +54,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get enterValidPhone01 => 'رقم الموبايل لازم يبدأ بـ 01';
 
   @override
+  String get enterYourId => 'الرقم القومي';
+
+  @override
   String get signInToAccount => 'سجّل الدخول إلى حسابك';
 
   @override

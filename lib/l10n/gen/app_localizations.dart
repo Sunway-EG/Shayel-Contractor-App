@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'Phone number must start with 01'**
   String get enterValidPhone01;
 
+  /// National ID Number
+  ///
+  /// In en, this message translates to:
+  /// **'National ID Number'**
+  String get enterYourId;
+
   /// Sign in screen title
   ///
   /// In en, this message translates to:

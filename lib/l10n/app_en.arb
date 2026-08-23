@@ -45,6 +45,10 @@
   "@enterValidPhone01": {
     "description": "Phone format validation error"
   },
+   "enterYourId": "National ID Number",
+  "@enterYourId": {
+    "description": "National ID Number"
+  },
   "signInToAccount": "Sign in to your account",
   "@signInToAccount": {
     "description": "Sign in screen title"

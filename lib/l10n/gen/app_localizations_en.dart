@@ -55,6 +55,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enterValidPhone01 => 'Phone number must start with 01';
 
   @override
+  String get enterYourId => 'National ID Number';
+
+  @override
   String get signInToAccount => 'Sign in to your account';
 
   @override

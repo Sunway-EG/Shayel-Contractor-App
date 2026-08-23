@@ -15,6 +15,7 @@
   "enterValidPhone": "أدخل رقم موبايل صحيح",
   "enterValidPhone11Digits": "أدخل 11 رقم",
   "enterValidPhone01": "رقم الموبايل لازم يبدأ بـ 01",
+  "enterYourId":"الرقم القومي",
   "signInToAccount": "سجّل الدخول إلى حسابك",
   "email": "البريد الإلكتروني",
   "password": "كلمة المرور",

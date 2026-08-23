@@ -110,7 +110,7 @@ class _SplashScreenState extends State<_SplashScreen>
   Future<void> _startSplashFlow() async {
     final updateFuture = AppUpdateService.instance?.checkForUpdate();
     await Future.wait<void>([
-      Future<void>.delayed(const Duration(seconds: 2)),
+      Future<void>.delayed(const Duration(milliseconds: 3500)),
       if (updateFuture != null) updateFuture.then((_) {}),
     ]);
 
@@ -297,10 +297,32 @@ GoRouter createAppRouter() {
           );
         },
       ),
-      GoRoute(
-        path: AppRoutePaths.onboarding,
-        builder: (context, state) => const OnBoardingScreen(),
-      ),
+      // GoRoute(
+      //   path: AppRoutePaths.onboarding,
+      //   builder: (context, state) => const OnBoardingScreen(),
+      // ),
+GoRoute(
+  path: AppRoutePaths.onboarding,
+  pageBuilder: (context, state) {
+    return CustomTransitionPage(
+      key: state.pageKey,
+      child: const OnBoardingScreen(),
+      transitionsBuilder: (
+        context,
+        animation,
+        secondaryAnimation,
+        child,
+      ) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 1200),
+    );
+  },
+),
+
       GoRoute(
         path: AppRoutePaths.changePassword,
         builder: (context, state) => const ChangePasswordScreen(),

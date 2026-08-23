@@ -571,6 +571,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         fullName: event.fullName,
         phone: event.phone,
         address: event.address,
+        NationalId: event.nationalId,
         documents: event.documents,
       ),
     );

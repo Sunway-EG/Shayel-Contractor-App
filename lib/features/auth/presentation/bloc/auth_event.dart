@@ -223,16 +223,18 @@ class AuthRegisterRequested extends AuthEvent {
     required this.fullName,
     required this.phone,
     required this.address,
+    required this.nationalId,
     required this.documents,
   });
 
   final String fullName;
   final String phone;
   final String address;
+  final String nationalId;
   final List<RegisterDocument> documents;
 
   @override
-  List<Object?> get props => [fullName, phone, address, documents];
+  List<Object?> get props => [fullName, phone, address,nationalId, documents];
 }
 
 class AuthGetDocumentsRequested extends AuthEvent {

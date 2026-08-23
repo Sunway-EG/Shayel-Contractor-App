@@ -308,6 +308,7 @@ class AuthImpl implements AuthRepository {
     required String fullName,
     required String phone,
     required String address,
+    required String NationalId,
     required List<RegisterDocument> documents,
   }) async {
     return _run(() async {
@@ -325,6 +326,7 @@ class AuthImpl implements AuthRepository {
         fullName: fullName,
         phone: phone,
         address: address,
+        NationalId: NationalId,
         documents: documentModels,
       );
     });
