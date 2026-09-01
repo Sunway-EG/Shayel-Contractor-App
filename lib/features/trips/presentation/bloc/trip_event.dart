@@ -1,11 +1,7 @@
 sealed class TripEvent {}
 
 class GetTrips extends TripEvent {
-  GetTrips({
-    this.page = 1,
-    this.pageSize = 10,
-    this.status,
-  });
+  GetTrips({this.page = 1, this.pageSize = 10, this.status});
 
   final int page;
   final int pageSize;

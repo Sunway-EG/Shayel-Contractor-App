@@ -30,7 +30,7 @@ abstract interface class AuthRemoteDataSource {
     required String fullName,
     required String phone,
     required String address,
-    required String NationalId,
+    required String nationalId,
 
     required List<RegisterDocumentModel> documents,
   });
@@ -321,7 +321,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String fullName,
     required String phone,
     required String address,
-    required String NationalId,
+    required String nationalId,
     required List<RegisterDocumentModel> documents,
   }) async {
     final formData = FormData();
@@ -332,7 +332,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
     formData.fields.add(MapEntry('Address', address));
 
-    formData.fields.add(MapEntry('NationalId', NationalId));
+    formData.fields.add(MapEntry('NationalId', nationalId));
 
     for (var i = 0; i < documents.length; i++) {
       final document = documents[i];

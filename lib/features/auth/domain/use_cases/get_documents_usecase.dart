@@ -5,8 +5,7 @@ import '../failures/auth_failure.dart';
 import '../repositories/auth_repository.dart';
 import 'usecase.dart';
 
-class GetDocumentsUseCase
-    implements UseCase<List<DocumentDefinition>, void> {
+class GetDocumentsUseCase implements UseCase<List<DocumentDefinition>, void> {
   GetDocumentsUseCase(this._repository);
 
   final AuthRepository _repository;

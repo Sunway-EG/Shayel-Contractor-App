@@ -1,22 +1,24 @@
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../l10n/gen/app_localizations.dart';
-import '../../../trips/data/models/trip_model.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/router/route_constants.dart';
+import '../../../trips/domain/entities/trip/trip.dart';
 
 class TripRequestCard extends StatelessWidget {
   const TripRequestCard({super.key, required this.trip});
 
-  final TripModel trip;
+  final Trip trip;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final dateStr = DateFormat('dd-MM-yyyy hh:mm a').format(trip.startDate.toLocal());
+    final dateStr = DateFormat(
+      'dd-MM-yyyy hh:mm a',
+    ).format(DateTime.parse(trip.startDate!).toLocal());
     final cost = trip.spotPrice ?? trip.cargoPrice;
 
     return Container(
@@ -49,7 +51,7 @@ class TripRequestCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _Title(
-                  title: trip.companyName ?? trip.referenceNumber,
+                  title: Directionality.of(context) == TextDirection.rtl ? trip.company?.nameAr ?? trip.company?.fullName ?? '' : trip.company?.nameEn ?? trip.company?.fullName ?? '',
                   fontSize: 16,
                 ),
                 const SizedBox(height: 10),
@@ -57,10 +59,7 @@ class TripRequestCard extends StatelessWidget {
                   children: [
                     _Title(title: l10n.tripDate, fontSize: 12),
                     const SizedBox(width: 10),
-                    _SubTitle(
-                      title: dateStr,
-                      fontSize: 14,
-                    ),
+                    _SubTitle(title: dateStr, fontSize: 14),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -79,7 +78,7 @@ class TripRequestCard extends StatelessWidget {
                           children: [
                             _SubTitle(title: l10n.tripFrom, fontSize: 12),
                             _Title(
-                              title: trip.fromLocation ?? '—',
+                              title: trip.waypoints?.first.addressName ?? '—',
                               fontSize: 14,
                             ),
                           ],
@@ -89,10 +88,7 @@ class TripRequestCard extends StatelessWidget {
                         child: Column(
                           children: [
                             _SubTitle(title: l10n.tripTo, fontSize: 12),
-                            _Title(
-                              title: trip.toLocation ?? '—',
-                              fontSize: 14,
-                            ),
+                            _Title(title: trip.waypoints?.last.addressName ?? '—', fontSize: 14),
                           ],
                         ),
                       ),
@@ -115,7 +111,7 @@ class TripRequestCard extends StatelessWidget {
                           children: [
                             _SubTitle(title: l10n.vehicleType, fontSize: 12),
                             _Title(
-                              title: trip.vehicleTypeName ?? '—',
+                              title:Directionality.of(context) == TextDirection.rtl ? trip.contractVehicleType?.vehicleType?.nameAr ?? trip.contractVehicleType?.vehicleType?.name ?? '—' : trip.contractVehicleType?.vehicleType?.nameEn ?? trip.contractVehicleType?.vehicleType?.name ?? '—',
                               fontSize: 14,
                             ),
                           ],
@@ -127,7 +123,7 @@ class TripRequestCard extends StatelessWidget {
                             _SubTitle(title: l10n.tripCost, fontSize: 12),
                             _Title(
                               title: cost != null
-                                  ? '${cost.toStringAsFixed(0)} جنيه'
+                                  ? cost.toString()
                                   : '—',
                               fontSize: 14,
                             ),
@@ -140,10 +136,7 @@ class TripRequestCard extends StatelessWidget {
                 const SizedBox(height: 10),
                 AppButton(
                   onPressed: () {
-                     context.go(
-      AppRoutePaths.bookTrip,
-      extra: trip,
-    );
+                    context.go(AppRoutePaths.bookTrip, extra: trip);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

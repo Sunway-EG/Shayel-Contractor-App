@@ -19,7 +19,7 @@ abstract interface class AuthRepository {
     required String fullName,
     required String phone,
     required String address,
-    required String NationalId,
+    required String nationalId,
     required List<RegisterDocument> documents,
   });
 

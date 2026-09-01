@@ -9,14 +9,8 @@ class DriverRepositoryImpl implements DriverRepository {
   final DriverRemoteDataSource _remoteDataSource;
 
   @override
-  Future<List<DriverModel>> getDrivers({
-    int page = 1,
-    int pageSize = 10,
-  }) {
-    return _remoteDataSource.getDrivers(
-      page: page,
-      pageSize: pageSize,
-    );
+  Future<List<DriverModel>> getDrivers({int page = 1, int pageSize = 10}) {
+    return _remoteDataSource.getDrivers(page: page, pageSize: pageSize);
   }
 
   @override

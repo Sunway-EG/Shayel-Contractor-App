@@ -75,11 +75,7 @@ class _FavoriteListCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _IconBadge(
-            icon: icon,
-            showBadge: showBadge,
-            emphasized: emphasized,
-          ),
+          _IconBadge(icon: icon, showBadge: showBadge, emphasized: emphasized),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -139,7 +135,9 @@ class _IconBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconColor = emphasized ? AppColors.mainBlue : AppColors.mediumBlueGray;
+    final iconColor = emphasized
+        ? AppColors.mainBlue
+        : AppColors.mediumBlueGray;
     final backgroundColor = emphasized
         ? const Color(0xFFEFF7FF)
         : const Color(0xFFF2F4F6);

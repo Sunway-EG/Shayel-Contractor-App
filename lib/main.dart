@@ -90,14 +90,14 @@ Future<void> _runApp({bool useSentry = false}) async {
   final registerUseCase = RegisterUseCase(authRepository);
   final getDocumentsUseCase = GetDocumentsUseCase(authRepository);
   // Trips
-final tripRemoteDataSource = TripRemoteDataSourceImpl(dio);
-final tripRepository = TripRepositoryImpl(tripRemoteDataSource);
-final tripBloc = TripBloc(tripRepository);
-final bookingRequestBloc = BookingRequestBloc(tripRepository);
+  final tripRemoteDataSource = TripRemoteDataSourceImpl(dio);
+  final tripRepository = TripRepositoryImpl(tripRemoteDataSource);
+  final tripBloc = TripBloc(tripRepository);
+  final bookingRequestBloc = BookingRequestBloc(tripRepository);
   // drivers
-final driverRemoteDataSource = DriverRemoteDataSourceImpl(dio);
-final driverRepository = DriverRepositoryImpl(driverRemoteDataSource);
-final driverBloc = DriverBloc(driverRepository);
+  final driverRemoteDataSource = DriverRemoteDataSourceImpl(dio);
+  final driverRepository = DriverRepositoryImpl(driverRemoteDataSource);
+  final driverBloc = DriverBloc(driverRepository);
 
   // Initialize BloC with use cases
   final authBloc = AuthBloc(

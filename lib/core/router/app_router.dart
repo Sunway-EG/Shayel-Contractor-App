@@ -4,6 +4,7 @@ import 'package:chucker_flutter/chucker_flutter.dart';
 import '../../features/profile/presentation/views/profile_screen.dart';
 import '../../features/requests/presentation/views/requests_screen.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
+import '../../features/trips/domain/entities/trip/trip.dart';
 import 'route_constants.dart';
 import '../../features/auth/presentation/views/register_screen.dart';
 import '../../features/home/presentation/views/home_screen.dart';
@@ -20,7 +21,6 @@ import '../services/app_update_service.dart';
 import '../storage/auth_storage.dart';
 import '../widgets/app_update_presenter.dart';
 import '../../features/auth/presentation/views/first_choose_screen.dart';
-import '../../features/trips/data/models/trip_model.dart';
 import '../../features/trips/presentations/views/booking_trip.dart';
 import '../../features/drivers/presentation/views/add_driver_screen.dart';
 
@@ -287,7 +287,7 @@ GoRouter createAppRouter() {
       GoRoute(
         path: AppRoutePaths.bookTrip,
         builder: (context, state) {
-          final trip = state.extra as TripModel?;
+          final trip = state.extra as Trip?;
           return BookingTripScreen(trip: trip);
         },
       ),
@@ -315,27 +315,20 @@ GoRouter createAppRouter() {
       //   path: AppRoutePaths.onboarding,
       //   builder: (context, state) => const OnBoardingScreen(),
       // ),
-GoRoute(
-  path: AppRoutePaths.onboarding,
-  pageBuilder: (context, state) {
-    return CustomTransitionPage(
-      key: state.pageKey,
-      child: const OnBoardingScreen(),
-      transitionsBuilder: (
-        context,
-        animation,
-        secondaryAnimation,
-        child,
-      ) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 1200),
-    );
-  },
-),
+      GoRoute(
+        path: AppRoutePaths.onboarding,
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: const OnBoardingScreen(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+            transitionDuration: const Duration(milliseconds: 1200),
+          );
+        },
+      ),
 
       GoRoute(
         path: AppRoutePaths.changePassword,

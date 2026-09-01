@@ -333,10 +333,7 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
           middle: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                CupertinoIcons.creditcard,
-                color: AppColors.mainBlue,
-              ),
+              const Icon(CupertinoIcons.creditcard, color: AppColors.mainBlue),
               const SizedBox(width: 5),
               Text(
                 l10n.addNewDriver,
@@ -486,10 +483,7 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
       alignment: AlignmentDirectional.centerStart,
       child: Text(
         text,
-        style: const TextStyle(
-          color: CupertinoColors.systemRed,
-          fontSize: 13,
-        ),
+        style: const TextStyle(color: CupertinoColors.systemRed, fontSize: 13),
       ),
     );
   }
@@ -566,7 +560,10 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('🇪🇬', style: TextStyle(fontSize: 20, height: 1.2)),
+                  const Text(
+                    '🇪🇬',
+                    style: TextStyle(fontSize: 20, height: 1.2),
+                  ),
                   const SizedBox(width: 6),
                   const Text(
                     '+20',

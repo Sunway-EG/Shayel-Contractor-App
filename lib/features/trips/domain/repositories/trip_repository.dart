@@ -1,9 +1,10 @@
 import '../../data/models/booking_request_model.dart';
 import '../../data/models/paged_list.dart';
 import '../../data/models/trip_model.dart';
+import '../entities/trip/trip.dart';
 
 abstract interface class TripRepository {
-  Future<PagedList<TripModel>> getTrips({
+  Future<PagedList<Trip>> getTrips({
     int page = 1,
     int pageSize = 10,
     int? status,

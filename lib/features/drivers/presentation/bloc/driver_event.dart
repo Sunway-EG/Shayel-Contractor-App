@@ -3,10 +3,7 @@ import '../../data/models/driver_document_input.dart';
 sealed class DriverEvent {}
 
 class GetDrivers extends DriverEvent {
-  GetDrivers({
-    this.page = 1,
-    this.pageSize = 10,
-  });
+  GetDrivers({this.page = 1, this.pageSize = 10});
 
   final int page;
   final int pageSize;

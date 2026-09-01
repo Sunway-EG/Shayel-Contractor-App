@@ -1,4 +1,4 @@
-import '../../data/models/trip_model.dart';
+import '../../domain/entities/trip/trip.dart';
 
 sealed class TripState {}
 
@@ -10,7 +10,7 @@ class TripLoaded extends TripState {
   TripLoaded(this.trips, {int? totalCount})
     : totalCount = totalCount ?? trips.length;
 
-  final List<TripModel> trips;
+  final List<Trip> trips;
   final int totalCount;
 }
 

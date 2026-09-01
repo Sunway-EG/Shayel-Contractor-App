@@ -18,12 +18,5 @@ class DocumentDefinition extends Equatable {
   });
 
   @override
-  List<Object?> get props => [
-        id,
-        entityId,
-        nameEn,
-        nameAr,
-        required,
-        status,
-      ];
+  List<Object?> get props => [id, entityId, nameEn, nameAr, required, status];
 }

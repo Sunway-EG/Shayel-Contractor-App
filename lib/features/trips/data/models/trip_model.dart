@@ -55,20 +55,19 @@ class TripModel {
 
   factory TripModel.fromJson(Map<String, dynamic> json) {
     developer.log(
-      json.entries.map((entry) {
-        final value = entry.value;
-        if (value is Map) return '${entry.key}:{${value.keys.join(',')}}';
-        if (value is List) return '${entry.key}:[${value.length}]';
-        return '${entry.key}:${value.runtimeType}';
-      }).join(' | '),
+      json.entries
+          .map((entry) {
+            final value = entry.value;
+            if (value is Map) return '${entry.key}:{${value.keys.join(',')}}';
+            if (value is List) return '${entry.key}:[${value.length}]';
+            return '${entry.key}:${value.runtimeType}';
+          })
+          .join(' | '),
       name: 'TripJson',
     );
 
     final nestedTrip = _asMap(json['trip'] ?? json['Trip']);
-    final source = <String, dynamic>{
-      ...?nestedTrip,
-      ...json,
-    };
+    final source = <String, dynamic>{...?nestedTrip, ...json};
     final company = _asMap(source['company'] ?? source['Company']);
     const fromKeys = [
       'fromLocation',
@@ -177,7 +176,9 @@ class TripModel {
           _asDouble(source['spotPrice'] ?? source['SpotPrice']) ??
           _asDouble(source['cargoPrice'] ?? source['CargoPrice']) ??
           _asDouble(source['totalTripCost'] ?? source['TotalTripCost']) ??
-          _asDouble(source['tripCostWithoutAddon'] ?? source['TripCostWithoutAddon']) ??
+          _asDouble(
+            source['tripCostWithoutAddon'] ?? source['TripCostWithoutAddon'],
+          ) ??
           _asDouble(source['tripPrice'] ?? source['TripPrice']) ??
           _asDouble(source['tripCost'] ?? source['TripCost']) ??
           _asDouble(source['price'] ?? source['Price']) ??
@@ -547,12 +548,16 @@ String? _composeSplitLocation(
 
   for (final entry in json.entries) {
     final key = entry.key.toLowerCase();
-    final matches = isPickup ? _isPickupKey(entry.key) : _isDropoffKey(entry.key);
+    final matches = isPickup
+        ? _isPickupKey(entry.key)
+        : _isDropoffKey(entry.key);
     final hasGov = key.contains('governorate') || key.contains('governate');
     final hasCity = key.contains('city') || key.contains('area');
     final hasAddress = key.contains('address');
     if (!matches && !(hasGov || hasCity || hasAddress)) continue;
-    if (!matches && isPickup && (key.startsWith('to') || key.contains('drop'))) {
+    if (!matches &&
+        isPickup &&
+        (key.startsWith('to') || key.contains('drop'))) {
       continue;
     }
     if (!matches &&
@@ -629,7 +634,8 @@ String? _composeLocation(dynamic value) {
         map['fullAddress'] ??
         map['FullAddress'],
   );
-  final name = _localizedName(map['name'] ?? map['Name']) ??
+  final name =
+      _localizedName(map['name'] ?? map['Name']) ??
       _localizedName(map['locationName'] ?? map['LocationName']);
 
   return _joinLocationParts(governorate, city, address, name) ??

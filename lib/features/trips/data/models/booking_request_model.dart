@@ -1,9 +1,5 @@
 class BookingRequestModel {
-  const BookingRequestModel({
-    required this.id,
-    this.statusName,
-    this.note,
-  });
+  const BookingRequestModel({required this.id, this.statusName, this.note});
 
   final int id;
   final String? statusName;

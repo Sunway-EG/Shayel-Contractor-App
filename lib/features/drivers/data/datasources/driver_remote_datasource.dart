@@ -7,10 +7,7 @@ import '../models/driver_document_input.dart';
 import '../models/driver_model.dart';
 
 abstract interface class DriverRemoteDataSource {
-  Future<List<DriverModel>> getDrivers({
-    int page = 1,
-    int pageSize = 10,
-  });
+  Future<List<DriverModel>> getDrivers({int page = 1, int pageSize = 10});
 
   Future<DriverModel?> createDriver({
     required String fullNameEn,
@@ -33,10 +30,7 @@ class DriverRemoteDataSourceImpl implements DriverRemoteDataSource {
   }) async {
     final response = await _dio.get<Map<String, dynamic>>(
       ApiEndpoints.drivers,
-      queryParameters: {
-        'page': page,
-        'pageSize': pageSize,
-      },
+      queryParameters: {'page': page, 'pageSize': pageSize},
     );
 
     final envelope = requireEnvelope(response);

@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'dart:developer' as developer;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 
 import '../../../../core/router/route_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -18,17 +17,17 @@ import '../../../drivers/data/models/driver_model.dart';
 import '../../../drivers/presentation/bloc/driver_bloc.dart';
 import '../../../drivers/presentation/bloc/driver_event.dart';
 import '../../../drivers/presentation/bloc/driver_state.dart';
-import '../../../trips/data/models/trip_model.dart';
 import '../../../trips/presentation/bloc/booking_request_bloc.dart';
 import '../../../trips/presentation/bloc/booking_request_event.dart';
 import '../../../trips/presentation/bloc/trip_bloc.dart';
 import '../../../trips/presentation/bloc/trip_event.dart';
 import '../../../trips/presentation/bloc/trip_state.dart';
+import '../../domain/entities/trip/trip.dart';
 
 class BookingTripScreen extends StatefulWidget {
   const BookingTripScreen({super.key, this.trip});
 
-  final TripModel? trip;
+  final Trip? trip;
 
   @override
   State<BookingTripScreen> createState() => _BookingTripScreenState();
@@ -38,36 +37,14 @@ class _BookingTripScreenState extends State<BookingTripScreen> {
   DriverModel? _selectedDriver;
   bool _showSelectDriverHint = false;
   Timer? _selectDriverHintTimer;
-  late TripModel? _trip;
+  late Trip? _trip;
 
   @override
   void initState() {
     super.initState();
     _trip = widget.trip;
-    final tripId = widget.trip?.id;
-    if (tripId != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _loadTripDetails(tripId);
-      });
-    }
   }
 
-  Future<void> _loadTripDetails(int tripId) async {
-    try {
-      final trip = await context.read<TripBloc>().getTripDetails(tripId);
-      if (!mounted) return;
-      setState(() {
-        final current = _trip;
-        _trip = current == null ? trip : current.mergedWith(trip);
-      });
-    } catch (error, stackTrace) {
-      developer.log(
-        'GetTrip failed: $error',
-        name: 'TripJson',
-        stackTrace: stackTrace,
-      );
-    }
-  }
 
   @override
   void dispose() {
@@ -95,7 +72,7 @@ class _BookingTripScreenState extends State<BookingTripScreen> {
     }
 
     context.read<TripBloc>().add(
-      BookTrip(tripId: trip.id, driverId: driver.id),
+      BookTrip(tripId: trip.id!, driverId: driver.id),
     );
   }
 
@@ -192,7 +169,10 @@ class _BookingTripScreenState extends State<BookingTripScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _Header(title: l10n.bookTrip, onBack: () => context.go(AppRoutePaths.home)),
+              _Header(
+                title: l10n.bookTrip,
+                onBack: () => context.go(AppRoutePaths.home),
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 16),
@@ -310,7 +290,7 @@ class _TripCard extends StatelessWidget {
     this.selectedDriver,
   });
 
-  final TripModel? trip;
+  final Trip? trip;
   final DriverModel? selectedDriver;
   final ValueChanged<DriverModel> onDriverSelected;
 
@@ -334,16 +314,13 @@ class _TripCard extends StatelessWidget {
         children: [
           const _WarningBanner(),
           const SizedBox(height: 8),
-          _CompanySection(name: trip?.companyName ?? trip?.referenceNumber),
+          _CompanySection(name: Directionality.of(context) == TextDirection.rtl ? trip?.company?.nameAr ?? trip?.company?.fullName ?? '' : trip?.company?.nameEn ?? trip?.company?.fullName ?? ''),
           const SizedBox(height: 8),
-          _DateSection(date: trip?.startDate),
+          _DateSection(date: DateTime.parse(trip!.startDate!).toLocal()),
           const SizedBox(height: 8),
-          _PointsSection(
-            from: trip?.fromLocation,
-            to: trip?.toLocation,
-          ),
+          _PointsSection(from: trip?.waypoints?.first.addressName ?? '—', to: trip?.waypoints?.last.addressName ?? '—'),
           const SizedBox(height: 8),
-          _VehicleSection(name: trip?.vehicleTypeName),
+          _VehicleSection(name:Directionality.of(context) == TextDirection.rtl ? trip?.contractVehicleType?.vehicleType?.nameAr ?? trip?.contractVehicleType?.vehicleType?.name ?? '—' : trip?.contractVehicleType?.vehicleType?.nameEn ?? trip?.contractVehicleType?.vehicleType?.name ?? '—'),
           const SizedBox(height: 8),
           _PriceSection(price: trip?.spotPrice ?? trip?.cargoPrice),
           _DriverSection(
@@ -619,9 +596,7 @@ class _PriceSection extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final formatted = price == null
         ? '—'
-        : l10n.priceInEgp(
-            NumberFormat('#,###').format(price!.round()),
-          );
+        : l10n.priceInEgp(NumberFormat('#,###').format(price!.round()));
 
     return Container(
       height: 49,
@@ -657,10 +632,7 @@ class _PriceSection extends StatelessWidget {
 }
 
 class _DriverSection extends StatefulWidget {
-  const _DriverSection({
-    required this.onDriverSelected,
-    this.selectedDriver,
-  });
+  const _DriverSection({required this.onDriverSelected, this.selectedDriver});
 
   final DriverModel? selectedDriver;
   final ValueChanged<DriverModel> onDriverSelected;
@@ -679,9 +651,8 @@ class _DriverSectionState extends State<_DriverSection> {
   Future<void> _openDriversSheet() async {
     final selected = await showCupertinoModalPopup<DriverModel>(
       context: context,
-      builder: (sheetContext) => _DriversSheet(
-        initiallySelected: widget.selectedDriver,
-      ),
+      builder: (sheetContext) =>
+          _DriversSheet(initiallySelected: widget.selectedDriver),
     );
 
     if (selected != null) {

@@ -276,7 +276,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _addressError = l10n.enterYourAddress;
       }
     });
-     final nationalId = _nationalIdController.text.trim();
+    final nationalId = _nationalIdController.text.trim();
 
     if (nationalId.isEmpty) {
       _nationalIdError = l10n.enterYourId;
@@ -286,7 +286,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _nationalIdError = null;
     }
   }
-  
 
   String? _validatePhone(AppLocalizations l10n) {
     final phone = _phoneController.text.trim();
@@ -792,42 +791,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // national id number
   // ===========================================================
   Widget _nationalIdField({required String placeholder}) {
-  return Container(
-    decoration: BoxDecoration(
-      color: AppColors.white,
-      borderRadius: BorderRadius.circular(10),
-      border: Border.all(
-        color: _nationalIdError != null
-            ? CupertinoColors.systemRed
-            : AppColors.lightGray,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: _nationalIdError != null
+              ? CupertinoColors.systemRed
+              : AppColors.lightGray,
+        ),
       ),
-    ),
-    child: CupertinoTextField(
-      controller: _nationalIdController,
-      placeholder: placeholder,
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        FilteringTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(14),
-      ],
-      onChanged: (_) {
-        if (_nationalIdError != null) {
-          setState(() => _nationalIdError = null);
-        }
-      },
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 14,
+      child: CupertinoTextField(
+        controller: _nationalIdController,
+        placeholder: placeholder,
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(14),
+        ],
+        onChanged: (_) {
+          if (_nationalIdError != null) {
+            setState(() => _nationalIdError = null);
+          }
+        },
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: null,
+        style: const TextStyle(
+          fontSize: 14,
+          color: AppColors.darkGray,
+          fontWeight: FontWeight.w400,
+        ),
       ),
-      decoration: null,
-      style: const TextStyle(
-        fontSize: 14,
-        color: AppColors.darkGray,
-        fontWeight: FontWeight.w400,
-      ),
-    ),
-  );
-}
+    );
+  }
   // ============================================================
   // DOCUMENT SECTION
   // ============================================================

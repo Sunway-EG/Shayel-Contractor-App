@@ -36,7 +36,10 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   Future<void> _onBookTrip(BookTrip event, Emitter<TripState> emit) async {
     emit(TripBooking());
     try {
-      await _repository.bookTrip(tripId: event.tripId, driverId: event.driverId);
+      await _repository.bookTrip(
+        tripId: event.tripId,
+        driverId: event.driverId,
+      );
       emit(TripBooked());
     } catch (e) {
       if (e is DioException) {

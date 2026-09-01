@@ -7,10 +7,11 @@ import '../../../../../core/network/api_endpoints.dart';
 import '../../../../../core/network/api_response_parser.dart';
 import '../models/booking_request_model.dart';
 import '../models/paged_list.dart';
+import '../models/trip_dto.dart';
 import '../models/trip_model.dart';
 
 abstract interface class TripRemoteDataSource {
-  Future<PagedList<TripModel>> getTrips({
+  Future<PagedList<TripDto>> getTrips({
     int page = 1,
     int pageSize = 10,
     int? status,
@@ -32,7 +33,7 @@ class TripRemoteDataSourceImpl implements TripRemoteDataSource {
   final Dio _dio;
 
   @override
-  Future<PagedList<TripModel>> getTrips({
+  Future<PagedList<TripDto>> getTrips({
     int page = 1,
     int pageSize = 10,
     int? status,
@@ -59,10 +60,10 @@ class TripRemoteDataSourceImpl implements TripRemoteDataSource {
       debugPrint('TRIP_RAW ${jsonEncode(data.first)}');
     }
 
-    final items = <TripModel>[];
+    final items = <TripDto>[];
     for (final item in data) {
       if (item is Map) {
-        items.add(TripModel.fromJson(Map<String, dynamic>.from(item)));
+        items.add(TripDto.fromJson(Map<String, dynamic>.from(item)));
       }
     }
 
@@ -105,10 +106,7 @@ class TripRemoteDataSourceImpl implements TripRemoteDataSource {
   }) async {
     final response = await _dio.get<Map<String, dynamic>>(
       ApiEndpoints.bookingRequests,
-      queryParameters: {
-        'page': page,
-        'pageSize': pageSize,
-      },
+      queryParameters: {'page': page, 'pageSize': pageSize},
     );
 
     final envelope = requireEnvelope(response);
@@ -131,9 +129,7 @@ class TripRemoteDataSourceImpl implements TripRemoteDataSource {
 
   @override
   Future<void> bookTrip({required int tripId, required int driverId}) async {
-    final formData = FormData.fromMap({
-      'DriverId': driverId.toString(),
-    });
+    final formData = FormData.fromMap({'DriverId': driverId.toString()});
     final response = await _dio.post<Map<String, dynamic>>(
       ApiEndpoints.bookTrip(tripId),
       data: formData,

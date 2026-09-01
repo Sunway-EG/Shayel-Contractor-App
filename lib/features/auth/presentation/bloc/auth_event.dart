@@ -234,7 +234,7 @@ class AuthRegisterRequested extends AuthEvent {
   final List<RegisterDocument> documents;
 
   @override
-  List<Object?> get props => [fullName, phone, address,nationalId, documents];
+  List<Object?> get props => [fullName, phone, address, nationalId, documents];
 }
 
 class AuthGetDocumentsRequested extends AuthEvent {
