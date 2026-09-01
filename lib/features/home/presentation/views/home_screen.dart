@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -94,12 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 10),
                       BlocBuilder<TripBloc, TripState>(
                         builder: (context, state) {
-                          if (state is TripLoading) {
-                            return const Center(
-                              child: CupertinoActivityIndicator(),
-                            );
-                          }
-
                           if (state is TripLoaded) {
                             if (state.trips.isEmpty) {
                               return Center(child: Text(l10n.tripsRequest));
@@ -119,11 +114,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           }
 
-                          if (state is TripError) {
-                            return Text(state.message);
-                          }
-
-                          return const SizedBox.shrink();
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 24),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.mainBlue,
+                              ),
+                            ),
+                          );
                         },
                       ),
                       const SizedBox(height: 10),

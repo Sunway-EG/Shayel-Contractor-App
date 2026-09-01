@@ -27,7 +27,13 @@ class TripRemoteDataSourceImpl implements TripRemoteDataSource {
   }) async {
     final response = await _dio.get<Map<String, dynamic>>(
       ApiEndpoints.trips,
-      queryParameters: {'page': page, 'pageSize': pageSize, 'Status': ?status},
+      queryParameters: {
+        'page': page,
+        'pageSize': pageSize,
+        'Status': status?.toString() ?? '',
+        'StartDateFrom': '',
+        'StartDateTo': '',
+      },
     );
 
     final envelope = requireEnvelope(response);
