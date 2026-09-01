@@ -2162,6 +2162,36 @@ abstract class AppLocalizations {
   /// **'Please select a driver first'**
   String get pleaseSelectDriver;
 
+  /// No description provided for @favoriteList.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite list'**
+  String get favoriteList;
+
+  /// No description provided for @preview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get preview;
+
+  /// No description provided for @requestedTransfers.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested transfers'**
+  String get requestedTransfers;
+
+  /// No description provided for @requestedTransfersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested transfers ({count})'**
+  String requestedTransfersCount(String count);
+
+  /// No description provided for @bookedTransfersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Booked transfers ({count})'**
+  String bookedTransfersCount(String count);
+
   /// No description provided for @priceInEgp.
   ///
   /// In en, this message translates to:

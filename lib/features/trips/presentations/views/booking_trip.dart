@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer' as developer;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,6 +19,8 @@ import '../../../drivers/presentation/bloc/driver_bloc.dart';
 import '../../../drivers/presentation/bloc/driver_event.dart';
 import '../../../drivers/presentation/bloc/driver_state.dart';
 import '../../../trips/data/models/trip_model.dart';
+import '../../../trips/presentation/bloc/booking_request_bloc.dart';
+import '../../../trips/presentation/bloc/booking_request_event.dart';
 import '../../../trips/presentation/bloc/trip_bloc.dart';
 import '../../../trips/presentation/bloc/trip_event.dart';
 import '../../../trips/presentation/bloc/trip_state.dart';
@@ -31,18 +36,61 @@ class BookingTripScreen extends StatefulWidget {
 
 class _BookingTripScreenState extends State<BookingTripScreen> {
   DriverModel? _selectedDriver;
+  bool _showSelectDriverHint = false;
+  Timer? _selectDriverHintTimer;
+  late TripModel? _trip;
+
+  @override
+  void initState() {
+    super.initState();
+    _trip = widget.trip;
+    final tripId = widget.trip?.id;
+    if (tripId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _loadTripDetails(tripId);
+      });
+    }
+  }
+
+  Future<void> _loadTripDetails(int tripId) async {
+    try {
+      final trip = await context.read<TripBloc>().getTripDetails(tripId);
+      if (!mounted) return;
+      setState(() {
+        final current = _trip;
+        _trip = current == null ? trip : current.mergedWith(trip);
+      });
+    } catch (error, stackTrace) {
+      developer.log(
+        'GetTrip failed: $error',
+        name: 'TripJson',
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _selectDriverHintTimer?.cancel();
+    super.dispose();
+  }
+
+  void _showSelectDriverMessage() {
+    _selectDriverHintTimer?.cancel();
+    setState(() => _showSelectDriverHint = true);
+    _selectDriverHintTimer = Timer(const Duration(seconds: 3), () {
+      if (mounted) setState(() => _showSelectDriverHint = false);
+    });
+  }
 
   void _bookTrip() {
-    final trip = widget.trip;
+    final trip = _trip;
     final driver = _selectedDriver;
-    final l10n = AppLocalizations.of(context)!;
 
-    if (trip == null || driver == null) {
-      showAppAlertDialog(
-        context: context,
-        title: l10n.bookTrip,
-        message: l10n.pleaseSelectDriver,
-      );
+    if (trip == null) return;
+
+    if (driver == null) {
+      _showSelectDriverMessage();
       return;
     }
 
@@ -104,6 +152,9 @@ class _BookingTripScreenState extends State<BookingTripScreen> {
                     onPressed: () {
                       Navigator.of(bottomSheetContext).pop();
                       context.read<TripBloc>().add(GetTrips());
+                      context.read<BookingRequestBloc>().add(
+                        GetBookingRequests(),
+                      );
                       context.go(AppRoutePaths.home);
                     },
                     label: l10n.goToHomepage,
@@ -139,16 +190,21 @@ class _BookingTripScreenState extends State<BookingTripScreen> {
         backgroundColor: const Color(0xFFFDFDFD),
         child: MainScaffold(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _Header(title: l10n.bookTrip, onBack: () => context.go(AppRoutePaths.home)),
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 16),
                   child: _TripCard(
-                    trip: widget.trip,
+                    trip: _trip,
                     selectedDriver: _selectedDriver,
                     onDriverSelected: (driver) {
-                      setState(() => _selectedDriver = driver);
+                      _selectDriverHintTimer?.cancel();
+                      setState(() {
+                        _selectedDriver = driver;
+                        _showSelectDriverHint = false;
+                      });
                     },
                   ),
                 ),
@@ -157,20 +213,46 @@ class _BookingTripScreenState extends State<BookingTripScreen> {
                 top: false,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                  child: BlocBuilder<TripBloc, TripState>(
-                    builder: (context, state) {
-                      final isBooking = state is TripBooking;
-                      return SizedBox(
-                        width: double.infinity,
-                        child: AppButton(
-                          loading: isBooking,
-                          onPressed: widget.trip == null || _selectedDriver == null
-                              ? null
-                              : _bookTrip,
-                          label: l10n.bookTrip,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (_showSelectDriverHint) ...[
+                        Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF333333),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            l10n.selectDriver,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: AppColors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
-                      );
-                    },
+                      ],
+                      BlocBuilder<TripBloc, TripState>(
+                        builder: (context, state) {
+                          final isBooking = state is TripBooking;
+                          return SizedBox(
+                            width: double.infinity,
+                            child: AppButton(
+                              loading: isBooking,
+                              onPressed: _trip == null ? null : _bookTrip,
+                              label: l10n.bookTrip,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -191,11 +273,13 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       color: AppColors.mainBlue,
       child: SafeArea(
         bottom: false,
         child: SizedBox(
           height: 56,
+          width: double.infinity,
           child: Stack(
             alignment: Alignment.center,
             children: [

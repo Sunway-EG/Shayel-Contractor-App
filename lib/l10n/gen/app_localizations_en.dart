@@ -1116,6 +1116,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pleaseSelectDriver => 'Please select a driver first';
 
   @override
+  String get favoriteList => 'Favorite list';
+
+  @override
+  String get preview => 'Preview';
+
+  @override
+  String get requestedTransfers => 'Requested transfers';
+
+  @override
+  String requestedTransfersCount(String count) {
+    return 'Requested transfers ($count)';
+  }
+
+  @override
+  String bookedTransfersCount(String count) {
+    return 'Booked transfers ($count)';
+  }
+
+  @override
   String priceInEgp(String amount) {
     return '$amount EGP';
   }

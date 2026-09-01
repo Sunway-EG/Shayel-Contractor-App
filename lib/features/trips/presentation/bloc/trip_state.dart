@@ -7,9 +7,11 @@ class TripInitial extends TripState {}
 class TripLoading extends TripState {}
 
 class TripLoaded extends TripState {
-  TripLoaded(this.trips);
+  TripLoaded(this.trips, {int? totalCount})
+    : totalCount = totalCount ?? trips.length;
 
   final List<TripModel> trips;
+  final int totalCount;
 }
 
 class TripError extends TripState {

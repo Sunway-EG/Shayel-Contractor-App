@@ -18,7 +18,9 @@ abstract final class ApiEndpoints {
   static const register = '/auth/register';
   static const documents = '/documents';
   static const String trips = '/trips';
-  static String bookTrip(int tripId) => '/trips/$tripId/book';
+  static String tripById(int tripId) => '/trips/$tripId';
+  static String bookTrip(int tripId) => '/trips/$tripId/apply';
+  static const String bookingRequests = '/booking-requests';
   static const String drivers = '/drivers';
 
   // App version check (shared API root, not under /contractor)

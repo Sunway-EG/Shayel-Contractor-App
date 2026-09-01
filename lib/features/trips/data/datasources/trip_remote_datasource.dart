@@ -1,14 +1,26 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../../core/network/api_endpoints.dart';
 import '../../../../../core/network/api_response_parser.dart';
+import '../models/booking_request_model.dart';
+import '../models/paged_list.dart';
 import '../models/trip_model.dart';
 
 abstract interface class TripRemoteDataSource {
-  Future<List<TripModel>> getTrips({
+  Future<PagedList<TripModel>> getTrips({
     int page = 1,
     int pageSize = 10,
     int? status,
+  });
+
+  Future<TripModel> getTrip(int tripId);
+
+  Future<PagedList<BookingRequestModel>> getBookingRequests({
+    int page = 1,
+    int pageSize = 10,
   });
 
   Future<void> bookTrip({required int tripId, required int driverId});
@@ -20,7 +32,7 @@ class TripRemoteDataSourceImpl implements TripRemoteDataSource {
   final Dio _dio;
 
   @override
-  Future<List<TripModel>> getTrips({
+  Future<PagedList<TripModel>> getTrips({
     int page = 1,
     int pageSize = 10,
     int? status,
@@ -43,17 +55,88 @@ class TripRemoteDataSourceImpl implements TripRemoteDataSource {
       throw Exception('Invalid trips response');
     }
 
-    return data
+    if (kDebugMode && data.isNotEmpty) {
+      debugPrint('TRIP_RAW ${jsonEncode(data.first)}');
+    }
+
+    final items = <TripModel>[];
+    for (final item in data) {
+      if (item is Map) {
+        items.add(TripModel.fromJson(Map<String, dynamic>.from(item)));
+      }
+    }
+
+    return PagedList(
+      items: items,
+      totalCount: totalCountFromEnvelope(envelope, items.length),
+    );
+  }
+
+  @override
+  Future<TripModel> getTrip(int tripId) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      ApiEndpoints.tripById(tripId),
+    );
+    final envelope = requireEnvelope(response);
+    final data = envelope['data'] ?? envelope['Data'];
+    if (data is List && data.isNotEmpty) {
+      final first = data.first;
+      if (first is Map<String, dynamic>) return TripModel.fromJson(first);
+      if (first is Map) {
+        return TripModel.fromJson(Map<String, dynamic>.from(first));
+      }
+    }
+    if (data is Map<String, dynamic>) {
+      return TripModel.fromJson(data);
+    }
+    if (data is Map) {
+      return TripModel.fromJson(Map<String, dynamic>.from(data));
+    }
+    if (envelope['id'] != null || envelope['referenceNumber'] != null) {
+      return TripModel.fromJson(envelope);
+    }
+    throw Exception('Invalid trip response');
+  }
+
+  @override
+  Future<PagedList<BookingRequestModel>> getBookingRequests({
+    int page = 1,
+    int pageSize = 10,
+  }) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      ApiEndpoints.bookingRequests,
+      queryParameters: {
+        'page': page,
+        'pageSize': pageSize,
+      },
+    );
+
+    final envelope = requireEnvelope(response);
+    final data = envelope['data'];
+
+    if (data is! List) {
+      throw Exception('Invalid booking requests response');
+    }
+
+    final items = data
         .whereType<Map<String, dynamic>>()
-        .map(TripModel.fromJson)
+        .map(BookingRequestModel.fromJson)
         .toList();
+
+    return PagedList(
+      items: items,
+      totalCount: totalCountFromEnvelope(envelope, items.length),
+    );
   }
 
   @override
   Future<void> bookTrip({required int tripId, required int driverId}) async {
+    final formData = FormData.fromMap({
+      'DriverId': driverId.toString(),
+    });
     final response = await _dio.post<Map<String, dynamic>>(
       ApiEndpoints.bookTrip(tripId),
-      data: {'driverId': driverId},
+      data: formData,
     );
     throwIfEnvelopeFailed(response, fallbackMessage: 'Failed to book trip');
   }

@@ -1189,6 +1189,25 @@
   "tripBookedTitle": "You have booked this trip.",
   "tripBookedMessage": "Wait for the admin to send the start date of this trip",
   "pleaseSelectDriver": "Please select a driver first",
+  "favoriteList": "Favorite list",
+  "preview": "Preview",
+  "requestedTransfers": "Requested transfers",
+  "requestedTransfersCount": "Requested transfers ({count})",
+  "@requestedTransfersCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "bookedTransfersCount": "Booked transfers ({count})",
+  "@bookedTransfersCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "priceInEgp": "{amount} EGP",
   "@priceInEgp": {
     "placeholders": {

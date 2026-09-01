@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/network/api_failure_mapper.dart';
+import '../../data/models/trip_model.dart';
 import '../../domain/repositories/trip_repository.dart';
 import 'trip_event.dart';
 import 'trip_state.dart';
@@ -14,15 +15,19 @@ class TripBloc extends Bloc<TripEvent, TripState> {
 
   final TripRepository _repository;
 
+  Future<TripModel> getTripDetails(int tripId) {
+    return _repository.getTrip(tripId);
+  }
+
   Future<void> _onGetTrips(GetTrips event, Emitter<TripState> emit) async {
     emit(TripLoading());
     try {
-      final trips = await _repository.getTrips(
+      final result = await _repository.getTrips(
         page: event.page,
         pageSize: event.pageSize,
         status: event.status,
       );
-      emit(TripLoaded(trips));
+      emit(TripLoaded(result.items, totalCount: result.totalCount));
     } catch (e) {
       emit(TripError(e.toString()));
     }

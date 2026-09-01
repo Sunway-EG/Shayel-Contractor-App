@@ -39,6 +39,7 @@ import 'features/auth/domain/use_cases/get_documents_usecase.dart';
 
 import 'features/trips/data/datasources/trip_remote_datasource.dart';
 import 'features/trips/data/repositories/trip_repository_impl.dart';
+import 'features/trips/presentation/bloc/booking_request_bloc.dart';
 import 'features/trips/presentation/bloc/trip_bloc.dart';
 
 import 'features/drivers/data/datasources/driver_remote_datasource.dart';
@@ -92,6 +93,7 @@ Future<void> _runApp({bool useSentry = false}) async {
 final tripRemoteDataSource = TripRemoteDataSourceImpl(dio);
 final tripRepository = TripRepositoryImpl(tripRemoteDataSource);
 final tripBloc = TripBloc(tripRepository);
+final bookingRequestBloc = BookingRequestBloc(tripRepository);
   // drivers
 final driverRemoteDataSource = DriverRemoteDataSourceImpl(dio);
 final driverRepository = DriverRepositoryImpl(driverRemoteDataSource);
@@ -132,6 +134,7 @@ final driverBloc = DriverBloc(driverRepository);
         BlocProvider.value(value: localeBloc),
         BlocProvider.value(value: profileBloc),
         BlocProvider.value(value: tripBloc),
+        BlocProvider.value(value: bookingRequestBloc),
         BlocProvider.value(value: driverBloc),
       ],
       child: useSentry

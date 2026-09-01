@@ -10,12 +10,15 @@ import '../../../../core/widgets/main_scaffold.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../../l10n/gen/app_localizations.dart';
-import '../widgets/trip_request_card.dart';
-import '../widgets/trip_review_card.dart';
-
+import '../../../trips/presentation/bloc/booking_request_bloc.dart';
+import '../../../trips/presentation/bloc/booking_request_event.dart';
+import '../../../trips/presentation/bloc/booking_request_state.dart';
 import '../../../trips/presentation/bloc/trip_bloc.dart';
 import '../../../trips/presentation/bloc/trip_event.dart';
 import '../../../trips/presentation/bloc/trip_state.dart';
+import '../widgets/favorite_list_section.dart';
+import '../widgets/trip_request_card.dart';
+import '../widgets/trip_review_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     context.read<TripBloc>().add(GetTrips());
+    context.read<BookingRequestBloc>().add(GetBookingRequests());
   }
 
   @override
@@ -75,11 +79,34 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _tripIdCard(l10n: l10n),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 16),
+                      BlocBuilder<TripBloc, TripState>(
+                        builder: (context, tripState) {
+                          final requestedCount = tripState is TripLoaded
+                              ? tripState.totalCount
+                              : 0;
+                          return BlocBuilder<
+                            BookingRequestBloc,
+                            BookingRequestState
+                          >(
+                            builder: (context, bookingState) {
+                              final bookedCount =
+                                  bookingState is BookingRequestLoaded
+                                  ? bookingState.totalCount
+                                  : 0;
+                              return FavoriteListSection(
+                                requestedCount: requestedCount,
+                                bookedCount: bookedCount,
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _Title(title: l10n.tripsRequest, fontSize: 16),
+                          _Title(title: l10n.requestedTransfers, fontSize: 16),
                           CupertinoButton(
                             onPressed: () => context.go(AppRoutePaths.requests),
                             padding: EdgeInsets.zero,

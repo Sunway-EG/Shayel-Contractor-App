@@ -1107,6 +1107,25 @@ class AppLocalizationsAr extends AppLocalizations {
   String get pleaseSelectDriver => 'يرجى اختيار سائق أولاً';
 
   @override
+  String get favoriteList => 'القائمة المفضلة';
+
+  @override
+  String get preview => 'معاينة';
+
+  @override
+  String get requestedTransfers => 'نقلات مطلوبة';
+
+  @override
+  String requestedTransfersCount(String count) {
+    return 'نقلات مطلوبة ($count)';
+  }
+
+  @override
+  String bookedTransfersCount(String count) {
+    return 'نقلات محجوزة ($count)';
+  }
+
+  @override
   String priceInEgp(String amount) {
     return '$amount جنيه';
   }

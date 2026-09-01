@@ -346,6 +346,25 @@
   "tripBookedTitle": "لقد حجزت هذه الرحلة لك.",
   "tripBookedMessage": "انتظر المسؤول لإرسال تاريخ بدء هذه الرحلة",
   "pleaseSelectDriver": "يرجى اختيار سائق أولاً",
+  "favoriteList": "القائمة المفضلة",
+  "preview": "معاينة",
+  "requestedTransfers": "نقلات مطلوبة",
+  "requestedTransfersCount": "نقلات مطلوبة ({count})",
+  "@requestedTransfersCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "bookedTransfersCount": "نقلات محجوزة ({count})",
+  "@bookedTransfersCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "priceInEgp": "{amount} جنيه",
   "@priceInEgp": {
     "placeholders": {

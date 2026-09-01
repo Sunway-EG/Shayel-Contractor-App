@@ -15,6 +15,33 @@ Map<String, dynamic> requireEnvelope(Response<Map<String, dynamic>> response) {
   return data;
 }
 
+int totalCountFromEnvelope(Map<String, dynamic> envelope, int fallback) {
+  for (final key in [
+    'totalCount',
+    'TotalCount',
+    'total',
+    'count',
+    'recordsTotal',
+  ]) {
+    final value = envelope[key];
+    if (value is num) return value.toInt();
+  }
+
+  final pagination = envelope['pagination'];
+  if (pagination is Map) {
+    final value = pagination['totalCount'] ?? pagination['total'];
+    if (value is num) return value.toInt();
+  }
+
+  final meta = envelope['meta'];
+  if (meta is Map) {
+    final value = meta['totalCount'] ?? meta['total'];
+    if (value is num) return value.toInt();
+  }
+
+  return fallback;
+}
+
 void throwIfEnvelopeFailed(
   Response<Map<String, dynamic>> response, {
   String fallbackMessage = 'Request failed',
