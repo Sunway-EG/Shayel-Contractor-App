@@ -2054,6 +2054,120 @@ abstract class AppLocalizations {
   /// **'Book trip'**
   String get bookTrip;
 
+  /// No description provided for @selectDriver.
+  ///
+  /// In en, this message translates to:
+  /// **'Select driver'**
+  String get selectDriver;
+
+  /// No description provided for @searchForDriver.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for a driver'**
+  String get searchForDriver;
+
+  /// No description provided for @noDrivers.
+  ///
+  /// In en, this message translates to:
+  /// **'No drivers'**
+  String get noDrivers;
+
+  /// No description provided for @chooseThisDriver.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose this driver'**
+  String get chooseThisDriver;
+
+  /// No description provided for @chooseDriverPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose driver'**
+  String get chooseDriverPlaceholder;
+
+  /// No description provided for @driversFromYourList.
+  ///
+  /// In en, this message translates to:
+  /// **'Drivers from your list'**
+  String get driversFromYourList;
+
+  /// No description provided for @tapToAddNewDriver.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap here to add a new driver'**
+  String get tapToAddNewDriver;
+
+  /// No description provided for @addNewDriver.
+  ///
+  /// In en, this message translates to:
+  /// **'Add new driver'**
+  String get addNewDriver;
+
+  /// No description provided for @addDriver.
+  ///
+  /// In en, this message translates to:
+  /// **'Add driver'**
+  String get addDriver;
+
+  /// No description provided for @driverInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Driver information'**
+  String get driverInformation;
+
+  /// No description provided for @driverDocumentsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'ID, driving license, and vehicle license'**
+  String get driverDocumentsHint;
+
+  /// No description provided for @pleaseUploadRequiredDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Please upload the required documents'**
+  String get pleaseUploadRequiredDocuments;
+
+  /// No description provided for @invalidNationalId.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid national ID'**
+  String get invalidNationalId;
+
+  /// No description provided for @pickupPoint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pickup point'**
+  String get pickupPoint;
+
+  /// No description provided for @dropoffPoint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop-off point'**
+  String get dropoffPoint;
+
+  /// No description provided for @tripBookedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You have booked this trip.'**
+  String get tripBookedTitle;
+
+  /// No description provided for @tripBookedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait for the admin to send the start date of this trip'**
+  String get tripBookedMessage;
+
+  /// No description provided for @pleaseSelectDriver.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a driver first'**
+  String get pleaseSelectDriver;
+
+  /// No description provided for @priceInEgp.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} EGP'**
+  String priceInEgp(String amount);
+
   /// No description provided for @all.
   ///
   /// In en, this message translates to:

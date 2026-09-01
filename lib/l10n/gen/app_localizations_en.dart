@@ -1060,6 +1060,67 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookTrip => 'Book trip';
 
   @override
+  String get selectDriver => 'Select driver';
+
+  @override
+  String get searchForDriver => 'Search for a driver';
+
+  @override
+  String get noDrivers => 'No drivers';
+
+  @override
+  String get chooseThisDriver => 'Choose this driver';
+
+  @override
+  String get chooseDriverPlaceholder => 'Choose driver';
+
+  @override
+  String get driversFromYourList => 'Drivers from your list';
+
+  @override
+  String get tapToAddNewDriver => 'Tap here to add a new driver';
+
+  @override
+  String get addNewDriver => 'Add new driver';
+
+  @override
+  String get addDriver => 'Add driver';
+
+  @override
+  String get driverInformation => 'Driver information';
+
+  @override
+  String get driverDocumentsHint => 'ID, driving license, and vehicle license';
+
+  @override
+  String get pleaseUploadRequiredDocuments =>
+      'Please upload the required documents';
+
+  @override
+  String get invalidNationalId => 'Invalid national ID';
+
+  @override
+  String get pickupPoint => 'Pickup point';
+
+  @override
+  String get dropoffPoint => 'Drop-off point';
+
+  @override
+  String get tripBookedTitle => 'You have booked this trip.';
+
+  @override
+  String get tripBookedMessage =>
+      'Wait for the admin to send the start date of this trip';
+
+  @override
+  String get pleaseSelectDriver => 'Please select a driver first';
+
+  @override
+  String priceInEgp(String amount) {
+    return '$amount EGP';
+  }
+
+  @override
   String get all => 'All';
 
   @override

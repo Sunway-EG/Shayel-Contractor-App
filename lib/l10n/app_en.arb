@@ -1171,6 +1171,32 @@
   "vehicleType": "Vehicle type",
   "tripCost": "Trip cost",
   "bookTrip": "Book trip",
+  "selectDriver": "Select driver",
+  "searchForDriver": "Search for a driver",
+  "noDrivers": "No drivers",
+  "chooseThisDriver": "Choose this driver",
+  "chooseDriverPlaceholder": "Choose driver",
+  "driversFromYourList": "Drivers from your list",
+  "tapToAddNewDriver": "Tap here to add a new driver",
+  "addNewDriver": "Add new driver",
+  "addDriver": "Add driver",
+  "driverInformation": "Driver information",
+  "driverDocumentsHint": "ID, driving license, and vehicle license",
+  "pleaseUploadRequiredDocuments": "Please upload the required documents",
+  "invalidNationalId": "Invalid national ID",
+  "pickupPoint": "Pickup point",
+  "dropoffPoint": "Drop-off point",
+  "tripBookedTitle": "You have booked this trip.",
+  "tripBookedMessage": "Wait for the admin to send the start date of this trip",
+  "pleaseSelectDriver": "Please select a driver first",
+  "priceInEgp": "{amount} EGP",
+  "@priceInEgp": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "all": "All",
   "requested": "Requested",
   "pending": "Pending",

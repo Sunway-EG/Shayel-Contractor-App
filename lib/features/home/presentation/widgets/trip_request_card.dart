@@ -1,15 +1,24 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../l10n/gen/app_localizations.dart';
+import '../../../trips/data/models/trip_model.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/router/route_constants.dart';
 
 class TripRequestCard extends StatelessWidget {
-  const TripRequestCard({super.key});
+  const TripRequestCard({super.key, required this.trip});
+
+  final TripModel trip;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final dateStr = DateFormat('dd-MM-yyyy hh:mm a').format(trip.startDate.toLocal());
+    final cost = trip.spotPrice ?? trip.cargoPrice;
+
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -39,14 +48,17 @@ class TripRequestCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const _Title(title: 'شركة عبور لاند', fontSize: 16),
+                _Title(
+                  title: trip.companyName ?? trip.referenceNumber,
+                  fontSize: 16,
+                ),
                 const SizedBox(height: 10),
                 Row(
                   children: [
                     _Title(title: l10n.tripDate, fontSize: 12),
                     const SizedBox(width: 10),
-                    const _SubTitle(
-                      title: '24-08-20226 04:40 PM',
+                    _SubTitle(
+                      title: dateStr,
                       fontSize: 14,
                     ),
                   ],
@@ -66,8 +78,8 @@ class TripRequestCard extends StatelessWidget {
                         child: Column(
                           children: [
                             _SubTitle(title: l10n.tripFrom, fontSize: 12),
-                            const _Title(
-                              title: 'سيدي بشر اسكندرية',
+                            _Title(
+                              title: trip.fromLocation ?? '—',
                               fontSize: 14,
                             ),
                           ],
@@ -77,8 +89,8 @@ class TripRequestCard extends StatelessWidget {
                         child: Column(
                           children: [
                             _SubTitle(title: l10n.tripTo, fontSize: 12),
-                            const _Title(
-                              title: 'الجيزة ابو رواش',
+                            _Title(
+                              title: trip.toLocation ?? '—',
                               fontSize: 14,
                             ),
                           ],
@@ -102,7 +114,10 @@ class TripRequestCard extends StatelessWidget {
                         child: Column(
                           children: [
                             _SubTitle(title: l10n.vehicleType, fontSize: 12),
-                            const _Title(title: 'تريلا فرش', fontSize: 14),
+                            _Title(
+                              title: trip.vehicleTypeName ?? '—',
+                              fontSize: 14,
+                            ),
                           ],
                         ),
                       ),
@@ -110,7 +125,12 @@ class TripRequestCard extends StatelessWidget {
                         child: Column(
                           children: [
                             _SubTitle(title: l10n.tripCost, fontSize: 12),
-                            const _Title(title: '14,000 جنيه ', fontSize: 14),
+                            _Title(
+                              title: cost != null
+                                  ? '${cost.toStringAsFixed(0)} جنيه'
+                                  : '—',
+                              fontSize: 14,
+                            ),
                           ],
                         ),
                       ),
@@ -119,7 +139,12 @@ class TripRequestCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 AppButton(
-                  onPressed: () {},
+                  onPressed: () {
+                     context.go(
+      AppRoutePaths.bookTrip,
+      extra: trip,
+    );
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

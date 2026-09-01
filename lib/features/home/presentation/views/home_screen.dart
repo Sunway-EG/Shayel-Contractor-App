@@ -12,6 +12,10 @@ import '../../../../l10n/gen/app_localizations.dart';
 import '../widgets/trip_request_card.dart';
 import '../widgets/trip_review_card.dart';
 
+import '../../../trips/presentation/bloc/trip_bloc.dart';
+import '../../../trips/presentation/bloc/trip_event.dart';
+import '../../../trips/presentation/bloc/trip_state.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -21,6 +25,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _tripIdController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<TripBloc>().add(GetTrips());
+  }
 
   @override
   void dispose() {
@@ -82,7 +92,40 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      const TripRequestCard(),
+                      BlocBuilder<TripBloc, TripState>(
+                        builder: (context, state) {
+                          if (state is TripLoading) {
+                            return const Center(
+                              child: CupertinoActivityIndicator(),
+                            );
+                          }
+
+                          if (state is TripLoaded) {
+                            if (state.trips.isEmpty) {
+                              return Center(child: Text(l10n.tripsRequest));
+                            }
+
+                            return ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: state.trips.length,
+                              separatorBuilder: (_, _) =>
+                                  const SizedBox(height: 10),
+                              itemBuilder: (context, index) {
+                                return TripRequestCard(
+                                  trip: state.trips[index],
+                                );
+                              },
+                            );
+                          }
+
+                          if (state is TripError) {
+                            return Text(state.message);
+                          }
+
+                          return const SizedBox.shrink();
+                        },
+                      ),
                       const SizedBox(height: 10),
                       _Title(title: l10n.tripsReview, fontSize: 16),
                       const SizedBox(height: 10),

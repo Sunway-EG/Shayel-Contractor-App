@@ -20,6 +20,9 @@ import '../services/app_update_service.dart';
 import '../storage/auth_storage.dart';
 import '../widgets/app_update_presenter.dart';
 import '../../features/auth/presentation/views/first_choose_screen.dart';
+import '../../features/trips/data/models/trip_model.dart';
+import '../../features/trips/presentations/views/booking_trip.dart';
+import '../../features/drivers/presentation/views/add_driver_screen.dart';
 
 /// Global router instance holder for accessing router from interceptors
 class AppRouterHolder {
@@ -280,6 +283,17 @@ GoRouter createAppRouter() {
           final phone = state.uri.queryParameters['phone'] ?? '';
           return MfaChannelScreen(email: email, phone: phone);
         },
+      ),
+      GoRoute(
+        path: AppRoutePaths.bookTrip,
+        builder: (context, state) {
+          final trip = state.extra as TripModel?;
+          return BookingTripScreen(trip: trip);
+        },
+      ),
+      GoRoute(
+        path: AppRoutePaths.addDriver,
+        builder: (context, state) => const AddDriverScreen(),
       ),
       GoRoute(
         path: AppRoutePaths.otp,

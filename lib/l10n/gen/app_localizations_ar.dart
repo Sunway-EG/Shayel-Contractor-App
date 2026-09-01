@@ -1053,6 +1053,65 @@ class AppLocalizationsAr extends AppLocalizations {
   String get bookTrip => 'احجز الرحلة';
 
   @override
+  String get selectDriver => 'اختر سائق';
+
+  @override
+  String get searchForDriver => 'البحث عن سائق';
+
+  @override
+  String get noDrivers => 'لا يوجد سائقون';
+
+  @override
+  String get chooseThisDriver => 'اختر هذا السائق';
+
+  @override
+  String get chooseDriverPlaceholder => 'اختر السائق';
+
+  @override
+  String get driversFromYourList => 'السائقون من قائمتك';
+
+  @override
+  String get tapToAddNewDriver => 'اضغط هنا لإضافة سائق جديد';
+
+  @override
+  String get addNewDriver => 'إضافة سائق جديد';
+
+  @override
+  String get addDriver => 'إضافة سائق';
+
+  @override
+  String get driverInformation => 'معلومات السائق';
+
+  @override
+  String get driverDocumentsHint => 'البطاقة و رخصة القيادة و رخصة العربية';
+
+  @override
+  String get pleaseUploadRequiredDocuments => 'يرجى رفع المستندات المطلوبة';
+
+  @override
+  String get invalidNationalId => 'رقم قومي غير صحيح';
+
+  @override
+  String get pickupPoint => 'نقطة الاستلام';
+
+  @override
+  String get dropoffPoint => 'نقطة الوصول';
+
+  @override
+  String get tripBookedTitle => 'لقد حجزت هذه الرحلة لك.';
+
+  @override
+  String get tripBookedMessage => 'انتظر المسؤول لإرسال تاريخ بدء هذه الرحلة';
+
+  @override
+  String get pleaseSelectDriver => 'يرجى اختيار سائق أولاً';
+
+  @override
+  String priceInEgp(String amount) {
+    return '$amount جنيه';
+  }
+
+  @override
   String get all => 'الكل';
 
   @override

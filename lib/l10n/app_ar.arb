@@ -328,6 +328,32 @@
   "vehicleType": "نوع المركبة",
   "tripCost": "سعر الرحلة",
   "bookTrip": "احجز الرحلة",
+  "selectDriver": "اختر سائق",
+  "searchForDriver": "البحث عن سائق",
+  "noDrivers": "لا يوجد سائقون",
+  "chooseThisDriver": "اختر هذا السائق",
+  "chooseDriverPlaceholder": "اختر السائق",
+  "driversFromYourList": "السائقون من قائمتك",
+  "tapToAddNewDriver": "اضغط هنا لإضافة سائق جديد",
+  "addNewDriver": "إضافة سائق جديد",
+  "addDriver": "إضافة سائق",
+  "driverInformation": "معلومات السائق",
+  "driverDocumentsHint": "البطاقة و رخصة القيادة و رخصة العربية",
+  "pleaseUploadRequiredDocuments": "يرجى رفع المستندات المطلوبة",
+  "invalidNationalId": "رقم قومي غير صحيح",
+  "pickupPoint": "نقطة الاستلام",
+  "dropoffPoint": "نقطة الوصول",
+  "tripBookedTitle": "لقد حجزت هذه الرحلة لك.",
+  "tripBookedMessage": "انتظر المسؤول لإرسال تاريخ بدء هذه الرحلة",
+  "pleaseSelectDriver": "يرجى اختيار سائق أولاً",
+  "priceInEgp": "{amount} جنيه",
+  "@priceInEgp": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "all": "الكل",
   "requested": "مطلوبة",
   "pending": "في الإنتظار",

@@ -14,4 +14,6 @@ class AppRoutePaths {
   static const market = '/market';
   static const settings = '/settings';
   static const profile = '/profile';
+  static const String bookTrip = '/book-trip';
+  static const String addDriver = '/add-driver';
 }

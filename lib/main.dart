@@ -37,6 +37,14 @@ import 'l10n/gen/app_localizations.dart';
 import 'features/auth/domain/use_cases/register_usecase.dart';
 import 'features/auth/domain/use_cases/get_documents_usecase.dart';
 
+import 'features/trips/data/datasources/trip_remote_datasource.dart';
+import 'features/trips/data/repositories/trip_repository_impl.dart';
+import 'features/trips/presentation/bloc/trip_bloc.dart';
+
+import 'features/drivers/data/datasources/driver_remote_datasource.dart';
+import 'features/drivers/data/repositories/driver_repository_impl.dart';
+import 'features/drivers/presentation/bloc/driver_bloc.dart';
+
 /// Override with --dart-define=SENTRY_DSN=... for other environments.
 const _sentryDsn = String.fromEnvironment(
   'SENTRY_DSN',
@@ -80,6 +88,15 @@ Future<void> _runApp({bool useSentry = false}) async {
   final validatePasswordUseCase = ValidatePasswordUseCase(authRepository);
   final registerUseCase = RegisterUseCase(authRepository);
   final getDocumentsUseCase = GetDocumentsUseCase(authRepository);
+  // Trips
+final tripRemoteDataSource = TripRemoteDataSourceImpl(dio);
+final tripRepository = TripRepositoryImpl(tripRemoteDataSource);
+final tripBloc = TripBloc(tripRepository);
+  // drivers
+final driverRemoteDataSource = DriverRemoteDataSourceImpl(dio);
+final driverRepository = DriverRepositoryImpl(driverRemoteDataSource);
+final driverBloc = DriverBloc(driverRepository);
+
   // Initialize BloC with use cases
   final authBloc = AuthBloc(
     loginUseCase: loginUseCase,
@@ -114,6 +131,8 @@ Future<void> _runApp({bool useSentry = false}) async {
         BlocProvider.value(value: authBloc),
         BlocProvider.value(value: localeBloc),
         BlocProvider.value(value: profileBloc),
+        BlocProvider.value(value: tripBloc),
+        BlocProvider.value(value: driverBloc),
       ],
       child: useSentry
           ? SentryWidget(child: const ShayelContractorApp())
