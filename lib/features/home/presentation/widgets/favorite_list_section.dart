@@ -9,10 +9,14 @@ class FavoriteListSection extends StatelessWidget {
     super.key,
     required this.requestedCount,
     required this.bookedCount,
+    required this.onRequestedPreview,
+    required this.onBookedPreview,
   });
 
   final int requestedCount;
   final int bookedCount;
+  final VoidCallback onRequestedPreview;
+  final VoidCallback onBookedPreview;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +39,7 @@ class FavoriteListSection extends StatelessWidget {
           icon: Icons.local_shipping_outlined,
           showBadge: requestedCount > 0,
           emphasized: true,
+          onPreview: onRequestedPreview,
         ),
         const SizedBox(height: 8),
         _FavoriteListCard(
@@ -42,6 +47,7 @@ class FavoriteListSection extends StatelessWidget {
           icon: CupertinoIcons.cube_box,
           showBadge: false,
           emphasized: false,
+          onPreview: onBookedPreview,
         ),
       ],
     );
@@ -54,12 +60,14 @@ class _FavoriteListCard extends StatelessWidget {
     required this.icon,
     required this.showBadge,
     required this.emphasized,
+    required this.onPreview,
   });
 
   final String title;
   final IconData icon;
   final bool showBadge;
   final bool emphasized;
+  final VoidCallback onPreview;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +97,7 @@ class _FavoriteListCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          _PreviewButton(label: l10n.preview),
+          _PreviewButton(label: l10n.preview, onTap: onPreview),
         ],
       ),
     );
@@ -97,25 +105,29 @@ class _FavoriteListCard extends StatelessWidget {
 }
 
 class _PreviewButton extends StatelessWidget {
-  const _PreviewButton({required this.label});
+  const _PreviewButton({required this.label, required this.onTap});
 
   final String label;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.mainBlue),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
-          color: AppColors.mainBlue,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.mainBlue),
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: AppColors.mainBlue,
+          ),
         ),
       ),
     );

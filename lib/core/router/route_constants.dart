@@ -11,6 +11,12 @@ class AppRoutePaths {
   static const register = '/register';
   static const home = '/home';
   static const requests = '/requests';
+  static const requestsTypeParam = 'type';
+  static const requestsTypeRequested = 'requested';
+  static const requestsTypeBooked = 'booked';
+
+  static String requestsPath({required bool booked}) =>
+      '$requests?$requestsTypeParam=${booked ? requestsTypeBooked : requestsTypeRequested}';
   static const market = '/market';
   static const settings = '/settings';
   static const profile = '/profile';

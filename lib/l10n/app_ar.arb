@@ -348,6 +348,18 @@
   "pleaseSelectDriver": "يرجى اختيار سائق أولاً",
   "favoriteList": "القائمة المفضلة",
   "preview": "معاينة",
+  "newTripRequestsCount": "طلبات نقلات جديدة ({count})",
+  "@newTripRequestsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "allYourTripRequests": "جميع طلبات النقلات لديك",
+  "notStarted": "لم تبدأ",
+  "finishedTransfers": "نقلات انتهت",
+  "cancellations": "إلغاء",
   "requestedTransfers": "نقلات مطلوبة",
   "requestedTransfersCount": "نقلات مطلوبة ({count})",
   "@requestedTransfersCount": {

@@ -1122,6 +1122,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preview => 'Preview';
 
   @override
+  String newTripRequestsCount(String count) {
+    return 'New trip requests ($count)';
+  }
+
+  @override
+  String get allYourTripRequests => 'All your trip requests';
+
+  @override
+  String get notStarted => 'Not started';
+
+  @override
+  String get finishedTransfers => 'Finished trips';
+
+  @override
+  String get cancellations => 'Cancelled';
+
+  @override
   String get requestedTransfers => 'Requested transfers';
 
   @override

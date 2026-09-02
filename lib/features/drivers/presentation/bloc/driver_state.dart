@@ -1,4 +1,6 @@
 import '../../data/models/driver_model.dart';
+import '../../domain/entities/driver/driver.dart';
+import '../../domain/entities/driver_document_type/driver_document_type.dart';
 
 sealed class DriverState {}
 
@@ -7,9 +9,19 @@ class DriverInitial extends DriverState {}
 class DriverLoading extends DriverState {}
 
 class DriverLoaded extends DriverState {
-  DriverLoaded(this.drivers);
+  DriverLoaded({
+    required this.drivers,
+    this.documentTypes = const [],
+    this.loadingDrivers = false,
+    this.loadingDocuments = false,
+    this.documentsError,
+  });
 
-  final List<DriverModel> drivers;
+  final List<Driver> drivers;
+  final List<DriverDocumentType> documentTypes;
+  final bool loadingDrivers;
+  final bool loadingDocuments;
+  final String? documentsError;
 }
 
 class DriverError extends DriverState {

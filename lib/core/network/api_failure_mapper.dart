@@ -57,7 +57,8 @@ String? extractApiMessage(dynamic data) {
   if (message is String &&
       message.isNotEmpty &&
       !message.startsWith('One or more') &&
-      !message.startsWith('حدث خطأ أو أكثر')) {
+      !message.startsWith('حدث خطأ أو أكثر') &&
+      !message.startsWith('common.')) {
     return message;
   }
 

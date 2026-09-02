@@ -1191,6 +1191,18 @@
   "pleaseSelectDriver": "Please select a driver first",
   "favoriteList": "Favorite list",
   "preview": "Preview",
+  "newTripRequestsCount": "New trip requests ({count})",
+  "@newTripRequestsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "allYourTripRequests": "All your trip requests",
+  "notStarted": "Not started",
+  "finishedTransfers": "Finished trips",
+  "cancellations": "Cancelled",
   "requestedTransfers": "Requested transfers",
   "requestedTransfersCount": "Requested transfers ({count})",
   "@requestedTransfersCount": {

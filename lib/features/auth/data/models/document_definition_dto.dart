@@ -12,12 +12,12 @@ class DocumentDefinitionDto extends DocumentDefinition {
 
   factory DocumentDefinitionDto.fromJson(Map<String, dynamic> json) {
     return DocumentDefinitionDto(
-      id: json['id'] as int,
-      entityId: json['entityId'] as int,
+      id: (json['id'] as num).toInt(),
+      entityId: (json['entityId'] as num?)?.toInt() ?? 0,
       nameEn: json['nameEn'] as String? ?? '',
       nameAr: json['nameAr'] as String? ?? '',
       required: json['required'] as bool? ?? false,
-      status: json['status'] as int? ?? 0,
+      status: (json['status'] as num?)?.toInt() ?? 0,
     );
   }
 }

@@ -83,5 +83,7 @@ abstract interface class AuthRepository {
   Future<Either<AuthFailure, bool>> validatePassword({
     required String password,
   });
-  Future<Either<AuthFailure, List<DocumentDefinition>>> getDocuments();
+  Future<Either<AuthFailure, List<DocumentDefinition>>> getDocuments({
+    int? entityId,
+  });
 }

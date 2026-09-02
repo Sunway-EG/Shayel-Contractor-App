@@ -5,7 +5,8 @@ import 'package:flutter/foundation.dart';
 
 import '../../../../../core/network/api_endpoints.dart';
 import '../../../../../core/network/api_response_parser.dart';
-import '../models/booking_request_model.dart';
+import '../models/book_trip_request_dto.dart';
+import '../models/booking_request_dto.dart';
 import '../models/paged_list.dart';
 import '../models/trip_dto.dart';
 import '../models/trip_model.dart';
@@ -19,12 +20,15 @@ abstract interface class TripRemoteDataSource {
 
   Future<TripModel> getTrip(int tripId);
 
-  Future<PagedList<BookingRequestModel>> getBookingRequests({
+  Future<PagedList<BookingRequestDto>> getBookingRequests({
     int page = 1,
     int pageSize = 10,
   });
 
-  Future<void> bookTrip({required int tripId, required int driverId});
+  Future<void> bookTrip({
+    required int tripId,
+    required BookTripRequestDto request,
+  });
 }
 
 class TripRemoteDataSourceImpl implements TripRemoteDataSource {
@@ -100,7 +104,7 @@ class TripRemoteDataSourceImpl implements TripRemoteDataSource {
   }
 
   @override
-  Future<PagedList<BookingRequestModel>> getBookingRequests({
+  Future<PagedList<BookingRequestDto>> getBookingRequests({
     int page = 1,
     int pageSize = 10,
   }) async {
@@ -116,10 +120,12 @@ class TripRemoteDataSourceImpl implements TripRemoteDataSource {
       throw Exception('Invalid booking requests response');
     }
 
-    final items = data
-        .whereType<Map<String, dynamic>>()
-        .map(BookingRequestModel.fromJson)
-        .toList();
+    final items = <BookingRequestDto>[];
+    for (final item in data) {
+      if (item is Map) {
+        items.add(BookingRequestDto.fromJson(Map<String, dynamic>.from(item)));
+      }
+    }
 
     return PagedList(
       items: items,
@@ -128,11 +134,13 @@ class TripRemoteDataSourceImpl implements TripRemoteDataSource {
   }
 
   @override
-  Future<void> bookTrip({required int tripId, required int driverId}) async {
-    final formData = FormData.fromMap({'DriverId': driverId.toString()});
+  Future<void> bookTrip({
+    required int tripId,
+    required BookTripRequestDto request,
+  }) async {
     final response = await _dio.post<Map<String, dynamic>>(
       ApiEndpoints.bookTrip(tripId),
-      data: formData,
+      data: await request.toFormData(),
     );
     throwIfEnvelopeFailed(response, fallbackMessage: 'Failed to book trip');
   }

@@ -12,14 +12,9 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../../core/permissions/prominent_user_data_disclosure.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
-import '../../../../core/widgets/app_dialog_presenter.dart';
 import '../../../../l10n/gen/app_localizations.dart';
-import '../../../auth/domain/entities/document_definition.dart';
-import '../../../auth/presentation/bloc/auth_bloc.dart';
-import '../../../auth/presentation/bloc/auth_event.dart';
-import '../../../auth/presentation/bloc/auth_state.dart';
-import '../../data/models/driver_document_input.dart';
-import '../../data/models/driver_model.dart';
+import '../../domain/entities/driver/driver.dart';
+import '../../domain/entities/driver_document_type/driver_document_type.dart';
 import '../bloc/driver_bloc.dart';
 import '../bloc/driver_event.dart';
 import '../bloc/driver_state.dart';
@@ -37,25 +32,28 @@ class AddDriverScreen extends StatefulWidget {
 }
 
 class _AddDriverScreenState extends State<AddDriverScreen> {
-  final _nameController = TextEditingController();
+  final _nameArController = TextEditingController();
+  final _nameEnController = TextEditingController();
   final _phoneController = TextEditingController();
   final _nationalIdController = TextEditingController();
-  String? _nameError;
+  String? _nameArError;
+  String? _nameEnError;
   String? _phoneError;
   String? _nationalIdError;
   String? _documentsError;
-  final List<DriverDocumentInput> _documents = [];
-  List<DocumentDefinition> _documentDefinitions = [];
+  final List<DriverDocument> _documents = [];
+  List<DriverDocumentType> _documentDefinitions = [];
 
   @override
   void initState() {
     super.initState();
-    context.read<AuthBloc>().add(const AuthGetDocumentsRequested());
+    context.read<DriverBloc>().add(GetDriverDocumentTypes());
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _nameArController.dispose();
+    _nameEnController.dispose();
     _phoneController.dispose();
     _nationalIdController.dispose();
     super.dispose();
@@ -211,7 +209,7 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
     if (image == null || !mounted) return;
     setState(() {
       _documents.add(
-        DriverDocumentInput(
+        DriverDocument(
           documentId: documentId,
           filePath: image.path,
           expiryDate: DateTime.now().add(const Duration(days: 365)),
@@ -266,7 +264,10 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
     setState(() {
       _phoneError = phoneError;
       _nationalIdError = nationalIdError;
-      _nameError = _nameController.text.trim().isEmpty
+      _nameArError = _nameArController.text.trim().isEmpty
+          ? l10n.enterYourFullName
+          : null;
+      _nameEnError = _nameEnController.text.trim().isEmpty
           ? l10n.enterYourFullName
           : null;
       _documentsError = missingRequired
@@ -274,7 +275,8 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
           : null;
     });
 
-    return _nameError == null &&
+    return _nameArError == null &&
+        _nameEnError == null &&
         _phoneError == null &&
         _nationalIdError == null &&
         _documentsError == null;
@@ -291,14 +293,13 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
   void _submit(AppLocalizations l10n) {
     if (!_validateFields(l10n)) return;
 
-    final name = _nameController.text.trim();
-    context.read<DriverBloc>().add(
-      CreateDriver(
-        fullNameEn: name,
-        fullNameAr: name,
+    context.pop(
+      Driver(
+        fullNameAr: _nameArController.text.trim(),
+        fullNameEn: _nameEnController.text.trim(),
         phone: _phoneController.text.trim(),
         nationalId: _nationalIdController.text.trim(),
-        documents: List<DriverDocumentInput>.from(_documents),
+        documents: List<DriverDocument>.from(_documents),
       ),
     );
   }
@@ -307,171 +308,178 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocListener<DriverBloc, DriverState>(
-      listenWhen: (previous, current) =>
-          current is DriverCreated || current is DriverCreateError,
-      listener: (context, state) {
-        if (state is DriverCreated) {
-          context.read<DriverBloc>().add(GetDrivers());
-          context.pop<DriverModel?>(state.driver);
-        } else if (state is DriverCreateError) {
-          showAppAlertDialog(
-            context: context,
-            title: l10n.addNewDriver,
-            message: state.message,
-          );
-        }
-      },
-      child: CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          backgroundColor: CupertinoColors.transparent,
-          leading: CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: () => context.pop(),
-            child: const Icon(CupertinoIcons.back),
-          ),
-          middle: Row(
-            mainAxisSize: MainAxisSize.min,
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: CupertinoColors.transparent,
+        leading: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => context.pop(),
+          child: const Icon(CupertinoIcons.back),
+        ),
+        middle: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(CupertinoIcons.creditcard, color: AppColors.mainBlue),
+            const SizedBox(width: 5),
+            Text(
+              l10n.addNewDriver,
+              style: const TextStyle(
+                color: AppColors.mainBlue,
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(height: 1, color: const Color(0xffeeeeee)),
+        ),
+      ),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(CupertinoIcons.creditcard, color: AppColors.mainBlue),
-              const SizedBox(width: 5),
               Text(
-                l10n.addNewDriver,
+                l10n.driverInformation,
                 style: const TextStyle(
-                  color: AppColors.mainBlue,
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
+                  color: AppColors.darkGray,
                 ),
               ),
-            ],
-          ),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(1),
-            child: Container(height: 1, color: const Color(0xffeeeeee)),
-          ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.driverInformation,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.darkGray,
-                  ),
-                ),
-                const SizedBox(height: 15),
-                _label(l10n.fullName),
-                const SizedBox(height: 5),
-                _nameField(placeholder: l10n.fullName),
-                if (_nameError != null) ...[
-                  const SizedBox(height: 8),
-                  _errorText(_nameError!),
-                ],
-                const SizedBox(height: 15),
-                _label(l10n.phone),
-                const SizedBox(height: 5),
-                _phoneField(placeholder: l10n.phone),
-                if (_phoneError != null) ...[
-                  const SizedBox(height: 8),
-                  _errorText(_phoneError!),
-                ],
-                const SizedBox(height: 15),
-                _label(l10n.enterYourId),
-                const SizedBox(height: 5),
-                _nationalIdField(placeholder: l10n.enterYourId),
-                if (_nationalIdError != null) ...[
-                  const SizedBox(height: 8),
-                  _errorText(_nationalIdError!),
-                ],
-                const SizedBox(height: 24),
-                Text(
-                  l10n.documents,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.darkGray,
-                  ),
-                ),
+              const SizedBox(height: 15),
+              _label(l10n.fullNameArabic),
+              const SizedBox(height: 5),
+              _nameField(
+                controller: _nameArController,
+                placeholder: l10n.fullNameArabic,
+                hasError: _nameArError != null,
+                textDirection: TextDirection.rtl,
+                onChanged: () {
+                  if (_nameArError != null) {
+                    setState(() => _nameArError = null);
+                  }
+                },
+              ),
+              if (_nameArError != null) ...[
                 const SizedBox(height: 8),
-                Text(
-                  l10n.driverDocumentsHint,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: CupertinoColors.systemGrey,
-                  ),
+                _errorText(_nameArError!),
+              ],
+              const SizedBox(height: 15),
+              _label(l10n.fullNameEnglish),
+              const SizedBox(height: 5),
+              _nameField(
+                controller: _nameEnController,
+                placeholder: l10n.fullNameEnglish,
+                hasError: _nameEnError != null,
+                textDirection: TextDirection.ltr,
+                onChanged: () {
+                  if (_nameEnError != null) {
+                    setState(() => _nameEnError = null);
+                  }
+                },
+              ),
+              if (_nameEnError != null) ...[
+                const SizedBox(height: 8),
+                _errorText(_nameEnError!),
+              ],
+              const SizedBox(height: 15),
+              _label(l10n.phone),
+              const SizedBox(height: 5),
+              _phoneField(placeholder: l10n.phone),
+              if (_phoneError != null) ...[
+                const SizedBox(height: 8),
+                _errorText(_phoneError!),
+              ],
+              const SizedBox(height: 15),
+              _label(l10n.enterYourId),
+              const SizedBox(height: 5),
+              _nationalIdField(placeholder: l10n.enterYourId),
+              if (_nationalIdError != null) ...[
+                const SizedBox(height: 8),
+                _errorText(_nationalIdError!),
+              ],
+              const SizedBox(height: 24),
+              Text(
+                l10n.documents,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.darkGray,
                 ),
-                const SizedBox(height: 14),
-                BlocBuilder<AuthBloc, AuthState>(
-                  buildWhen: (previous, current) =>
-                      current is AuthDocumentsLoading ||
-                      current is AuthDocumentsLoaded ||
-                      current is AuthDocumentsError,
-                  builder: (context, state) {
-                    if (state is AuthDocumentsLoading) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(20),
-                          child: CupertinoActivityIndicator(),
-                        ),
-                      );
-                    }
-                    if (state is AuthDocumentsError) {
-                      return Text(
-                        state.message,
-                        style: const TextStyle(color: AppColors.red),
-                      );
-                    }
-                    if (state is AuthDocumentsLoaded) {
-                      _documentDefinitions = state.documents;
-                      return Column(
-                        children: [
-                          for (int i = 0; i < state.documents.length; i++) ...[
-                            _documentSection(
-                              title:
-                                  Directionality.of(context) ==
-                                      TextDirection.rtl
-                                  ? state.documents[i].nameAr
-                                  : state.documents[i].nameEn,
-                              documentId: state.documents[i].id,
-                              l10n: l10n,
-                              required: state.documents[i].required,
-                            ),
-                            if (i != state.documents.length - 1)
-                              const SizedBox(height: 20),
-                          ],
-                        ],
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ),
-                if (_documentsError != null) ...[
-                  const SizedBox(height: 8),
-                  _errorText(_documentsError!),
-                ],
-                const SizedBox(height: 24),
-                BlocBuilder<DriverBloc, DriverState>(
-                  builder: (context, state) {
-                    return SizedBox(
-                      width: double.infinity,
-                      child: AppButton(
-                        loading: state is DriverCreating,
-                        onPressed: () => _submit(l10n),
-                        label: l10n.addDriver,
+              ),
+              const SizedBox(height: 14),
+              BlocBuilder<DriverBloc, DriverState>(
+                buildWhen: (previous, current) => current is DriverLoaded,
+                builder: (context, state) {
+                  if (state is! DriverLoaded) {
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: CupertinoActivityIndicator(),
                       ),
                     );
-                  },
-                ),
-                const SizedBox(height: 15),
+                  }
+                  if (state.loadingDocuments && state.documentTypes.isEmpty) {
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: CupertinoActivityIndicator(),
+                      ),
+                    );
+                  }
+                  if (state.documentsError != null &&
+                      state.documentTypes.isEmpty) {
+                    return Text(
+                      state.documentsError!,
+                      style: const TextStyle(color: AppColors.red),
+                    );
+                  }
+
+                  _documentDefinitions = state.documentTypes;
+                  final isRtl =
+                      Directionality.of(context) == TextDirection.rtl;
+
+                  return Column(
+                    children: [
+                      for (
+                        int i = 0;
+                        i < state.documentTypes.length;
+                        i++
+                      ) ...[
+                        _documentSection(
+                          title: state.documentTypes[i].localizedName(
+                            isRtl: isRtl,
+                          ),
+                          documentId: state.documentTypes[i].id,
+                          l10n: l10n,
+                          required: state.documentTypes[i].required,
+                        ),
+                        if (i != state.documentTypes.length - 1)
+                          const SizedBox(height: 20),
+                      ],
+                    ],
+                  );
+                },
+              ),
+              if (_documentsError != null) ...[
+                const SizedBox(height: 8),
+                _errorText(_documentsError!),
               ],
-            ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: AppButton(
+                  onPressed: () => _submit(l10n),
+                  label: l10n.addDriver,
+                ),
+              ),
+              const SizedBox(height: 15),
+            ],
           ),
         ),
       ),
@@ -511,23 +519,26 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
     );
   }
 
-  Widget _nameField({required String placeholder}) {
+  Widget _nameField({
+    required TextEditingController controller,
+    required String placeholder,
+    required bool hasError,
+    required TextDirection textDirection,
+    required VoidCallback onChanged,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: _nameError != null
-              ? CupertinoColors.systemRed
-              : AppColors.lightGray,
+          color: hasError ? CupertinoColors.systemRed : AppColors.lightGray,
         ),
       ),
       child: CupertinoTextField(
-        controller: _nameController,
+        controller: controller,
         placeholder: placeholder,
-        onChanged: (_) {
-          if (_nameError != null) setState(() => _nameError = null);
-        },
+        textDirection: textDirection,
+        onChanged: (_) => onChanged(),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: null,
         style: const TextStyle(
@@ -749,7 +760,7 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
     );
   }
 
-  Widget _uploadedFile(DriverDocumentInput document) {
+  Widget _uploadedFile(DriverDocument document) {
     final file = File(document.filePath);
     final fileName = file.path.split(Platform.pathSeparator).last;
     final sizeLabel = _fileSizeLabel(file);

@@ -1113,6 +1113,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get preview => 'معاينة';
 
   @override
+  String newTripRequestsCount(String count) {
+    return 'طلبات نقلات جديدة ($count)';
+  }
+
+  @override
+  String get allYourTripRequests => 'جميع طلبات النقلات لديك';
+
+  @override
+  String get notStarted => 'لم تبدأ';
+
+  @override
+  String get finishedTransfers => 'نقلات انتهت';
+
+  @override
+  String get cancellations => 'إلغاء';
+
+  @override
   String get requestedTransfers => 'نقلات مطلوبة';
 
   @override

@@ -238,5 +238,10 @@ class AuthRegisterRequested extends AuthEvent {
 }
 
 class AuthGetDocumentsRequested extends AuthEvent {
-  const AuthGetDocumentsRequested();
+  const AuthGetDocumentsRequested({this.entityId});
+
+  final int? entityId;
+
+  @override
+  List<Object?> get props => [entityId];
 }

@@ -3,20 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/router/route_constants.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_nav_bar.dart';
 import '../../../../core/widgets/main_scaffold.dart';
+import '../../../../l10n/gen/app_localizations.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
-import '../../../../l10n/gen/app_localizations.dart';
-import '../widgets/trip_request_card.dart';
+import '../../../home/presentation/widgets/trip_request_card.dart';
+import '../../../home/presentation/widgets/trip_review_card.dart';
+import '../../../trips/domain/entities/booking_request/booking_request.dart';
+import '../../../trips/presentation/bloc/booking_request_bloc.dart';
+import '../../../trips/presentation/bloc/booking_request_event.dart';
+import '../../../trips/presentation/bloc/booking_request_state.dart';
+import '../../../trips/presentation/bloc/trip_bloc.dart';
+import '../../../trips/presentation/bloc/trip_event.dart';
+import '../../../trips/presentation/bloc/trip_state.dart';
+import 'transfers_list_type.dart';
 
 class RequestsScreen extends StatefulWidget {
-  const RequestsScreen({super.key});
+  const RequestsScreen({super.key, required this.listType});
+
+  final TransfersListType listType;
 
   @override
   State<RequestsScreen> createState() => _RequestsScreenState();
@@ -24,116 +33,30 @@ class RequestsScreen extends StatefulWidget {
 
 class _RequestsScreenState extends State<RequestsScreen> {
   final _searchController = TextEditingController();
-  final _filterController = TextEditingController();
-  int _selectedTabIndex = 0;
-  DateTime? dateFilter;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.listType.isBooked) {
+      context.read<BookingRequestBloc>().add(
+        GetBookingRequests(pageSize: 50),
+      );
+    } else {
+      context.read<TripBloc>().add(GetTrips(pageSize: 50));
+    }
+  }
 
   @override
   void dispose() {
     _searchController.dispose();
-    _filterController.dispose();
     super.dispose();
-  }
-
-  void _showFilter(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    // Local copy of the date, initially from parent
-    DateTime? localDate = dateFilter;
-
-    showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            // This setModalState rebuilds ONLY the modal content.
-            return Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(15),
-              decoration: const BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-              ),
-              child: SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _Title(
-                          title: l10n.filter,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        const SizedBox(height: 12),
-                        _Title(title: l10n.searchForPlace, fontSize: 16),
-                        const SizedBox(height: 10),
-                        _SubTitle(title: l10n.searchForPlaceDesc, fontSize: 14),
-                        const SizedBox(height: 10),
-                        _filterField(l10n: l10n),
-                        const SizedBox(height: 12),
-                        _Title(title: l10n.tripDate, fontSize: 16),
-                        const SizedBox(height: 10),
-                        // ✅ Use localDate, not parent's dateFilter
-                        _buildDateField(context, localDate, (newDate) {
-                          // Update local date and rebuild the modal
-                          setModalState(() {
-                            localDate = newDate;
-                          });
-                          // Optionally also update the date picker if it's open,
-                          // but we don't need to.
-                        }),
-                        const SizedBox(height: 12),
-                        SizedBox(
-                          width: double.infinity,
-                          child: AppButton(
-                            onPressed: () {
-                              // ✅ Apply the filter: update parent state and close
-                              setState(() {
-                                dateFilter = localDate;
-                              });
-                              Navigator.pop(context);
-                            },
-                            label: l10n.applyFilter,
-                          ),
-                        ),
-                        Center(
-                          child: CupertinoButton(
-                            onPressed: () {
-                              // Clear filter: set localDate to null and update parent
-                              setModalState(() {
-                                localDate = null;
-                              });
-                              setState(() {
-                                dateFilter = null;
-                              });
-                              Navigator.pop(context);
-                            },
-                            child: _SubTitle(
-                              title: l10n.clearFilter,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isBooked = widget.listType.isBooked;
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -167,38 +90,27 @@ class _RequestsScreenState extends State<RequestsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _headerCard(l10n: l10n),
+                      if (isBooked)
+                        const _BookedHeaderCard()
+                      else
+                        const _RequestedHeaderCard(),
                       const SizedBox(height: 12),
-                      _requestsSearchField(l10n: l10n),
+                      _SearchRow(
+                        controller: _searchController,
+                        placeholder: l10n.searchForTrip,
+                      ),
                       const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _TabButton(
-                              label: l10n.newRequests,
-                              isSelected: _selectedTabIndex == 0,
-                              onTap: () {
-                                setState(() => _selectedTabIndex = 0);
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _TabButton(
-                              label: l10n.alreadyBooked,
-                              isSelected: _selectedTabIndex == 1,
-                              onTap: () {
-                                setState(() => _selectedTabIndex = 1);
-                              },
-                            ),
-                          ),
-                        ],
+                      _Title(
+                        title: isBooked
+                            ? l10n.tripsReview
+                            : l10n.requestedTransfers,
+                        fontSize: 16,
                       ),
                       const SizedBox(height: 10),
-                      _Title(title: l10n.tripsRequest, fontSize: 16),
-                      const SizedBox(height: 10),
-                      TripRequestCard(selectedTabIndex: _selectedTabIndex),
-                      const SizedBox(height: 10),
+                      if (isBooked)
+                        const _BookedTripsList()
+                      else
+                        const _RequestedTripsList(),
                     ],
                   ),
                 ),
@@ -209,57 +121,189 @@ class _RequestsScreenState extends State<RequestsScreen> {
       ),
     );
   }
+}
 
-  Widget _requestsSearchField({required AppLocalizations l10n}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(50),
-              border: Border.all(color: AppColors.lightGray),
-            ),
-            child: CupertinoTextField(
-              controller: _searchController,
-              placeholder: l10n.searchForTrip,
-              textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.text,
-              style: const TextStyle(
-                color: AppColors.darkGray,
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
+class _RequestedHeaderCard extends StatelessWidget {
+  const _RequestedHeaderCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return BlocBuilder<TripBloc, TripState>(
+      builder: (context, state) {
+        final count = state is TripLoaded ? state.totalCount : 0;
+        return _HeaderShell(
+          child: CupertinoListTile(
+            padding: EdgeInsets.zero,
+            leading: SvgPicture.asset(
+              'assets/images/requests.svg',
+              width: 28,
+              height: 28,
+              colorFilter: const ColorFilter.mode(
+                AppColors.mainBlue,
+                BlendMode.srcIn,
               ),
-              prefix: SvgPicture.asset('assets/images/search.svg'),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              decoration: null,
             ),
+            title: _Title(
+              title: l10n.newTripRequestsCount(count.toString()),
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+            subtitle: _SubTitle(title: l10n.allYourTripRequests, fontSize: 12),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _BookedHeaderCard extends StatelessWidget {
+  const _BookedHeaderCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return BlocBuilder<BookingRequestBloc, BookingRequestState>(
+      builder: (context, state) {
+        final requests = state is BookingRequestLoaded
+            ? state.requests
+            : const <BookingRequest>[];
+        final stats = _BookedStats.from(requests);
+
+        return _HeaderShell(
+          child: Row(
+            children: [
+              Expanded(
+                child: _StatCell(
+                  count: stats.notStarted,
+                  label: l10n.notStarted,
+                  color: AppColors.darkGray,
+                ),
+              ),
+              Expanded(
+                child: _StatCell(
+                  count: stats.inProgress,
+                  label: l10n.inProgress,
+                  color: AppColors.orange,
+                ),
+              ),
+              Expanded(
+                child: _StatCell(
+                  count: stats.finished,
+                  label: l10n.finishedTransfers,
+                  color: AppColors.mainBlue,
+                ),
+              ),
+              Expanded(
+                child: _StatCell(
+                  count: stats.cancelled,
+                  label: l10n.cancellations,
+                  color: AppColors.red,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _BookedStats {
+  const _BookedStats({
+    required this.notStarted,
+    required this.inProgress,
+    required this.finished,
+    required this.cancelled,
+  });
+
+  final int notStarted;
+  final int inProgress;
+  final int finished;
+  final int cancelled;
+
+  factory _BookedStats.from(List<BookingRequest> requests) {
+    var notStarted = 0;
+    var inProgress = 0;
+    var finished = 0;
+    var cancelled = 0;
+
+    for (final request in requests) {
+      final status = request.status ?? request.trip?.status;
+      switch (status) {
+        case 5:
+          inProgress++;
+        case 6:
+        case 7:
+          finished++;
+        case 8:
+          cancelled++;
+        default:
+          notStarted++;
+      }
+    }
+
+    return _BookedStats(
+      notStarted: notStarted,
+      inProgress: inProgress,
+      finished: finished,
+      cancelled: cancelled,
+    );
+  }
+}
+
+class _StatCell extends StatelessWidget {
+  const _StatCell({
+    required this.count,
+    required this.label,
+    required this.color,
+  });
+
+  final int count;
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          '$count',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: color,
           ),
         ),
-        const SizedBox(width: 5),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.mediumBlueGray, width: 0.5),
-            borderRadius: BorderRadius.circular(50),
-          ),
-          child: CupertinoButton(
-            padding: EdgeInsets.zero,
-            borderRadius: BorderRadius.circular(50),
-            color: AppColors.white,
-            onPressed: () => _showFilter(context),
-            child: SvgPicture.asset('assets/images/filter.svg'),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            color: color,
           ),
         ),
       ],
     );
   }
+}
 
-  Widget _headerCard({required AppLocalizations l10n}) {
+class _HeaderShell extends StatelessWidget {
+  const _HeaderShell({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
@@ -272,147 +316,144 @@ class _RequestsScreenState extends State<RequestsScreen> {
         ],
         color: AppColors.white,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: child,
+    );
+  }
+}
+
+class _SearchRow extends StatelessWidget {
+  const _SearchRow({required this.controller, required this.placeholder});
+
+  final TextEditingController controller;
+  final String placeholder;
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: Row(
         children: [
-          CupertinoListTile(
-            leading: SvgPicture.asset(
-              'assets/images/requests.svg',
-              colorFilter: const ColorFilter.mode(
-                AppColors.mainBlue,
-                BlendMode.srcIn,
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(50),
+                border: Border.all(color: AppColors.lightGray),
+              ),
+              child: CupertinoTextField(
+                controller: controller,
+                placeholder: placeholder,
+                readOnly: true,
+                style: const TextStyle(
+                  color: AppColors.darkGray,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+                prefix: SvgPicture.asset('assets/images/search.svg'),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+                decoration: null,
               ),
             ),
-            title: _Title(title: l10n.tripsRequest, fontSize: 14),
-            subtitle: _SubTitle(title: l10n.tripsRequestDesc, fontSize: 12),
           ),
-          const Divider(color: AppColors.mainGray),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const _Title(title: '12', fontSize: 16),
-                  _SubTitle(title: l10n.tripInProgress, fontSize: 12),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const _Title(title: '67', fontSize: 16),
-                  _Title(title: l10n.tripRequest, fontSize: 12),
-                ],
-              ),
-            ],
+          const SizedBox(width: 5),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.mediumBlueGray, width: 0.5),
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: CupertinoButton(
+              padding: EdgeInsets.zero,
+              borderRadius: BorderRadius.circular(50),
+              color: AppColors.white,
+              onPressed: () {},
+              child: SvgPicture.asset('assets/images/filter.svg'),
+            ),
           ),
         ],
       ),
     );
   }
+}
 
-  Widget _filterField({required AppLocalizations l10n}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.lightGray),
-      ),
-      child: CupertinoTextField(
-        controller: _filterController,
-        placeholder: l10n.movingFrom,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: null,
-        prefix: SvgPicture.asset('assets/images/location.svg'),
-        style: const TextStyle(
-          fontSize: 14,
-          color: AppColors.darkGray,
-          fontWeight: FontWeight.w400,
-        ),
-      ),
+class _RequestedTripsList extends StatelessWidget {
+  const _RequestedTripsList();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return BlocBuilder<TripBloc, TripState>(
+      builder: (context, state) {
+        if (state is TripError) {
+          return Center(child: Text(state.message));
+        }
+
+        if (state is TripLoaded) {
+          if (state.trips.isEmpty) {
+            return Center(child: Text(l10n.noTripsAvailable));
+          }
+
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: state.trips.length,
+            separatorBuilder: (_, _) => const SizedBox(height: 10),
+            itemBuilder: (context, index) {
+              return TripRequestCard(trip: state.trips[index]);
+            },
+          );
+        }
+
+        return const Padding(
+          padding: EdgeInsets.symmetric(vertical: 24),
+          child: Center(
+            child: CircularProgressIndicator(color: AppColors.mainBlue),
+          ),
+        );
+      },
     );
   }
+}
 
-  Widget _buildDateField(
-    BuildContext context,
-    DateTime? date,
-    Function(DateTime) onDateChanged,
-  ) {
-    return GestureDetector(
-      onTap: () => _showDatePicker(context, date, onDateChanged),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.lightGray),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            const Icon(
-              CupertinoIcons.calendar,
-              size: 20,
-              color: AppColors.darkGray,
-            ),
-            const SizedBox(width: 10),
-            _SubTitle(
-              title: date == null
-                  ? AppLocalizations.of(context)!.tripDate
-                  : DateFormat('yyyy-MM-dd').format(date),
-              fontSize: 14,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+class _BookedTripsList extends StatelessWidget {
+  const _BookedTripsList();
 
-  void _showDatePicker(
-    BuildContext context,
-    DateTime? date,
-    Function(DateTime) onDateChanged,
-  ) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) => Container(
-        height: 250,
-        color: CupertinoColors.systemBackground.resolveFrom(context),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              height: 44,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      if (date == null) {
-                        onDateChanged(DateTime.now());
-                      }
-                      Navigator.pop(context);
-                    },
-                    child: Text(AppLocalizations.of(context)!.ok),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.date,
-                initialDateTime: DateTime.now(),
-                onDateTimeChanged: (dateTime) {
-                  setState(() {
-                    date = dateTime;
-                    onDateChanged(dateTime);
-                  });
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return BlocBuilder<BookingRequestBloc, BookingRequestState>(
+      builder: (context, state) {
+        if (state is BookingRequestError) {
+          return Center(child: Text(state.message));
+        }
+
+        if (state is BookingRequestLoaded) {
+          if (state.requests.isEmpty) {
+            return Center(child: Text(l10n.noTripsAvailable));
+          }
+
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: state.requests.length,
+            separatorBuilder: (_, _) => const SizedBox(height: 10),
+            itemBuilder: (context, index) {
+              return TripReviewCard(booking: state.requests[index]);
+            },
+          );
+        }
+
+        return const Padding(
+          padding: EdgeInsets.symmetric(vertical: 24),
+          child: Center(
+            child: CircularProgressIndicator(color: AppColors.mainBlue),
+          ),
+        );
+      },
     );
   }
 }
@@ -455,47 +496,6 @@ class _SubTitle extends StatelessWidget {
         fontSize: fontSize,
         color: CupertinoColors.systemGrey,
         fontWeight: FontWeight.w400,
-      ),
-    );
-  }
-}
-
-class _TabButton extends StatelessWidget {
-  const _TabButton({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isSelected ? AppColors.mainBlue : AppColors.mainGray,
-          width: isSelected ? 1.5 : 1,
-        ),
-      ),
-      child: CupertinoButton(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        color: isSelected
-            ? AppColors.mainBlue.withValues(alpha: 0.05)
-            : AppColors.mainGray,
-        borderRadius: BorderRadius.circular(12),
-        onPressed: onTap,
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            color: isSelected ? AppColors.mainBlue : AppColors.darkGray,
-          ),
-        ),
       ),
     );
   }

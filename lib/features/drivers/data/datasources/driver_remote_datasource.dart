@@ -4,10 +4,17 @@ import 'package:path/path.dart' as p;
 import '../../../../../core/network/api_endpoints.dart';
 import '../../../../../core/network/api_response_parser.dart';
 import '../models/driver_document_input.dart';
+import '../models/driver_document_type_dto.dart';
+import '../models/driver_dto.dart';
 import '../models/driver_model.dart';
 
 abstract interface class DriverRemoteDataSource {
-  Future<List<DriverModel>> getDrivers({int page = 1, int pageSize = 10});
+  Future<List<DriverDto>> getDrivers({int page = 1, int pageSize = 10});
+
+  Future<List<DriverDocumentTypeDto>> getDocumentTypes({
+    int page = 1,
+    int pageSize = 15,
+  });
 
   Future<DriverModel?> createDriver({
     required String fullNameEn,
@@ -24,7 +31,7 @@ class DriverRemoteDataSourceImpl implements DriverRemoteDataSource {
   final Dio _dio;
 
   @override
-  Future<List<DriverModel>> getDrivers({
+  Future<List<DriverDto>> getDrivers({
     int page = 1,
     int pageSize = 10,
   }) async {
@@ -34,15 +41,41 @@ class DriverRemoteDataSourceImpl implements DriverRemoteDataSource {
     );
 
     final envelope = requireEnvelope(response);
-    final data = envelope['data'];
+    final items = _mapList(envelope['data'] ?? envelope['Data']);
 
-    if (data is! List) {
+    if (items == null) {
       throw Exception('Invalid drivers response');
     }
 
-    return data
-        .whereType<Map<String, dynamic>>()
-        .map(DriverModel.fromJson)
+    return items.map(DriverDto.fromJson).toList();
+  }
+
+  @override
+  Future<List<DriverDocumentTypeDto>> getDocumentTypes({
+    int page = 1,
+    int pageSize = 15,
+  }) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      ApiEndpoints.documents,
+      queryParameters: {
+        'Page': page,
+        'PageSize': pageSize,
+        'Search': '',
+        'Status': 1,
+        'entityId': ApiEndpoints.driverDocumentsEntityId,
+      },
+    );
+
+    final envelope = requireEnvelope(response);
+    final items = _mapList(envelope['data'] ?? envelope['Data']);
+
+    if (items == null) {
+      throw Exception('Invalid driver documents response');
+    }
+
+    return items
+        .map(DriverDocumentTypeDto.fromJson)
+        .where((item) => item.id != 0)
         .toList();
   }
 
@@ -98,4 +131,23 @@ class DriverRemoteDataSourceImpl implements DriverRemoteDataSource {
     }
     return null;
   }
+}
+
+List<Map<String, dynamic>>? _mapList(dynamic data) {
+  if (data is List) {
+    return data
+        .whereType<Map>()
+        .map((item) => Map<String, dynamic>.from(item))
+        .toList();
+  }
+  if (data is Map) {
+    final nested = data['items'] ?? data['Items'] ?? data['data'] ?? data['Data'];
+    if (nested is List) {
+      return nested
+          .whereType<Map>()
+          .map((item) => Map<String, dynamic>.from(item))
+          .toList();
+    }
+  }
+  return null;
 }

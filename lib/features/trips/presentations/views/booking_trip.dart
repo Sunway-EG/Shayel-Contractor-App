@@ -13,16 +13,17 @@ import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_dialog_presenter.dart';
 import '../../../../core/widgets/main_scaffold.dart';
 import '../../../../l10n/gen/app_localizations.dart';
-import '../../../drivers/data/models/driver_model.dart';
+import '../../../drivers/domain/entities/driver/driver.dart';
 import '../../../drivers/presentation/bloc/driver_bloc.dart';
 import '../../../drivers/presentation/bloc/driver_event.dart';
 import '../../../drivers/presentation/bloc/driver_state.dart';
+import '../../../trips/domain/entities/book_trip/book_trip_request.dart';
 import '../../../trips/presentation/bloc/booking_request_bloc.dart';
 import '../../../trips/presentation/bloc/booking_request_event.dart';
 import '../../../trips/presentation/bloc/trip_bloc.dart';
 import '../../../trips/presentation/bloc/trip_event.dart';
 import '../../../trips/presentation/bloc/trip_state.dart';
-import '../../domain/entities/trip/trip.dart';
+import '../../domain/entities/trip/trip.dart' hide Driver;
 
 class BookingTripScreen extends StatefulWidget {
   const BookingTripScreen({super.key, this.trip});
@@ -34,7 +35,7 @@ class BookingTripScreen extends StatefulWidget {
 }
 
 class _BookingTripScreenState extends State<BookingTripScreen> {
-  DriverModel? _selectedDriver;
+  Driver? _selectedDriver;
   bool _showSelectDriverHint = false;
   Timer? _selectDriverHintTimer;
   late Trip? _trip;
@@ -72,7 +73,29 @@ class _BookingTripScreenState extends State<BookingTripScreen> {
     }
 
     context.read<TripBloc>().add(
-      BookTrip(tripId: trip.id!, driverId: driver.id),
+      BookTrip(
+        driver.isNew
+            ? BookTripRequest(
+                tripId: trip.id!,
+                note: 'New driver application',
+                driver: BookTripDriver(
+                  fullNameEn: driver.fullNameEn ?? '',
+                  fullNameAr: driver.fullNameAr ?? '',
+                  phone: driver.phone ?? '',
+                  nationalId: driver.nationalId ?? '',
+                  documents: driver.documents
+                      .map(
+                        (document) => BookTripDriverDocument(
+                          documentId: document.documentId,
+                          filePath: document.filePath,
+                          expiryDate: document.expiryDate,
+                        ),
+                      )
+                      .toList(),
+                ),
+              )
+            : BookTripRequest(tripId: trip.id!, driverId: driver.id),
+      ),
     );
   }
 
@@ -291,8 +314,8 @@ class _TripCard extends StatelessWidget {
   });
 
   final Trip? trip;
-  final DriverModel? selectedDriver;
-  final ValueChanged<DriverModel> onDriverSelected;
+  final Driver? selectedDriver;
+  final ValueChanged<Driver> onDriverSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -634,8 +657,8 @@ class _PriceSection extends StatelessWidget {
 class _DriverSection extends StatefulWidget {
   const _DriverSection({required this.onDriverSelected, this.selectedDriver});
 
-  final DriverModel? selectedDriver;
-  final ValueChanged<DriverModel> onDriverSelected;
+  final Driver? selectedDriver;
+  final ValueChanged<Driver> onDriverSelected;
 
   @override
   State<_DriverSection> createState() => _DriverSectionState();
@@ -649,7 +672,7 @@ class _DriverSectionState extends State<_DriverSection> {
   }
 
   Future<void> _openDriversSheet() async {
-    final selected = await showCupertinoModalPopup<DriverModel>(
+    final selected = await showCupertinoModalPopup<Driver>(
       context: context,
       builder: (sheetContext) =>
           _DriversSheet(initiallySelected: widget.selectedDriver),
@@ -661,7 +684,7 @@ class _DriverSectionState extends State<_DriverSection> {
   }
 
   Future<void> _openAddDriver() async {
-    final created = await context.push<DriverModel?>(AppRoutePaths.addDriver);
+    final created = await context.push<Driver?>(AppRoutePaths.addDriver);
     if (created != null && mounted) {
       widget.onDriverSelected(created);
     }
@@ -793,7 +816,7 @@ class _DriverSectionState extends State<_DriverSection> {
 class _DriversSheet extends StatefulWidget {
   const _DriversSheet({this.initiallySelected});
 
-  final DriverModel? initiallySelected;
+  final Driver? initiallySelected;
 
   @override
   State<_DriversSheet> createState() => _DriversSheetState();
@@ -801,13 +824,14 @@ class _DriversSheet extends StatefulWidget {
 
 class _DriversSheetState extends State<_DriversSheet> {
   late final TextEditingController _searchController;
-  DriverModel? _tempSelected;
+  Driver? _tempSelected;
 
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
     _tempSelected = widget.initiallySelected;
+    context.read<DriverBloc>().add(GetDrivers());
   }
 
   @override
@@ -865,73 +889,79 @@ class _DriversSheetState extends State<_DriversSheet> {
           Expanded(
             child: BlocBuilder<DriverBloc, DriverState>(
               builder: (context, state) {
-                if (state is DriverLoading) {
-                  return const Center(child: CupertinoActivityIndicator());
-                }
                 if (state is DriverError) {
                   return Center(child: Text(state.message));
                 }
-                if (state is DriverLoaded) {
-                  final query = _searchController.text.trim();
-                  final drivers = state.drivers.where((d) {
-                    if (query.isEmpty) return true;
-                    final name = _driverDisplayName(d);
-                    return name.contains(query) || d.phone.contains(query);
-                  }).toList();
 
-                  if (drivers.isEmpty) {
-                    return Center(child: Text(l10n.noDrivers));
-                  }
+                final loaded = state is DriverLoaded ? state : null;
+                final drivers = loaded?.drivers ?? const <Driver>[];
+                final loading =
+                    state is DriverLoading ||
+                    (loaded?.loadingDrivers ?? false);
 
-                  return ListView.separated(
-                    itemCount: drivers.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 8),
-                    itemBuilder: (context, index) {
-                      final driver = drivers[index];
-                      final isSelected = _tempSelected?.id == driver.id;
+                if (loading && drivers.isEmpty) {
+                  return const Center(child: CupertinoActivityIndicator());
+                }
 
-                      return GestureDetector(
-                        onTap: () => setState(() => _tempSelected = driver),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
+                final query = _searchController.text.trim();
+                final filtered = drivers.where((d) {
+                  if (query.isEmpty) return true;
+                  final name = _driverDisplayName(d);
+                  return name.contains(query) ||
+                      (d.phone?.contains(query) ?? false);
+                }).toList();
+
+                if (filtered.isEmpty) {
+                  return Center(child: Text(l10n.noDrivers));
+                }
+
+                return ListView.separated(
+                  itemCount: filtered.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    final driver = filtered[index];
+                    final isSelected = _tempSelected?.id == driver.id;
+
+                    return GestureDetector(
+                      onTap: () => setState(() => _tempSelected = driver),
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? const Color(0xFFEFF7FF)
+                              : CupertinoColors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
                             color: isSelected
-                                ? const Color(0xFFEFF7FF)
-                                : CupertinoColors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: isSelected
-                                  ? const Color(0xFF0874C9)
-                                  : const Color(0xFFE5E9ED),
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _driverDisplayName(driver),
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF222222),
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                driver.phone,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xFF888888),
-                                ),
-                              ),
-                            ],
+                                ? const Color(0xFF0874C9)
+                                : const Color(0xFFE5E9ED),
                           ),
                         ),
-                      );
-                    },
-                  );
-                }
-                return const SizedBox.shrink();
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _driverDisplayName(driver),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF222222),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              driver.phone ?? '',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Color(0xFF888888),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
               },
             ),
           ),
@@ -959,8 +989,12 @@ class _DriversSheetState extends State<_DriversSheet> {
   }
 }
 
-String _driverDisplayName(DriverModel driver) {
-  if (driver.fullNameAr.isNotEmpty) return driver.fullNameAr;
-  if (driver.fullNameEn.isNotEmpty) return driver.fullNameEn;
-  return driver.phone;
+String _driverDisplayName(Driver driver) {
+  if (driver.fullNameAr != null && driver.fullNameAr!.isNotEmpty) {
+    return driver.fullNameAr!;
+  }
+  if (driver.fullNameEn != null && driver.fullNameEn!.isNotEmpty) {
+    return driver.fullNameEn!;
+  }
+  return driver.phone ?? '';
 }

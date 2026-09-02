@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:chucker_flutter/chucker_flutter.dart';
 import '../../features/profile/presentation/views/profile_screen.dart';
 import '../../features/requests/presentation/views/requests_screen.dart';
+import '../../features/requests/presentation/views/transfers_list_type.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
 import '../../features/trips/domain/entities/trip/trip.dart';
 import 'route_constants.dart';
@@ -348,7 +349,12 @@ GoRouter createAppRouter() {
       ),
       GoRoute(
         path: AppRoutePaths.requests,
-        builder: (context, state) => const RequestsScreen(),
+        builder: (context, state) {
+          final listType = TransfersListType.fromQuery(
+            state.uri.queryParameters[AppRoutePaths.requestsTypeParam],
+          );
+          return RequestsScreen(key: ValueKey(listType), listType: listType);
+        },
       ),
     ],
   );

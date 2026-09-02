@@ -17,6 +17,7 @@ abstract final class ApiEndpoints {
   static const String validatePassword = '/auth/validate-password';
   static const register = '/auth/register';
   static const documents = '/documents';
+  static const driverDocumentsEntityId = 3;
   static const String trips = '/trips';
   static String tripById(int tripId) => '/trips/$tripId';
   static String bookTrip(int tripId) => '/trips/$tripId/apply';

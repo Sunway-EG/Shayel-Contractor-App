@@ -16,7 +16,7 @@ import '../../models/document_definition_dto.dart';
 abstract interface class AuthRemoteDataSource {
   /// Returns [LoginResponseDto] parsed from data envelope.
   /// Sends [lang] header: 'ar' when RTL (Arabic), else 'en'.
-  Future<List<DocumentDefinitionDto>> getDocuments();
+  Future<List<DocumentDefinitionDto>> getDocuments({int? entityId});
   Future<LoginResponseDto> login(LoginRequestDto request, {String? lang});
   Future<SendLoginOtpResponseDto> sendLoginOtp(LoginRequestDto request);
   Future<LoginResponseDto> loginWithOtp(LoginWithOtpRequestDto request);
@@ -145,15 +145,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<List<DocumentDefinitionDto>> getDocuments() async {
+  Future<List<DocumentDefinitionDto>> getDocuments({int? entityId}) async {
     final response = await _dio.get<Map<String, dynamic>>(
       ApiEndpoints.documents,
       queryParameters: {
         'Page': 1,
-        'PageSize': 100,
+        'PageSize': entityId == null ? 100 : 15,
         'Search': '',
-        'Required': '',
         'Status': 1,
+        if (entityId == null) 'Required': '',
+        'entityId': ?entityId,
       },
     );
 
@@ -165,10 +166,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw Exception('Invalid documents response');
     }
 
-    return data
-        .whereType<Map<String, dynamic>>()
-        .map(DocumentDefinitionDto.fromJson)
-        .toList();
+    return data.whereType<Map>().map((item) {
+      return DocumentDefinitionDto.fromJson(Map<String, dynamic>.from(item));
+    }).toList();
   }
 
   @override

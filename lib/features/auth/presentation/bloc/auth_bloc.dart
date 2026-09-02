@@ -592,14 +592,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(const AuthDocumentsLoading());
 
-    final result = await _getDocumentsUseCase(null);
+    final result = await _getDocumentsUseCase(event.entityId);
 
     result.fold(
       (failure) {
         emit(AuthDocumentsError(_messageForFailure(failure)));
       },
       (documents) {
-        documents.sort((a, b) => a.id.compareTo(b.id));
+        if (event.entityId == null) {
+          documents.sort((a, b) => a.id.compareTo(b.id));
+        }
         emit(AuthDocumentsLoaded(documents));
       },
     );

@@ -9,6 +9,13 @@ class GetDrivers extends DriverEvent {
   final int pageSize;
 }
 
+class GetDriverDocumentTypes extends DriverEvent {
+  GetDriverDocumentTypes({this.page = 1, this.pageSize = 15});
+
+  final int page;
+  final int pageSize;
+}
+
 class CreateDriver extends DriverEvent {
   CreateDriver({
     required this.fullNameEn,

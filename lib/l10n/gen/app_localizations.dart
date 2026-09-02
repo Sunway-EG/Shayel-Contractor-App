@@ -2174,6 +2174,36 @@ abstract class AppLocalizations {
   /// **'Preview'**
   String get preview;
 
+  /// No description provided for @newTripRequestsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'New trip requests ({count})'**
+  String newTripRequestsCount(String count);
+
+  /// No description provided for @allYourTripRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'All your trip requests'**
+  String get allYourTripRequests;
+
+  /// No description provided for @notStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Not started'**
+  String get notStarted;
+
+  /// No description provided for @finishedTransfers.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished trips'**
+  String get finishedTransfers;
+
+  /// No description provided for @cancellations.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get cancellations;
+
   /// No description provided for @requestedTransfers.
   ///
   /// In en, this message translates to:

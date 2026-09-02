@@ -97,6 +97,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               return FavoriteListSection(
                                 requestedCount: requestedCount,
                                 bookedCount: bookedCount,
+                                onRequestedPreview: () => context.go(
+                                  AppRoutePaths.requestsPath(booked: false),
+                                ),
+                                onBookedPreview: () => context.go(
+                                  AppRoutePaths.requestsPath(booked: true),
+                                ),
                               );
                             },
                           );
@@ -108,7 +114,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           _Title(title: l10n.requestedTransfers, fontSize: 16),
                           CupertinoButton(
-                            onPressed: () => context.go(AppRoutePaths.requests),
+                            onPressed: () => context.go(
+                              AppRoutePaths.requestsPath(booked: false),
+                            ),
                             padding: EdgeInsets.zero,
                             child: _Title(
                               title: l10n.showAll,
@@ -154,7 +162,37 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 10),
                       _Title(title: l10n.tripsReview, fontSize: 16),
                       const SizedBox(height: 10),
-                      const TripReviewCard(),
+                      BlocBuilder<BookingRequestBloc, BookingRequestState>(
+                        builder: (context, state) {
+                          if (state is BookingRequestLoaded) {
+                            if (state.requests.isEmpty) {
+                              return Center(child: Text(l10n.tripsReview));
+                            }
+
+                            return ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: state.requests.length,
+                              separatorBuilder: (_, _) =>
+                                  const SizedBox(height: 10),
+                              itemBuilder: (context, index) {
+                                return TripReviewCard(
+                                  booking: state.requests[index],
+                                );
+                              },
+                            );
+                          }
+
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 24),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.mainBlue,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),

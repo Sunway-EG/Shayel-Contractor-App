@@ -1,3 +1,5 @@
+import '../../domain/entities/book_trip/book_trip_request.dart';
+
 sealed class TripEvent {}
 
 class GetTrips extends TripEvent {
@@ -9,8 +11,7 @@ class GetTrips extends TripEvent {
 }
 
 class BookTrip extends TripEvent {
-  BookTrip({required this.tripId, required this.driverId});
+  BookTrip(this.request);
 
-  final int tripId;
-  final int driverId;
+  final BookTripRequest request;
 }

@@ -364,9 +364,11 @@ class AuthImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, List<DocumentDefinition>>> getDocuments() async {
+  Future<Either<AuthFailure, List<DocumentDefinition>>> getDocuments({
+    int? entityId,
+  }) async {
     return _run(() async {
-      final dtos = await _remote.getDocuments();
+      final dtos = await _remote.getDocuments(entityId: entityId);
 
       return dtos
           .map(

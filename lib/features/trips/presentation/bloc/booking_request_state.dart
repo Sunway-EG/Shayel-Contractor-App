@@ -1,4 +1,4 @@
-import '../../data/models/booking_request_model.dart';
+import '../../domain/entities/booking_request/booking_request.dart';
 
 sealed class BookingRequestState {}
 
@@ -9,7 +9,7 @@ class BookingRequestLoading extends BookingRequestState {}
 class BookingRequestLoaded extends BookingRequestState {
   BookingRequestLoaded(this.requests, {required this.totalCount});
 
-  final List<BookingRequestModel> requests;
+  final List<BookingRequest> requests;
   final int totalCount;
 }
 
