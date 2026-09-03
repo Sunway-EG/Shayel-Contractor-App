@@ -951,7 +951,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get requests => 'Requests';
 
   @override
-  String get market => 'Market';
+  String get market => 'My trips';
 
   @override
   String get account => 'Account';
@@ -1057,7 +1057,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tripCost => 'Trip cost';
 
   @override
+  String get tripValue => 'Value';
+
+  @override
   String get bookTrip => 'Book trip';
+
+  @override
+  String get requestTripBooking => 'Request trip booking';
 
   @override
   String get selectDriver => 'Select driver';
@@ -1173,6 +1179,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get completed => 'Completed';
+
+  @override
+  String get tripCompleted => 'Completed';
+
+  @override
+  String get tripWasCancelled => 'Cancelled';
+
+  @override
+  String get delivered => 'Delivered';
+
+  @override
+  String get loadingCargo => 'Loading';
 
   @override
   String get reviewed => 'Reviewed';

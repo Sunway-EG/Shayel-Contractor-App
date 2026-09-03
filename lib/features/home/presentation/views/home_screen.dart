@@ -10,6 +10,8 @@ import '../../../../core/widgets/main_scaffold.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../../l10n/gen/app_localizations.dart';
+import '../../../trips/domain/entities/booking_request/booking_request.dart';
+import '../../../trips/domain/exclude_booked_trips.dart';
 import '../../../trips/presentation/bloc/booking_request_bloc.dart';
 import '../../../trips/presentation/bloc/booking_request_event.dart';
 import '../../../trips/presentation/bloc/booking_request_state.dart';
@@ -33,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<TripBloc>().add(GetTrips());
+    context.read<TripBloc>().add(GetTrips(status:1));
     context.read<BookingRequestBloc>().add(GetBookingRequests());
   }
 
@@ -82,14 +84,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 16),
                       BlocBuilder<TripBloc, TripState>(
                         builder: (context, tripState) {
-                          final requestedCount = tripState is TripLoaded
-                              ? tripState.totalCount
-                              : 0;
                           return BlocBuilder<
                             BookingRequestBloc,
                             BookingRequestState
                           >(
                             builder: (context, bookingState) {
+                              final bookings =
+                                  bookingState is BookingRequestLoaded
+                                  ? bookingState.requests
+                                  : const <BookingRequest>[];
+                              final requestedCount = tripState is TripLoaded
+                                  ? requestedCountExcludingBooked(
+                                      trips: tripState.trips,
+                                      totalCount: tripState.totalCount,
+                                      bookings: bookings,
+                                    )
+                                  : 0;
                               final bookedCount =
                                   bookingState is BookingRequestLoaded
                                   ? bookingState.totalCount
@@ -131,19 +141,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       BlocBuilder<TripBloc, TripState>(
                         builder: (context, state) {
                           if (state is TripLoaded) {
-                            if (state.trips.isEmpty) {
-                              return Center(child: Text(l10n.tripsRequest));
-                            }
+                            return BlocBuilder<
+                              BookingRequestBloc,
+                              BookingRequestState
+                            >(
+                              builder: (context, bookingState) {
+                                final bookings =
+                                    bookingState is BookingRequestLoaded
+                                    ? bookingState.requests
+                                    : const <BookingRequest>[];
+                                final trips = excludeBookedTrips(
+                                  state.trips,
+                                  bookings,
+                                );
+                                if (trips.isEmpty) {
+                                  return Center(child: Text(l10n.tripsRequest));
+                                }
 
-                            return ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: state.trips.length,
-                              separatorBuilder: (_, _) =>
-                                  const SizedBox(height: 10),
-                              itemBuilder: (context, index) {
-                                return TripRequestCard(
-                                  trip: state.trips[index],
+                                return ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: trips.length,
+                                  separatorBuilder: (_, _) =>
+                                      const SizedBox(height: 10),
+                                  itemBuilder: (context, index) {
+                                    return TripRequestCard(
+                                      trip: trips[index],
+                                    );
+                                  },
                                 );
                               },
                             );

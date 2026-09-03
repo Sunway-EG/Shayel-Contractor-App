@@ -1,3 +1,4 @@
+import 'package:cross_file/cross_file.dart';
 import 'package:dio/dio.dart';
 import 'package:path/path.dart' as p;
 
@@ -10,54 +11,55 @@ class BookTripRequestDto {
 
   Future<FormData> toFormData() async {
     final formData = FormData();
+    final applyDriver = driver;
 
     if (note != null && note!.isNotEmpty) {
       formData.fields.add(MapEntry('Note', note!));
     }
-    if (driverId != null) {
-      formData.fields.add(MapEntry('DriverId', driverId.toString()));
+
+    if (applyDriver == null) {
+      if (driverId != null) {
+        formData.fields.add(MapEntry('DriverId', driverId.toString()));
+      }
+      return formData;
     }
 
-    final applyDriver = driver;
-    if (applyDriver != null) {
-      formData.fields.add(MapEntry('Driver.FullNameEn', applyDriver.fullNameEn));
-      formData.fields.add(MapEntry('Driver.FullNameAr', applyDriver.fullNameAr));
-      formData.fields.add(MapEntry('Driver.Phone', applyDriver.phone));
-      formData.fields.add(
-        MapEntry('Driver.NationalId', applyDriver.nationalId),
-      );
+    formData.fields.add(MapEntry('Driver.FullNameEn', applyDriver.fullNameEn));
+    formData.fields.add(MapEntry('Driver.FullNameAr', applyDriver.fullNameAr));
+    formData.fields.add(MapEntry('Driver.Phone', applyDriver.phone));
+    formData.fields.add(MapEntry('Driver.NationalId', applyDriver.nationalId));
 
-      for (var i = 0; i < applyDriver.documents.length; i++) {
-        final document = applyDriver.documents[i];
-        formData.fields.add(
-          MapEntry(
-            'Driver.Documents[$i].DocumentId',
-            document.documentId.toString(),
-          ),
-        );
-        formData.fields.add(
-          MapEntry(
-            'Driver.Documents[$i].ExpiryDate',
-            document.expiryDate.toIso8601String().split('T').first,
-          ),
-        );
-        formData.fields.add(
-          MapEntry('Driver.Documents[$i].Status', document.status.toString()),
-        );
-        formData.files.add(
-          MapEntry(
-            'Driver.Documents[$i].File',
-            await MultipartFile.fromFile(
-              document.filePath,
-              filename: p.basename(document.filePath),
-            ),
-          ),
-        );
-      }
+    for (var i = 0; i < applyDriver.documents.length; i++) {
+      final document = applyDriver.documents[i];
+      formData.fields.add(
+        MapEntry(
+          'Driver.Documents[$i].DocumentId',
+          document.documentId.toString(),
+        ),
+      );
+      formData.fields.add(
+        MapEntry(
+          'Driver.Documents[$i].ExpiryDate',
+          document.expiryDate.toIso8601String().split('T').first,
+        ),
+      );
+      formData.files.add(
+        MapEntry(
+          'Driver.Documents[$i].File',
+          await _multipartFileFromPath(document.filePath),
+        ),
+      );
     }
 
     return formData;
   }
+}
+
+Future<MultipartFile> _multipartFileFromPath(String filePath) async {
+  final filename = p.basename(filePath);
+  final name = filename.isEmpty ? 'document.jpg' : filename;
+  final bytes = await XFile(filePath).readAsBytes();
+  return MultipartFile.fromBytes(bytes, filename: name);
 }
 
 class ApplyDriverDto {

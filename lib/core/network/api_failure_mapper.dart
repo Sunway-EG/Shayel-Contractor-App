@@ -43,8 +43,29 @@ bool _isNetworkError(DioExceptionType type) {
   };
 }
 
+String? userFacingDioMessage(DioException error) {
+  final mapped = mapDioExceptionToFailure(error).message;
+  return isUserFacingApiMessage(mapped) ? mapped : null;
+}
+
+bool isUserFacingApiMessage(String? message) {
+  if (message == null) return false;
+  final text = message.trim();
+  if (text.isEmpty) return false;
+  if (text.length > 180) return false;
+  final lower = text.toLowerCase();
+  return !lower.contains('this exception was thrown') &&
+      !lower.contains('validatestatus') &&
+      !lower.contains('dioexception') &&
+      !lower.contains('requestoptions') &&
+      !lower.contains('status code of') &&
+      !lower.contains('xmlhttprequest');
+}
+
 String? _extractMessage(DioException error) {
-  if (error.error is String && (error.error as String).isNotEmpty) {
+  if (error.error is String &&
+      (error.error as String).isNotEmpty &&
+      isUserFacingApiMessage(error.error as String)) {
     return error.error as String;
   }
   return extractApiMessage(error.response?.data);

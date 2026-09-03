@@ -1853,7 +1853,7 @@ abstract class AppLocalizations {
   /// No description provided for @market.
   ///
   /// In en, this message translates to:
-  /// **'Market'**
+  /// **'My trips'**
   String get market;
 
   /// No description provided for @account.
@@ -2048,11 +2048,23 @@ abstract class AppLocalizations {
   /// **'Trip cost'**
   String get tripCost;
 
+  /// No description provided for @tripValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get tripValue;
+
   /// No description provided for @bookTrip.
   ///
   /// In en, this message translates to:
   /// **'Book trip'**
   String get bookTrip;
+
+  /// No description provided for @requestTripBooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Request trip booking'**
+  String get requestTripBooking;
 
   /// No description provided for @selectDriver.
   ///
@@ -2263,6 +2275,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Completed'**
   String get completed;
+
+  /// No description provided for @tripCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get tripCompleted;
+
+  /// No description provided for @tripWasCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get tripWasCancelled;
+
+  /// No description provided for @delivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get delivered;
+
+  /// No description provided for @loadingCargo.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get loadingCargo;
 
   /// No description provided for @reviewed.
   ///

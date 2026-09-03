@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:path/path.dart' as p;
 
 import '../../../../../core/network/api_endpoints.dart';
+import '../../../../../core/network/api_failure_mapper.dart';
 import '../../../../../core/network/api_response_parser.dart';
 import '../models/driver_document_input.dart';
 import '../models/driver_document_type_dto.dart';
@@ -123,13 +124,46 @@ class DriverRemoteDataSourceImpl implements DriverRemoteDataSource {
       ApiEndpoints.drivers,
       data: formData,
     );
-    throwIfEnvelopeFailed(response, fallbackMessage: 'Failed to create driver');
-
-    final data = response.data?['data'];
-    if (data is Map<String, dynamic> && data['id'] is int) {
-      return DriverModel.fromJson(data);
+    final envelope = requireEnvelope(response);
+    final success = envelope['success'] ?? envelope['Success'];
+    if (success == false) {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        type: DioExceptionType.badResponse,
+        error: extractApiMessage(envelope) ?? 'Failed to create driver',
+      );
     }
-    return null;
+
+    final raw = envelope['data'] ?? envelope['Data'] ?? envelope;
+    if (raw is num) {
+      return DriverModel(
+        id: raw.toInt(),
+        fullNameEn: fullNameEn,
+        fullNameAr: fullNameAr,
+        nationalId: nationalId,
+        phone: phone,
+        status: 0,
+      );
+    }
+
+    final map = _asMap(raw);
+    if (map == null) return null;
+
+    final dto = DriverDto.fromJson(map);
+    if (dto.id == null) return null;
+
+    return DriverModel(
+      id: dto.id!,
+      fullNameEn: dto.fullNameEn ?? fullNameEn,
+      fullNameAr: dto.fullNameAr ?? fullNameAr,
+      nationalId: dto.nationalId ?? nationalId,
+      userName: dto.userName,
+      email: dto.email,
+      phone: dto.phone ?? phone,
+      status: dto.status ?? 0,
+      workingStatus: dto.workingStatus,
+    );
   }
 }
 
@@ -148,6 +182,16 @@ List<Map<String, dynamic>>? _mapList(dynamic data) {
           .map((item) => Map<String, dynamic>.from(item))
           .toList();
     }
+  }
+  return null;
+}
+
+Map<String, dynamic>? _asMap(dynamic data) {
+  if (data is Map<String, dynamic>) return data;
+  if (data is Map) return Map<String, dynamic>.from(data);
+  if (data is List && data.isNotEmpty) {
+    final first = data.first;
+    if (first is Map) return Map<String, dynamic>.from(first);
   }
   return null;
 }

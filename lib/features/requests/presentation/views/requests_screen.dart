@@ -14,6 +14,7 @@ import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../home/presentation/widgets/trip_request_card.dart';
 import '../../../home/presentation/widgets/trip_review_card.dart';
 import '../../../trips/domain/entities/booking_request/booking_request.dart';
+import '../../../trips/domain/exclude_booked_trips.dart';
 import '../../../trips/presentation/bloc/booking_request_bloc.dart';
 import '../../../trips/presentation/bloc/booking_request_event.dart';
 import '../../../trips/presentation/bloc/booking_request_state.dart';
@@ -42,7 +43,10 @@ class _RequestsScreenState extends State<RequestsScreen> {
         GetBookingRequests(pageSize: 50),
       );
     } else {
-      context.read<TripBloc>().add(GetTrips(pageSize: 50));
+      context.read<TripBloc>().add(GetTrips(pageSize: 50, status: 1));
+      context.read<BookingRequestBloc>().add(
+        GetBookingRequests(pageSize: 50),
+      );
     }
   }
 
@@ -90,11 +94,10 @@ class _RequestsScreenState extends State<RequestsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (isBooked)
-                        const _BookedHeaderCard()
-                      else
+                      if (!isBooked) ...[
                         const _RequestedHeaderCard(),
-                      const SizedBox(height: 12),
+                        const SizedBox(height: 12),
+                      ],
                       _SearchRow(
                         controller: _searchController,
                         placeholder: l10n.searchForTrip,
@@ -132,164 +135,44 @@ class _RequestedHeaderCard extends StatelessWidget {
 
     return BlocBuilder<TripBloc, TripState>(
       builder: (context, state) {
-        final count = state is TripLoaded ? state.totalCount : 0;
-        return _HeaderShell(
-          child: CupertinoListTile(
-            padding: EdgeInsets.zero,
-            leading: SvgPicture.asset(
-              'assets/images/requests.svg',
-              width: 28,
-              height: 28,
-              colorFilter: const ColorFilter.mode(
-                AppColors.mainBlue,
-                BlendMode.srcIn,
+        return BlocBuilder<BookingRequestBloc, BookingRequestState>(
+          builder: (context, bookingState) {
+            final bookings = bookingState is BookingRequestLoaded
+                ? bookingState.requests
+                : const <BookingRequest>[];
+            final count = state is TripLoaded
+                ? requestedCountExcludingBooked(
+                    trips: state.trips,
+                    totalCount: state.totalCount,
+                    bookings: bookings,
+                  )
+                : 0;
+            return _HeaderShell(
+              child: CupertinoListTile(
+                padding: EdgeInsets.zero,
+                leading: SvgPicture.asset(
+                  'assets/images/requests.svg',
+                  width: 28,
+                  height: 28,
+                  colorFilter: const ColorFilter.mode(
+                    AppColors.mainBlue,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                title: _Title(
+                  title: l10n.newTripRequestsCount(count.toString()),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+                subtitle: _SubTitle(
+                  title: l10n.allYourTripRequests,
+                  fontSize: 12,
+                ),
               ),
-            ),
-            title: _Title(
-              title: l10n.newTripRequestsCount(count.toString()),
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-            subtitle: _SubTitle(title: l10n.allYourTripRequests, fontSize: 12),
-          ),
+            );
+          },
         );
       },
-    );
-  }
-}
-
-class _BookedHeaderCard extends StatelessWidget {
-  const _BookedHeaderCard();
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return BlocBuilder<BookingRequestBloc, BookingRequestState>(
-      builder: (context, state) {
-        final requests = state is BookingRequestLoaded
-            ? state.requests
-            : const <BookingRequest>[];
-        final stats = _BookedStats.from(requests);
-
-        return _HeaderShell(
-          child: Row(
-            children: [
-              Expanded(
-                child: _StatCell(
-                  count: stats.notStarted,
-                  label: l10n.notStarted,
-                  color: AppColors.darkGray,
-                ),
-              ),
-              Expanded(
-                child: _StatCell(
-                  count: stats.inProgress,
-                  label: l10n.inProgress,
-                  color: AppColors.orange,
-                ),
-              ),
-              Expanded(
-                child: _StatCell(
-                  count: stats.finished,
-                  label: l10n.finishedTransfers,
-                  color: AppColors.mainBlue,
-                ),
-              ),
-              Expanded(
-                child: _StatCell(
-                  count: stats.cancelled,
-                  label: l10n.cancellations,
-                  color: AppColors.red,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _BookedStats {
-  const _BookedStats({
-    required this.notStarted,
-    required this.inProgress,
-    required this.finished,
-    required this.cancelled,
-  });
-
-  final int notStarted;
-  final int inProgress;
-  final int finished;
-  final int cancelled;
-
-  factory _BookedStats.from(List<BookingRequest> requests) {
-    var notStarted = 0;
-    var inProgress = 0;
-    var finished = 0;
-    var cancelled = 0;
-
-    for (final request in requests) {
-      final status = request.status ?? request.trip?.status;
-      switch (status) {
-        case 5:
-          inProgress++;
-        case 6:
-        case 7:
-          finished++;
-        case 8:
-          cancelled++;
-        default:
-          notStarted++;
-      }
-    }
-
-    return _BookedStats(
-      notStarted: notStarted,
-      inProgress: inProgress,
-      finished: finished,
-      cancelled: cancelled,
-    );
-  }
-}
-
-class _StatCell extends StatelessWidget {
-  const _StatCell({
-    required this.count,
-    required this.label,
-    required this.color,
-  });
-
-  final int count;
-  final String label;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          '$count',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            color: color,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-            color: color,
-          ),
-        ),
-      ],
     );
   }
 }
@@ -392,17 +275,25 @@ class _RequestedTripsList extends StatelessWidget {
         }
 
         if (state is TripLoaded) {
-          if (state.trips.isEmpty) {
-            return Center(child: Text(l10n.noTripsAvailable));
-          }
+          return BlocBuilder<BookingRequestBloc, BookingRequestState>(
+            builder: (context, bookingState) {
+              final bookings = bookingState is BookingRequestLoaded
+                  ? bookingState.requests
+                  : const <BookingRequest>[];
+              final trips = excludeBookedTrips(state.trips, bookings);
+              if (trips.isEmpty) {
+                return Center(child: Text(l10n.noTripsAvailable));
+              }
 
-          return ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: state.trips.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 10),
-            itemBuilder: (context, index) {
-              return TripRequestCard(trip: state.trips[index]);
+              return ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: trips.length,
+                separatorBuilder: (_, _) => const SizedBox(height: 10),
+                itemBuilder: (context, index) {
+                  return TripRequestCard(trip: trips[index]);
+                },
+              );
             },
           );
         }

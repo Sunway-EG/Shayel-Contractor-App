@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../../../core/network/api_endpoints.dart';
+import '../../../../../core/network/api_failure_mapper.dart';
 import '../../../../../core/network/api_response_parser.dart';
 import '../models/book_trip_request_dto.dart';
 import '../models/booking_request_dto.dart';
@@ -138,10 +139,25 @@ class TripRemoteDataSourceImpl implements TripRemoteDataSource {
     required int tripId,
     required BookTripRequestDto request,
   }) async {
+    final formData = await request.toFormData();
     final response = await _dio.post<Map<String, dynamic>>(
       ApiEndpoints.bookTrip(tripId),
-      data: await request.toFormData(),
+      data: formData,
+      options: Options(
+        contentType: 'multipart/form-data; boundary=${formData.boundary}',
+        sendTimeout: const Duration(seconds: 60),
+        receiveTimeout: const Duration(seconds: 60),
+      ),
     );
-    throwIfEnvelopeFailed(response, fallbackMessage: 'Failed to book trip');
+    final envelope = requireEnvelope(response);
+    final success = envelope['success'] ?? envelope['Success'];
+    if (success == false) {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        type: DioExceptionType.badResponse,
+        error: extractApiMessage(envelope) ?? 'Failed to book trip',
+      );
+    }
   }
 }

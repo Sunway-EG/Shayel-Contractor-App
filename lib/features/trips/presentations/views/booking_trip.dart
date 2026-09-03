@@ -74,10 +74,9 @@ class _BookingTripScreenState extends State<BookingTripScreen> {
 
     context.read<TripBloc>().add(
       BookTrip(
-        driver.isNew
+        (driver.id == null || driver.id == 0)
             ? BookTripRequest(
                 tripId: trip.id!,
-                note: 'New driver application',
                 driver: BookTripDriver(
                   fullNameEn: driver.fullNameEn ?? '',
                   fullNameAr: driver.fullNameAr ?? '',
@@ -151,7 +150,7 @@ class _BookingTripScreenState extends State<BookingTripScreen> {
                   child: AppButton(
                     onPressed: () {
                       Navigator.of(bottomSheetContext).pop();
-                      context.read<TripBloc>().add(GetTrips());
+                      context.read<TripBloc>().add(GetTrips(status: 1));
                       context.read<BookingRequestBloc>().add(
                         GetBookingRequests(),
                       );
@@ -182,7 +181,7 @@ class _BookingTripScreenState extends State<BookingTripScreen> {
           showAppAlertDialog(
             context: context,
             title: l10n.bookTrip,
-            message: state.message,
+            message: state.message.isEmpty ? l10n.error : state.message,
           );
         }
       },

@@ -5,21 +5,36 @@ import 'package:intl/intl.dart' hide TextDirection;
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/gen/app_localizations.dart';
 import '../../../trips/domain/entities/booking_request/booking_request.dart';
+import '../../../trips/domain/entities/trip/trip.dart';
 
 class TripReviewCard extends StatelessWidget {
-  const TripReviewCard({super.key, required this.booking});
+  const TripReviewCard({super.key, this.booking, this.trip})
+    : assert(booking != null || trip != null);
 
-  final BookingRequest booking;
+  final BookingRequest? booking;
+  final Trip? trip;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final tripEntity = trip ?? booking?.trip;
+    final tripId = booking?.tripId ?? tripEntity?.id;
+    final tripNumber = tripId == null ? '—' : '$tripId';
     final statuses = _statuses(l10n);
-    final status = _statusFor(booking, statuses);
-    final tripNumber = booking.trip?.referenceNumber ?? '${booking.id ?? ''}';
-    final companyName = _companyName(context, booking);
-    final dateStr = _dateText(booking);
-    final address = _address(booking);
+    final status = _statusFor(
+      statusCode: tripEntity?.status ?? booking?.status,
+      statusName: tripEntity?.tripStatusName ?? booking?.statusName,
+      statuses: statuses,
+    );
+    final companyName = _companyName(
+      context,
+      booking?.company ?? tripEntity?.company,
+    );
+    final dateStr = _dateText(
+      startDate: tripEntity?.startDate,
+      fallback: booking?.createdAt ?? tripEntity?.createdAt,
+    );
+    final address = _address(tripEntity);
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -77,26 +92,24 @@ class TripReviewCard extends StatelessWidget {
   }
 }
 
-String _companyName(BuildContext context, BookingRequest booking) {
-  final isRtl = Directionality.of(context) == TextDirection.rtl;
-  final company = booking.company ?? booking.trip?.company;
+String _companyName(BuildContext context, Company? company) {
   if (company == null) return '—';
+  final isRtl = Directionality.of(context) == TextDirection.rtl;
   if (isRtl) {
     return company.nameAr ?? company.fullName ?? company.nameEn ?? '—';
   }
   return company.nameEn ?? company.fullName ?? company.nameAr ?? '—';
 }
 
-String _dateText(BookingRequest booking) {
-  final raw = booking.trip?.startDate;
-  final parsed = raw == null ? booking.createdAt : DateTime.tryParse(raw);
-  final date = parsed ?? booking.createdAt;
+String _dateText({String? startDate, DateTime? fallback}) {
+  final parsed = startDate == null ? fallback : DateTime.tryParse(startDate);
+  final date = parsed ?? fallback;
   if (date == null) return '—';
-  return DateFormat('dd-MM-yyyy hh:mm a').format(date.toLocal());
+  return DateFormat('hh:mm a • dd-MM-yyyy').format(date.toLocal());
 }
 
-String _address(BookingRequest booking) {
-  final waypoints = booking.trip?.waypoints;
+String _address(Trip? trip) {
+  final waypoints = trip?.waypoints;
   if (waypoints != null && waypoints.isNotEmpty) {
     final named = waypoints
         .map((w) => w.addressName)
@@ -104,27 +117,29 @@ String _address(BookingRequest booking) {
         .where((name) => name.trim().isNotEmpty);
     if (named.isNotEmpty) return named.first;
   }
-  final destination = booking.trip?.contractDestination;
+  final destination = trip?.contractDestination;
   return destination?.nameAr ?? destination?.nameEn ?? '—';
 }
 
-Status _statusFor(BookingRequest booking, List<Status> statuses) {
-  final code = booking.status ?? booking.trip?.status;
-  if (code != null) {
+Status _statusFor({
+  required int? statusCode,
+  required String? statusName,
+  required List<Status> statuses,
+}) {
+  if (statusCode != null) {
     for (final status in statuses) {
-      if (status.code == code) return status;
+      if (status.code == statusCode) return status;
     }
   }
 
-  final name = booking.statusName ?? booking.trip?.tripStatusName;
-  if (name != null && name.trim().isNotEmpty) {
-    final lower = name.toLowerCase();
+  if (statusName != null && statusName.trim().isNotEmpty) {
+    final lower = statusName.toLowerCase();
     for (final status in statuses) {
       if (status.name.toLowerCase() == lower) return status;
     }
     return Status(
-      name: name,
-      code: code,
+      name: statusName,
+      code: statusCode,
       color: CupertinoColors.activeBlue,
       icon: CupertinoIcons.doc_text,
     );
@@ -156,19 +171,25 @@ List<Status> _statuses(AppLocalizations l10n) {
     Status(
       name: l10n.scheduled,
       code: 2,
-      color: CupertinoColors.systemPink,
+      color: AppColors.newgreen,
       icon: CupertinoIcons.table_fill,
+    ),
+    Status(
+      name: l10n.loadingCargo,
+      code: 3,
+      color: const Color(0xFFE89B5D),
+      icon: CupertinoIcons.cube_box_fill,
     ),
     Status(
       name: l10n.inProgress,
       code: 5,
-      color: CupertinoColors.activeOrange,
+      color: AppColors.orange,
       icon: CupertinoIcons.slowmo,
     ),
     Status(
-      name: l10n.completed,
+      name: l10n.tripCompleted,
       code: 6,
-      color: CupertinoColors.activeGreen,
+      color: const Color(0xFF0874C9),
       icon: CupertinoIcons.checkmark_alt,
     ),
     Status(
@@ -178,9 +199,9 @@ List<Status> _statuses(AppLocalizations l10n) {
       icon: CupertinoIcons.doc_checkmark_fill,
     ),
     Status(
-      name: l10n.cancelled,
+      name: l10n.tripWasCancelled,
       code: 8,
-      color: CupertinoColors.systemRed,
+      color: AppColors.red,
       icon: CupertinoIcons.xmark,
     ),
     Status(

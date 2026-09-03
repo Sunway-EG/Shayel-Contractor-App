@@ -34,7 +34,8 @@ class BookingRequestDto {
       createdAt: _parseDate(json['createdAt']),
       reviewedAt: _parseDate(json['reviewedAt']),
       reviewedByAdminId: (json['reviewedByAdminId'] as num?)?.toInt(),
-      tripId: (json['tripId'] as num?)?.toInt(),
+      tripId: (json['tripId'] as num?)?.toInt() ??
+          (json['TripId'] as num?)?.toInt(),
       trip: () {
         try {
           final map = _mapOf(json['trip']);

@@ -1,4 +1,3 @@
-import '../../data/models/driver_model.dart';
 import '../../domain/entities/driver/driver.dart';
 import '../../domain/entities/driver_document_type/driver_document_type.dart';
 
@@ -35,7 +34,7 @@ class DriverCreating extends DriverState {}
 class DriverCreated extends DriverState {
   DriverCreated(this.driver);
 
-  final DriverModel? driver;
+  final Driver driver;
 }
 
 class DriverCreateError extends DriverState {

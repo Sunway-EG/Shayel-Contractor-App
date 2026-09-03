@@ -254,12 +254,10 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
       nationalIdError = l10n.invalidNationalId;
     }
 
-    final missingRequired = _documentDefinitions
-        .where((definition) => definition.required)
-        .any(
-          (definition) =>
-              !_documents.any((doc) => doc.documentId == definition.id),
-        );
+    final missingRequired = _documentDefinitions.any(
+      (definition) =>
+          !_documents.any((doc) => doc.documentId == definition.id),
+    );
 
     setState(() {
       _phoneError = phoneError;
@@ -336,10 +334,14 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
           child: Container(height: 1, color: const Color(0xffeeeeee)),
         ),
       ),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -481,6 +483,7 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
               const SizedBox(height: 15),
             ],
           ),
+        ),
         ),
       ),
     );
@@ -640,6 +643,7 @@ class _AddDriverScreenState extends State<AddDriverScreen> {
             setState(() => _nationalIdError = null);
           }
         },
+        onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: null,
         style: const TextStyle(

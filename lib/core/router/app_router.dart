@@ -23,6 +23,7 @@ import '../storage/auth_storage.dart';
 import '../widgets/app_update_presenter.dart';
 import '../../features/auth/presentation/views/first_choose_screen.dart';
 import '../../features/trips/presentations/views/booking_trip.dart';
+import '../../features/trips/presentations/views/my_trips_screen.dart';
 import '../../features/drivers/presentation/views/add_driver_screen.dart';
 
 /// Global router instance holder for accessing router from interceptors
@@ -338,6 +339,10 @@ GoRouter createAppRouter() {
       GoRoute(
         path: AppRoutePaths.home,
         builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: AppRoutePaths.market,
+        builder: (context, state) => const MyTripsScreen(),
       ),
       GoRoute(
         path: AppRoutePaths.settings,

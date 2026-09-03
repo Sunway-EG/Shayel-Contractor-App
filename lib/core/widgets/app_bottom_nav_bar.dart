@@ -110,10 +110,9 @@ class AppBottomNavBar extends StatelessWidget {
                 ),
                 _BottomNavItem(
                   label: l10n.market,
-                  icon: 'assets/images/market.svg',
+                  icon: 'assets/images/my_trips.svg',
                   isSelected: currentIndex == 2,
-                  // onTap: () => handleItemTap(2),
-                  onTap: () {},
+                  onTap: () => handleItemTap(2),
                 ),
                 _BottomNavItem(
                   label: l10n.account,

@@ -945,7 +945,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get requests => 'الطلبات';
 
   @override
-  String get market => 'السوق';
+  String get market => 'نقلاتي';
 
   @override
   String get account => 'الحساب';
@@ -1050,7 +1050,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tripCost => 'سعر الرحلة';
 
   @override
+  String get tripValue => 'قيمة';
+
+  @override
   String get bookTrip => 'احجز الرحلة';
+
+  @override
+  String get requestTripBooking => 'طلب حجز الرحلة';
 
   @override
   String get selectDriver => 'اختر سائق';
@@ -1164,6 +1170,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get completed => 'مكتملة';
+
+  @override
+  String get tripCompleted => 'اكتملت';
+
+  @override
+  String get tripWasCancelled => 'تم الالغاء';
+
+  @override
+  String get delivered => 'تم التسليم';
+
+  @override
+  String get loadingCargo => 'جاري التحميل';
 
   @override
   String get reviewed => 'تمت المراجعة';

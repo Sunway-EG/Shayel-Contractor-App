@@ -1,56 +1,68 @@
-import 'package:dio/dio.dart';
+// ignore_for_file: prefer_initializing_formals
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/network/api_failure_mapper.dart';
-import '../../data/models/trip_model.dart';
-import '../../domain/repositories/trip_repository.dart';
+import '../../domain/entities/trip/trip.dart';
+import '../../domain/use_cases/book_trip_usecase.dart';
+import '../../domain/use_cases/get_trips_usecase.dart';
 import 'trip_event.dart';
 import 'trip_state.dart';
 
 class TripBloc extends Bloc<TripEvent, TripState> {
-  TripBloc(this._repository) : super(TripInitial()) {
+  TripBloc({
+    required GetTripsUseCase getTripsUseCase,
+    required BookTripUseCase bookTripUseCase,
+  }) : _getTripsUseCase = getTripsUseCase,
+       _bookTripUseCase = bookTripUseCase,
+       super(TripInitial()) {
     on<GetTrips>(_onGetTrips);
     on<BookTrip>(_onBookTrip);
   }
 
-  final TripRepository _repository;
+  final GetTripsUseCase _getTripsUseCase;
+  final BookTripUseCase _bookTripUseCase;
+  final Set<int> _appliedTripIds = {};
 
-  Future<TripModel> getTripDetails(int tripId) {
-    return _repository.getTrip(tripId);
+  List<Trip> _withoutApplied(List<Trip> trips) {
+    if (_appliedTripIds.isEmpty) return trips;
+    return [
+      for (final trip in trips)
+        if (trip.id == null || !_appliedTripIds.contains(trip.id)) trip,
+    ];
   }
 
   Future<void> _onGetTrips(GetTrips event, Emitter<TripState> emit) async {
     emit(TripLoading());
-    try {
-      final result = await _repository.getTrips(
+    final result = await _getTripsUseCase(
+      GetTripsParams(
         page: event.page,
         pageSize: event.pageSize,
         status: event.status,
-      );
-      emit(TripLoaded(result.items, totalCount: result.totalCount));
-    } catch (e) {
-      emit(TripError(e.toString()));
-    }
+      ),
+    );
+    result.fold(
+      (failure) => emit(TripError(failure.message)),
+      (data) {
+        if (event.status != 1) {
+          emit(TripLoaded(data.items, totalCount: data.totalCount));
+          return;
+        }
+        final trips = _withoutApplied(data.items);
+        final hidden = data.items.length - trips.length;
+        final totalCount = data.totalCount - hidden;
+        emit(
+          TripLoaded(trips, totalCount: totalCount < 0 ? 0 : totalCount),
+        );
+      },
+    );
   }
 
   Future<void> _onBookTrip(BookTrip event, Emitter<TripState> emit) async {
     emit(TripBooking());
-    try {
-      await _repository.bookTrip(event.request);
+    final result = await _bookTripUseCase(event.request);
+    result.fold((failure) => emit(TripBookError(failure.message)), (_) {
+      _appliedTripIds.add(event.request.tripId);
       emit(TripBooked());
-    } catch (e) {
-      if (e is DioException) {
-        emit(
-          TripBookError(
-            mapDioExceptionToFailure(e).message ??
-                e.error?.toString() ??
-                e.message ??
-                'Request failed',
-          ),
-        );
-      } else {
-        emit(TripBookError(e.toString()));
-      }
-    }
+    });
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
+import '../../../../core/router/route_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../l10n/gen/app_localizations.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../core/router/route_constants.dart';
 import '../../../trips/domain/entities/trip/trip.dart';
 
 class TripRequestCard extends StatelessWidget {
@@ -16,191 +16,194 @@ class TripRequestCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final dateStr = DateFormat(
-      'dd-MM-yyyy hh:mm a',
-    ).format(DateTime.parse(trip.startDate!).toLocal());
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+    final companyName = isRtl
+        ? trip.company?.nameAr ?? trip.company?.fullName ?? trip.company?.nameEn
+        : trip.company?.nameEn ??
+              trip.company?.fullName ??
+              trip.company?.nameAr;
+    final vehicleName = isRtl
+        ? trip.contractVehicleType?.vehicleType?.nameAr ??
+              trip.contractVehicleType?.vehicleType?.name ??
+              trip.contractVehicleType?.vehicleType?.nameEn
+        : trip.contractVehicleType?.vehicleType?.nameEn ??
+              trip.contractVehicleType?.vehicleType?.name ??
+              trip.contractVehicleType?.vehicleType?.nameAr;
+    final dateStr = _dateText(trip.startDate);
     final cost = trip.spotPrice ?? trip.cargoPrice;
+    final priceText = cost == null
+        ? '—'
+        : NumberFormat('#,###').format(cost.round()).replaceAll(',', '.');
+    final waypoints = trip.waypoints;
+    final from = (waypoints != null && waypoints.isNotEmpty)
+        ? waypoints.first.addressName ?? '—'
+        : '—';
+    final to = (waypoints != null && waypoints.isNotEmpty)
+        ? waypoints.last.addressName ?? '—'
+        : '—';
+    final tripId = trip.id;
+    final title = [
+      companyName ?? '—',
+      if (tripId != null) '#$tripId',
+    ].join(' ');
 
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.mainBlue,
-        borderRadius: BorderRadius.circular(10),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.mainBlue, width: 10),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(CupertinoIcons.time, color: AppColors.white, size: 20),
-              const SizedBox(width: 10),
-              _Title(
-                title: l10n.sunwayAdminSendThisTripFromAgo,
-                fontSize: 12,
-                color: AppColors.white,
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.darkGray,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Container(
+                constraints: const BoxConstraints(maxWidth: 140),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.mainBlue),
+                ),
+                child: Text(
+                  '${l10n.tripValue}: $priceText',
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.mainBlue,
+                  ),
+                ),
               ),
             ],
           ),
           const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(10),
+          Text(
+            '${l10n.tripDate} $dateStr',
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+              color: Color(0xFF7A8A99),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _Title(
-                  title: Directionality.of(context) == TextDirection.rtl ? trip.company?.nameAr ?? trip.company?.fullName ?? '' : trip.company?.nameEn ?? trip.company?.fullName ?? '',
-                  fontSize: 16,
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    _Title(title: l10n.tripDate, fontSize: 12),
-                    const SizedBox(width: 10),
-                    _SubTitle(title: dateStr, fontSize: 14),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColors.mainGray),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _LabeledValue(label: l10n.tripTo, value: to),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _LabeledValue(label: l10n.tripFrom, value: from),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _LabeledValue(label: l10n.vehicleType, value: vehicleName ?? '—'),
+              ),
+              const SizedBox(width: 8),
+              AppButton(
+                  minSize: 0,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            _SubTitle(title: l10n.tripFrom, fontSize: 12),
-                            _Title(
-                              title: trip.waypoints?.first.addressName ?? '—',
-                              fontSize: 14,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            _SubTitle(title: l10n.tripTo, fontSize: 12),
-                            _Title(title: trip.waypoints?.last.addressName ?? '—', fontSize: 14),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColors.mainGray),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            _SubTitle(title: l10n.vehicleType, fontSize: 12),
-                            _Title(
-                              title:Directionality.of(context) == TextDirection.rtl ? trip.contractVehicleType?.vehicleType?.nameAr ?? trip.contractVehicleType?.vehicleType?.name ?? '—' : trip.contractVehicleType?.vehicleType?.nameEn ?? trip.contractVehicleType?.vehicleType?.name ?? '—',
-                              fontSize: 14,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            _SubTitle(title: l10n.tripCost, fontSize: 12),
-                            _Title(
-                              title: cost != null
-                                  ? cost.toString()
-                                  : '—',
-                              fontSize: 14,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                AppButton(
                   onPressed: () {
                     context.go(AppRoutePaths.bookTrip, extra: trip);
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      _Title(
-                        title: l10n.bookTrip,
-                        fontSize: 14,
-                        color: AppColors.white,
-                      ),
-                      const SizedBox(width: 5),
                       const Icon(
                         CupertinoIcons.add_circled_solid,
                         color: AppColors.white,
+                        size: 16,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        l10n.requestTripBooking,
+                        style: const TextStyle(
+                          color: AppColors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+            ],
           ),
+
+          // const SizedBox(height: 14),
         ],
       ),
     );
   }
-}
 
-class _Title extends StatelessWidget {
-  const _Title({
-    required this.title,
-    required this.fontSize,
-    this.color = AppColors.darkGray,
-  });
-
-  final String title;
-  final double fontSize;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: fontSize,
-        color: color,
-        fontWeight: FontWeight.w400,
-      ),
-    );
+  String _dateText(String? startDate) {
+    final parsed = startDate == null ? null : DateTime.tryParse(startDate);
+    if (parsed == null) return '—';
+    return DateFormat('hh:mm a • dd-MM-yyyy').format(parsed.toLocal());
   }
 }
 
-class _SubTitle extends StatelessWidget {
-  const _SubTitle({required this.title, required this.fontSize});
+class _LabeledValue extends StatelessWidget {
+  const _LabeledValue({required this.label, required this.value});
 
-  final String title;
-  final double fontSize;
+  final String label;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: fontSize,
-        color: CupertinoColors.systemGrey,
-        fontWeight: FontWeight.w400,
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: Color(0xFF7A8A99),
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            softWrap: true,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.darkGray,
+            ),
+          ),
+        ],
       ),
     );
   }
